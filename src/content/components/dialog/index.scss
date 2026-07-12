@@ -1,4 +1,9 @@
+sx-dialog {
+  --sx-dialog-radius: var(--radius);
+}
+
 #sx-dialog {
+  margin: 20px;
   .close-cursor {
     width: 36px;
     height: 36px;
@@ -11,4 +16,52 @@
     font-size: var(--text-sm);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   }
+
+  sx-dialog-pull {
+    display: block;
+    width: 100px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border);
+    padding: 0 auto var(--space-2);
+  }
+
+  sx-dialog[name="pull-demo3"] {
+    sx-dialog-pull {
+      width: 6px;
+      height: 100px;
+    }
+  }
+
+  sx-dialog[name="dialog-responsive"] {
+    --sx-dialog-radius: 0;
+    .dialog-cart {
+      background-color: #fff;
+      padding: 20px;
+      height: 100vh;
+      width: min(420px, 100vw);
+      sx-dialog-pull {
+        display: none;
+      }
+      @media (max-width: "567px") {
+        width: 100%;
+        height: 60vh;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        sx-dialog-pull {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+sx-close-cursor[name="dialog-demo-cursor"] {
+  background-color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
