@@ -116,6 +116,15 @@ a {
   height: auto;
   display: block;
 }
+.site-header__brand .logo_text--light {
+  display: none;
+}
+:root[data-theme="light"] .site-header__brand .logo_text--light {
+  display: block;
+}
+:root[data-theme="light"] .site-header__brand .logo_text--dark {
+  display: none;
+}
 .site-header__brand .logo_icon {
   width: 30px;
   height: auto;
@@ -757,6 +766,8 @@ a {
 }
 
 .page-section {
+  max-width: 880px;
+  margin: 0 auto;
   padding: var(--space-5) 0 var(--space-6);
 }
 

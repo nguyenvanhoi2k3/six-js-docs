@@ -4,6 +4,7 @@ import { renderHeader } from "../layout/header/header";
 import { mountThemeToggle } from "../layout/header/theme";
 import { renderInstallation } from "../content/installation";
 import { mountCodeCopy } from "../content/shared";
+import { renderFooter } from "../layout/footer/footer";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   ${renderHeader("installation")}
@@ -12,9 +13,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     ${renderInstallation()}
   </div>
 
-  <footer class="site-footer">
-    <div class="container">six-js docs</div>
-  </footer>
+  ${renderFooter()}
 `;
 
 mountThemeToggle(document);

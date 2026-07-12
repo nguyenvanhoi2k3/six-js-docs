@@ -6,6 +6,7 @@ import { renderFlatSidebar } from "../layout/nav/sidebar";
 import { componentsList } from "../layout/nav/nav-data";
 import { componentsDocs } from "../content/components";
 import { mountCodeCopy } from "../content/shared";
+import { renderFooter } from "../layout/footer/footer";
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   ${renderHeader("components")}
@@ -13,6 +14,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <aside class="section-sidebar" id="sidebar"></aside>
     <main class="section-content" id="content"></main>
   </div>
+  ${renderFooter()}
 `;
 
 mountThemeToggle(document);

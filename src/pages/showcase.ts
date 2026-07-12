@@ -2,6 +2,7 @@ import "@six-js/core/style.css";
 import "../styles/base.css";
 import { renderHeader } from "../layout/header/header";
 import { mountThemeToggle } from "../layout/header/theme";
+import { renderFooter } from "../layout/footer/footer";
 import { showcaseItems } from "../content/showcase";
 
 const cards = showcaseItems
@@ -31,9 +32,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <section class="showcase-grid">${cards}</section>
   </div>
 
-  <footer class="site-footer">
-    <div class="container">six-js docs</div>
-  </footer>
+  ${renderFooter()}
 `;
 
 mountThemeToggle(document);
