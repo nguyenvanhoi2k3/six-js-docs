@@ -1,0 +1,91 @@
+:root {
+  color-scheme: dark;
+
+  --bg: #0b0a10;
+  --surface: #161420;
+  --surface-2: #1e1b2c;
+  --primary: #7c5cff;
+  --accent: #ff6b4a;
+  --text: #f5f3ff;
+  --muted: #9a94b3;
+  --border: #c6c1da;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6rem;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  --text-xs: 0.8rem;
+  --text-sm: 0.9rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(2.5rem, 6vw, 4.5rem);
+
+  --container-pad: 20px;
+  --header-h: 64px;
+  --sidebar-w: 260px;
+
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --code-tag: #ff7ab6;
+  --code-attr: #ffd479;
+  --code-string: #9ece6a;
+  --code-keyword: #c792ea;
+  --code-function: #82aaff;
+  --code-number: #f78c6c;
+  --code-property: #7dcfff;
+
+  --noise-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --surface: #f5f4f9;
+  --surface-2: #ececf3;
+  --primary: #6428e0;
+  --accent: #e2572f;
+  --text: #16141f;
+  --muted: #615c78;
+  --border: #e2e0ea;
+
+  --code-tag: #c2185b;
+  --code-attr: #9a6a00;
+  --code-string: #2f7d32;
+  --code-keyword: #7c3aed;
+  --code-function: #2a56c6;
+  --code-number: #c2410c;
+  --code-property: #0e7490;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+
+    --bg: #ffffff;
+    --surface: #f5f4f9;
+    --surface-2: #ececf3;
+    --primary: #6428e0;
+    --accent: #e2572f;
+    --text: #16141f;
+    --muted: #615c78;
+    --border: #e2e0ea;
+
+    --code-tag: #c2185b;
+    --code-attr: #9a6a00;
+    --code-string: #2f7d32;
+    --code-keyword: #7c3aed;
+    --code-function: #2a56c6;
+    --code-number: #c2410c;
+    --code-property: #0e7490;
+  }
+}

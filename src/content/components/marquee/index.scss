@@ -1,0 +1,26 @@
+#sx-marquee {
+  .marquee {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-2) 0;
+    background: var(--surface);
+
+    + .marquee {
+      margin-top: var(--space-2);
+    }
+
+    &--vertical {
+      height: 180px;
+    }
+
+    .item {
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,27 @@
+#sx-animate {
+  .grid + .grid {
+    margin-top: var(--space-2);
+  }
+
+  .box {
+    height: 300px;
+    width: 300px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-sm);
+    background: linear-gradient(135deg, var(--surface), var(--primary) 200%);
+    font-weight: 600;
+    color: var(--text);
+
+    &--blue {
+      background: linear-gradient(135deg, var(--surface), #358ab8 200%);
+    }
+
+    &--yellow {
+      background: linear-gradient(135deg, var(--surface), #9a6a00 200%);
+    }
+  }
+}
