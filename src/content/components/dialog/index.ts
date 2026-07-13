@@ -15,11 +15,13 @@ export const dialog: ComponentDoc = {
 <sx-dialog 
   name="dialog1" 
   effect="zoom" 
-  breakpoints='{
+  breakpoints="{
     567: {
-    position: "right",
-    effect: "slide-left"
-  }'>
+      position: 'right',
+      effect: 'slide-left'
+    }
+  }"
+>
   <sx-close-cursor>x</sx-close-cursor>
   <div class="content" style="background: #fff">
     <h2>Dialog</h2>
@@ -270,12 +272,12 @@ ${attrsTable([
         </div>
 
         <sx-dialog name="dialog-responsive" effect="slide-up" position="bottom"
-        breakpoints='{
-      "567": {
-        position: "right",
-        effect: "slide-left"
+        breakpoints="{
+      567: {
+        position: 'right',
+        effect: 'slide-left'
       }
-    }'>
+    }">
           <div class="dialog-cart">
           <sx-dialog-pull></sx-dialog-pull>
             <h2>Xin chào</h2>
