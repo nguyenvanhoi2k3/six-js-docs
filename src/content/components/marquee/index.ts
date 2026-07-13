@@ -10,11 +10,11 @@ export const marquee: ComponentDoc = {
   demoSidebar: false,
   render: () => `
     <h2>Code</h2>
-    ${codeBlock(`<sx-marquee speed="50">
+    ${codeBlock(`<sx-marquee>
   <sx-marquee-inner>
-    <sx-marquee-item>Animation</sx-marquee-item>
-    <sx-marquee-item>Web Components</sx-marquee-item>
-    ...
+    <sx-marquee-item>
+      <span>🔥 Lorem ipsum dolor sit amet consectetur adipisicing!</span>
+    </sx-marquee-item>
   </sx-marquee-inner>
 </sx-marquee>`)}
 
@@ -32,41 +32,89 @@ export const marquee: ComponentDoc = {
   demos: [
     {
       renderDemo: () => `
-        <sx-marquee class="marquee" speed="50">
-          <sx-marquee-inner>
-            <sx-marquee-item class="item">Animation</sx-marquee-item>
-            <sx-marquee-item class="item">Web Components</sx-marquee-item>
-            <sx-marquee-item class="item">six.to()</sx-marquee-item>
-            <sx-marquee-item class="item">Timeline</sx-marquee-item>
-            <sx-marquee-item class="item">ScrollTrigger</sx-marquee-item>
-            <sx-marquee-item class="item">Lightweight</sx-marquee-item>
-          </sx-marquee-inner>
-        </sx-marquee>
+        <div style="margin-top: 50px;">
+        <sx-marquee class="marquee">
+      <sx-marquee-inner>
+        <sx-marquee-item>
+          <span>🔥 Tin tức mới nhất: Hot sale tháng 11!</span>
+        </sx-marquee-item>
+      </sx-marquee-inner>
+    </sx-marquee>
+        </div>
       `,
     },
     {
       renderDemo: () => `
-        <sx-marquee class="marquee" speed="90" direction="right">
-          <sx-marquee-inner>
-            <sx-marquee-item class="item">Fast</sx-marquee-item>
-            <sx-marquee-item class="item">→</sx-marquee-item>
-            <sx-marquee-item class="item">direction="right"</sx-marquee-item>
-            <sx-marquee-item class="item">→</sx-marquee-item>
-            <sx-marquee-item class="item">speed="90"</sx-marquee-item>
-          </sx-marquee-inner>
-        </sx-marquee>
-
-        <div class="marquee marquee--vertical" style="display:flex;">
-          <sx-marquee direction="up" speed="35" style="height:100%">
-            <sx-marquee-inner>
-              <sx-marquee-item class="item">up ↑</sx-marquee-item>
-              <sx-marquee-item class="item">vertical</sx-marquee-item>
-              <sx-marquee-item class="item">marquee</sx-marquee-item>
-              <sx-marquee-item class="item">six-js</sx-marquee-item>
-              <sx-marquee-item class="item">shadow DOM</sx-marquee-item>
-            </sx-marquee-inner>
-          </sx-marquee>
+      <h3>direction="right" speed="120"</h3>
+      
+        <sx-marquee class="marquee" direction="right" speed="120">
+  <sx-marquee-inner>
+    <sx-marquee-item>
+      <span>🔥 Tin tức mới nhất: Hot sale tháng 11!</span>
+    </sx-marquee-item>
+  </sx-marquee-inner>
+</sx-marquee>
+      `,
+    },
+    {
+      renderDemo: () => `
+      <h3>clone="false"</h3>
+      
+        <sx-marquee class="marquee" clone="false" speed="200">
+  <sx-marquee-inner>
+    <sx-marquee-item>
+      <span>Khi clone false nội dung sẽ không bị lặp lại</span>
+    </sx-marquee-item>
+  </sx-marquee-inner>
+</sx-marquee>
+      `,
+    },
+    {
+      renderDemo: () => `
+      <h3>direction="up" pause-on-hover="false"</h3>
+      
+       <sx-marquee
+  direction="up"
+  pause-on-hover="false"
+  speed="70"
+  style="height: 400px; border: 1px solid #ddd;">
+  <sx-marquee-inner>
+    <sx-marquee-item>
+      <div class="card">
+        <div class="card-header">
+          <img
+            class="card-avt"
+            src="https://i.pravatar.cc/150?img=32"
+            alt=""
+          />
+          <div class="card-name">Emily Johnson</div>
         </div>
+        <div>
+          I'm thoroughly impressed with Marquee's performance and
+          ease of use. It made implementing complex scrolling texts
+          a breeze, and the support for TypeScript is top-notch.
+        </div>
+      </div>
+    </sx-marquee-item>
+    <sx-marquee-item>
+      <div class="card">
+        <div class="card-header">
+          <img
+            class="card-avt"
+            src="https://i.pravatar.cc/150?img=31"
+            alt=""
+          />
+          <div class="card-name">Dan Gale</div>
+        </div>
+        <div>
+          I'm thoroughly impressed with Marquee's performance and
+          ease of use. It made implementing complex scrolling texts
+          a breeze, and the support for TypeScript is top-notch.
+        </div>
+      </div>
+    </sx-marquee-item>
+  </sx-marquee-inner>
+</sx-marquee>
       `,
     },
   ],

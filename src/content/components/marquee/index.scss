@@ -1,4 +1,5 @@
 #sx-marquee {
+  margin: 20px;
   .marquee {
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -22,5 +23,23 @@
       font-weight: 600;
       white-space: nowrap;
     }
+  }
+  .card {
+    width: 400px;
+    background: #ccc;
+    padding: 2rem;
+    margin: 0 auto;
+  }
+
+  .card-header {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .card-avt {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
   }
 }
