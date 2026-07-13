@@ -3,7 +3,7 @@ import "../styles/base.css";
 import { six } from "@six-js/core";
 import { componentsDocs } from "../content/components";
 import { codeBlock, mountCodeCopy, scopeCss } from "../content/shared";
-import type { ComponentDemo } from "../content/components/types";
+import type { ComponentDemo, ComponentDoc } from "../content/components/types";
 
 const root = document.querySelector<HTMLDivElement>("#app")!;
 
@@ -25,6 +25,44 @@ function renderDemoBody(sectionId: string, d: ComponentDemo): string {
       ${d.css ? `<div class="demo-tabs__panel" data-tab-panel="css">${codeBlock(d.css, "css")}</div>` : ""}
     </div>
   `;
+}
+
+function setupScrollSpy(doc: ComponentDoc) {
+  const sidebar = root.querySelector<HTMLElement>(".demo-sidebar");
+  const heading = sidebar?.querySelector<HTMLElement>(".section-sidebar__heading");
+  const links = Array.from(sidebar?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
+  if (!sidebar || !links.length) return;
+
+  const linkById = new Map(links.map((a) => [a.getAttribute("href")?.slice(1) ?? "", a]));
+
+  const setActive = (id: string) => {
+    const link = linkById.get(id);
+    if (!link) return;
+
+    links.forEach((a) => a.classList.remove("is-active"));
+    link.classList.add("is-active");
+
+    const label = link.textContent?.trim();
+    if (heading) heading.textContent = label ? `${doc.title} — ${label}` : doc.title;
+    document.title = label ? `${doc.title} — ${label} — demo` : `${doc.title} — demo`;
+  };
+
+  const firstId = links[0]?.getAttribute("href")?.slice(1);
+  if (firstId) setActive(firstId);
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    },
+    { rootMargin: "-15% 0px -70% 0px", threshold: 0 },
+  );
+
+  doc.demos.forEach((_, i) => {
+    const section = root.querySelector<HTMLElement>(`#${doc.slug}-demo-${i}`);
+    if (section) observer.observe(section);
+  });
 }
 
 function render() {
@@ -74,6 +112,8 @@ function render() {
     const section = root.querySelector<HTMLElement>(`#${doc.slug}-demo-${i}`);
     if (section) d.initDemo?.(section);
   });
+
+  setupScrollSpy(doc);
 }
 
 root.addEventListener("click", (e) => {

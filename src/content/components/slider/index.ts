@@ -359,7 +359,7 @@ export const slider: ComponentDoc = {
       ],
       [
         "lock-active",
-        "true | false — không tự đổi slide active khi bị điều khiển bởi sync",
+        "true | false — drag slider những giữ nguyên slide đang activ. Phục vụ trong việc xem thumbnail",
         "false",
       ],
       [
