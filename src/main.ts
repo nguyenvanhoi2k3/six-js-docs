@@ -29,7 +29,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <section class="hero__boxes container">
     <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--1">to()</sx-animate>
     <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--2">timeline()</sx-animate>
-    <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--3">media()</sx-animate>
+    <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--3">matchMedia()</sx-animate>
   </section>
 
   <section class="container home-links">
@@ -48,7 +48,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <sx-animate type="fade-up" cascade delay="1">
       <a href="/animatable.html">
         <h3>Animatable →</h3>
-        <p>six.to(), six.timeline(), stagger, onScroll, media() — toàn bộ animation engine.</p>
+        <p>six.to(), six.timeline(), stagger, onScroll, matchMedia() — toàn bộ animation engine.</p>
       </a>
     </sx-animate>
     <sx-animate type="fade-up" cascade delay="1">

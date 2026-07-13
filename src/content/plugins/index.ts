@@ -18,7 +18,7 @@ const pluginsContent: ContentMap = {
   "split-text/overview": {
     eyebrow: "Plugins",
     title: "splitText",
-    lead: "Tách text của một element thành mảng chars/words/lines để animate từng phần — tương tự SplitText của GSAP.",
+    lead: "Tách text của một element thành mảng chars/words/lines để animate từng phần.",
     render: () => `
       ${splitDemoText("split-overview-target", "Six-js splits text.")}
 
@@ -165,6 +165,8 @@ split.kill();`,
         [".split(vars?)", "merge vars mới rồi split lại, trả về chính instance (this)", "—"],
         [".revert() / .kill()", "khôi phục HTML gốc, gỡ toàn bộ side-effect (autoSplit, tween từ onSplit)", "—"],
       ])}
+
+      <p>Vì <span class="c-accent">SplitText</span> implement <span class="c-accent">Killable</span>, tạo instance bên trong handler của <span class="c-accent">six.matchMedia()</span> sẽ tự <span class="c-accent">revert()</span> khi rời khỏi điều kiện breakpoint hoặc khi scope bị kill — giống hệt cách <span class="c-accent">Playable</span> tự kill trong scope đó.</p>
     `,
   },
 };

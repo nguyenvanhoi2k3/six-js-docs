@@ -44,7 +44,7 @@ export const animatableNav: NavGroup[] = [
   {
     slug: "scope",
     label: "Media scope",
-    items: [{ slug: "media", label: "six.media()" }],
+    items: [{ slug: "matchMedia", label: "six.matchMedia()" }],
   },
   {
     slug: "utils",

@@ -206,7 +206,7 @@ const animatableContent: ContentMap = {
         "js",
       )}
       ${attrsTable([
-        ["start / end", "chuỗi kiểu GSAP: \"top bottom\", \"+=500\", hoặc nhãn tương đối", "—"],
+        ["start / end", "chuỗi vị trí: \"top bottom\", \"+=500\", hoặc nhãn tương đối", "—"],
         ["sync", "true (seek trực tiếp) hoặc số giây làm hằng số làm mượt (lag)", "false"],
         ["sticky", "ghim trigger element bằng position: fixed trong quãng scroll", "false"],
         ["target", "phần tử dùng làm mốc scroll, mặc định là chính tween target", "—"],
@@ -215,28 +215,41 @@ const animatableContent: ContentMap = {
     `,
   },
 
-  "scope/media": {
+  "scope/matchMedia": {
     eyebrow: "Animatable",
-    title: "six.media()",
-    lead: "Tương đương matchMedia/context của GSAP: đăng ký animation theo breakpoint, tự kill khi rời khỏi scope hoặc khi query đổi.",
+    title: "six.matchMedia()",
+    lead: "Chạy handler theo breakpoint dựa trên window.matchMedia, tự kill/re-run khi rời khỏi điều kiện hoặc khi query đổi.",
     render: () => `
       ${codeBlock(
-        `const scope = six.media({
-  isDesktop: "(min-width: 1024px)",
-  isMobile: "(max-width: 1023px)",
-});
+        `const scope = six.matchMedia(
+  {
+    isDesktop: "(min-width: 1024px)",
+    isMobile: "(max-width: 1023px)",
+  },
+  ({ isDesktop }, scope) => {
+    // handler chạy ngay lần đầu, rồi chạy lại mỗi khi kết quả match đổi
+    // mọi to/from/fromTo/timeline/stagger gọi đồng bộ ở đây
+    // sẽ tự bị kill trước lần chạy kế tiếp hoặc khi scope.kill()
+    six.to(".hero", { x: isDesktop ? 40 : 0, duration: 0.4 });
 
-scope.add(({ isDesktop }) => {
-  // mọi to/from/fromTo/timeline/stagger gọi đồng bộ ở đây
-  // sẽ tự bị kill khi rời điều kiện hoặc khi scope.kill()
-  six.to(".hero", { x: isDesktop ? 40 : 0, duration: 0.4 });
-});
+    // (tuỳ chọn) return một teardown function, chạy trước lần re-run kế tiếp
+    return () => six.set(".hero", { x: 0 });
+  },
+);
 
 // dọn dẹp toàn bộ khi component unmount
 scope.kill();`,
         "js",
       )}
-      <p>Nhiều media query đổi cùng lúc trong một frame sẽ được gộp qua một requestAnimationFrame duy nhất trước khi diff và chạy lại handler, tránh teardown/rebuild thừa.</p>
+
+      ${attrsTable([
+        ["queries", 'chuỗi query đơn (vd "(min-width: 1024px)") hoặc object map {name: query} — quyết định matches là boolean hay { [name]: boolean }', "—"],
+        ["handler(matches, scope)", "chạy đồng bộ ngay khi tạo, rồi chạy lại mỗi khi matches đổi; có thể return teardown function", "—"],
+        ["scope.refresh()", "ép chạy lại handler ngay cả khi matches không đổi", "—"],
+        ["scope.track(fn)", "bọc một callback để mọi tween gọi bên trong cũng được scope quản lý (dùng ngoài handler, vd trong event listener)", "—"],
+        ["scope.matches", "getter — snapshot kết quả match hiện tại", "—"],
+        ["scope.kill()", "huỷ toàn bộ: gỡ media query listener, kill tween đã capture, chạy teardown cuối cùng", "—"],
+      ])}
     `,
   },
 

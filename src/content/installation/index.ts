@@ -27,7 +27,7 @@ six.to(".box", { x: 400, duration: 1.5, ease: "quintInOut" });`,
 <script src="https://cdn.jsdelivr.net/npm/@six-js/core/dist/six-js.umd.js"></script>
 
 <script>
-  const { six } = SixJS;
+  const { six, splitText } = SixJS;
 
   six.initElements();
 
@@ -35,6 +35,7 @@ six.to(".box", { x: 400, duration: 1.5, ease: "quintInOut" });`,
 </script>`,
         "html",
       )}
+      <p class="note">Bản UMD (<code>six-js.umd.js</code>) là một file gộp duy nhất — Mọi  <span class="c-accent">Plugin</span> đã nằm sẵn trong đó.
 
       <h2 id="tree-shaking">3. Tree shaking &amp; plugin subpath</h2>
       <p>Bản build ESM (npm) tách <span class="c-accent">six</span> core và từng plugin (vd <span class="c-accent">splitText</span>) thành các chunk riêng. Import plugin qua subpath riêng để bundler chỉ gói phần bạn thực sự dùng, thay vì kéo theo toàn bộ core:</p>
