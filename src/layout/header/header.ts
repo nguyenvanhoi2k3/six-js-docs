@@ -1,6 +1,6 @@
 import { VERSION } from "@six-js/core";
 
-export type ActiveSection = "home" | "installation" | "components" | "animatable" | "showcase";
+export type ActiveSection = "home" | "installation" | "components" | "animatable" | "plugins" | "showcase";
 
 export function renderHeader(active: ActiveSection): string {
   const link = (section: ActiveSection, href: string, label: string) =>
@@ -18,6 +18,7 @@ export function renderHeader(active: ActiveSection): string {
         ${link("installation", "/installation.html", "Installation")}
         ${link("components", "/components.html", "Components")}
         ${link("animatable", "/animatable.html", "Animatable")}
+        ${link("plugins", "/plugins.html", "Plugins")}
         ${link("showcase", "/showcase.html", "Showcase")}
       </nav>
 

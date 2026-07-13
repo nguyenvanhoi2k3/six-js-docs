@@ -58,6 +58,19 @@ export const animatableNav: NavGroup[] = [
   },
 ];
 
+export const pluginsNav: NavGroup[] = [
+  {
+    slug: "split-text",
+    label: "splitText",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
+      { slug: "mask", label: "mask" },
+      { slug: "lifecycle", label: "split() / revert() / kill()" },
+    ],
+  },
+];
+
 export function findFirstLeaf(nav: NavGroup[]): string {
   const group = nav[0];
   return `${group.slug}/${group.items[0].slug}`;
