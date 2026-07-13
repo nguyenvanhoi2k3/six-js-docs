@@ -409,6 +409,32 @@ export const slider: ComponentDoc = {
         "—",
       ],
     ])}
+
+    <h2>Method</h2>
+    <p class="note">Lấy element <span class="c-accent">sx-slider</span> qua <span class="c-accent">querySelector</span> để gọi trực tiếp các method điều khiển.</p>
+    ${codeBlock(
+      `const slider = document.querySelector('sx-slider[name="my-slider"]');
+
+slider.next();
+
+slider.prev();
+
+slider.goTo(2);
+
+// Lấy index hiện tại để xử lý logic riêng
+const currentIndex = slider.getCurrentIndex();
+console.log("Slide hiện tại là:", currentIndex);`,
+      "js",
+    )}
+    <table class="content-pane__attrs">
+      <thead><tr><th>Method</th><th>Mô tả</th></tr></thead>
+      <tbody>
+        <tr><td>next()</td><td>chuyển đến slide kế tiếp</td></tr>
+        <tr><td>prev()</td><td>quay về slide trước đó</td></tr>
+        <tr><td>goTo(index)</td><td>nhảy thẳng đến slide theo index (bắt đầu từ 0)</td></tr>
+        <tr><td>getCurrentIndex()</td><td>trả về index (từ 0) của slide đang active — đã quy đổi về index thật kể cả khi loop</td></tr>
+      </tbody>
+    </table>
   `,
 
   demoSidebar: true,
