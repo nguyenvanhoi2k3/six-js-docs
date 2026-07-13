@@ -16,6 +16,18 @@ export function attrsTable(rows: [attr: string, value: string, def: string][]): 
   `;
 }
 
+/** Prefixes every top-level selector in `css` with `scope` so it only applies within that container. Skips at-rule blocks (@media, @keyframes, ...). */
+export function scopeCss(scope: string, css: string): string {
+  return css.replace(/(^|\})\s*([^{}]+)\{/g, (match, brace: string, selectorList: string) => {
+    if (selectorList.trim().startsWith("@")) return match;
+    const scoped = selectorList
+      .split(",")
+      .map((s) => `${scope} ${s.trim()}`)
+      .join(", ");
+    return `${brace}\n${scoped} {`;
+  });
+}
+
 export type CodeLang = "html" | "css" | "js" | "bash";
 
 const GRAMMAR_NAME: Record<CodeLang, string> = {
