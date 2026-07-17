@@ -21,7 +21,7 @@ export function renderSidebar(nav: NavGroup[], heading: string): string {
             ${group.items
               .map(
                 (item) =>
-                  `<li><a href="#${group.slug}/${item.slug}" data-slug="${group.slug}/${item.slug}">${item.label}</a></li>`,
+                  `<li><a href="#${group.slug}/${item.slug}" data-slug="${group.slug}/${item.slug}">${item.label}${item.badge ? ` <span class="badge">${item.badge}</span>` : ""}</a></li>`,
               )
               .join("")}
           </ul>

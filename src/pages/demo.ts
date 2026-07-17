@@ -1,6 +1,7 @@
 import "@six-js/core/style.css";
 import "../styles/base.css";
-import { six } from "@six-js/core";
+import "../styles/demo-fixed-light.css";
+import { enableElements } from "@six-js/core";
 import { componentsDocs } from "../content/components";
 import { codeBlock, mountCodeCopy, scopeCss } from "../content/shared";
 import type { ComponentDemo, ComponentDoc } from "../content/components/types";
@@ -107,7 +108,7 @@ function render() {
         </div>
       `;
 
-  six.initElements();
+  enableElements();
   doc.demos.forEach((d, i) => {
     const section = root.querySelector<HTMLElement>(`#${doc.slug}-demo-${i}`);
     if (section) d.initDemo?.(section);

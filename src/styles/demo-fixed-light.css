@@ -1,0 +1,27 @@
+/*
+  Trang demo (demo.html) hiển thị live demo của từng component, tách biệt khỏi giao diện
+  docs (không có theme toggle). Ghim cứng design tokens về bảng màu light bất kể
+  prefers-color-scheme của OS, để trang luôn là một trang trắng bình thường thay vì
+  đổi màu theo dark/light mode. !important để thắng cả rule dark mặc định lẫn
+  @media (prefers-color-scheme: light) trong tokens.css (cùng độ đặc hiệu, khác thời điểm nạp).
+*/
+:root {
+  color-scheme: light !important;
+
+  --bg: #ffffff !important;
+  --surface: #f5f4f9 !important;
+  --surface-2: #ececf3 !important;
+  --primary: #6428e0 !important;
+  --accent: #e2572f !important;
+  --text: #16141f !important;
+  --muted: #615c78 !important;
+  --border: #e2e0ea !important;
+
+  --code-tag: #c2185b !important;
+  --code-attr: #9a6a00 !important;
+  --code-string: #2f7d32 !important;
+  --code-keyword: #7c3aed !important;
+  --code-function: #2a56c6 !important;
+  --code-number: #c2410c !important;
+  --code-property: #0e7490 !important;
+}

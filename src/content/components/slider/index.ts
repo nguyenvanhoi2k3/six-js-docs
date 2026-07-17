@@ -127,7 +127,7 @@ const SNAKE_PAGINATION_CSS = `sx-slider-pagination[effect="snake"] {
      theo activeIndex * step tính từ mép trái của chính thẻ này, nên container
      không được stretch/centered bằng justify-content — chỉ canh giữa cả khối. */
   position: absolute;
-  bottom: 0.75rem;
+  bottom: 20px;
   left: 0;
   right: 0;
   width: fit-content;
@@ -186,7 +186,7 @@ sx-slider-pagination[effect="number"] .sx-slider-pagination-bullet {
 
 sx-slider-pagination[effect="number"] .sx-slider-pagination-bullet[sx-bullet-active] {
   background-color: #000;
-  border-color: #000;
+  border-color: #fff;
   color: #fff;
 }`;
 
@@ -200,7 +200,6 @@ const FRACTION_PAGINATION_CSS = `sx-slider-pagination[effect="fraction"] {
 }
 
 sx-slider-pagination[effect="fraction"] .sx-slider-pagination-current {
-  color: #000;
   font-weight: 700;
 }`;
 

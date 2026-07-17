@@ -52,7 +52,11 @@ export const dialog: ComponentDoc = {
       ["duration", "số giây (vd: 0.3)", "0.3"],
       ["close-on-outside-click", "true | false", "true"],
       ["close-on-esc-key", "true | false", "true"],
-      ["scrollable", "true | false — cho phép cuộn nền khi mở", "false"],
+      [
+        "scrollable",
+        'false (khoá hẳn — overflow:hidden + chặn wheel/touch) | "scrollbar" (chỉ chặn wheel/touch, vẫn hiện thanh scrollbar nền, không giật layout) | true (không khoá gì)',
+        "false",
+      ],
       ["overlay", "true | false", "true"],
       [
         "overlay-style",
@@ -82,6 +86,34 @@ ${attrsTable([
     "0.25",
   ],
 ])}
+<p class="note">Kéo nhanh (vuốt) cũng tự đóng dù chưa kéo đủ khoảng cách <code>threshold</code> — six-js tính thêm vận tốc kéo, vượt một ngưỡng nhất định là đóng ngay bất kể đã kéo được bao xa.</p>
+
+<h2>sx-dialog-trigger</h2>
+<p>Tự thêm attribute <code>sx-active</code> lên chính nó trong suốt lúc dialog cùng <code>name</code> đang mở (theo dõi qua MutationObserver, không cần code thêm) — dùng làm hook CSS để tô đậm nút/tab đang mở dialog tương ứng:</p>
+${codeBlock(`sx-dialog-trigger[sx-active] {
+  color: var(--accent);
+}`, "css")}
+
+<h2>Sự kiện</h2>
+<p>Bắn trên chính thẻ <span class="c-accent">sx-dialog</span> (bubbles, composed) — lắng nghe bằng <code>addEventListener</code> như event DOM thường.</p>
+${attrsTable([
+  [
+    "sx-dialog-before-open",
+    "cancelable — gọi preventDefault() trong listener để chặn không cho mở",
+    "—",
+  ],
+  ["sx-dialog-after-open", "bắn sau khi đã mở và focus phần tử đầu tiên xong", "—"],
+  [
+    "sx-dialog-before-close",
+    "cancelable — gọi preventDefault() để chặn không cho đóng (vd chờ xác nhận)",
+    "—",
+  ],
+  ["sx-dialog-after-close", "bắn sau khi hiệu ứng đóng (duration) hoàn tất", "—"],
+])}
+${codeBlock(`document.querySelector('sx-dialog[name="dialog1"]').addEventListener("sx-dialog-before-close", (e) => {
+  if (!confirm("Đóng dialog?")) e.preventDefault();
+});`, "js")}
+<p class="note">Mở/đóng bằng JS (không qua <span class="c-accent">sx-dialog-trigger</span>) bằng cách bắn <code>window</code> event <span class="c-accent">sx-dialog-toggle</span> với <code>detail: { name }</code>, hoặc gọi trực tiếp <code>dialogEl.open()</code> / <code>dialogEl.close()</code> — cả hai đều trả về <code>boolean</code> (false nếu bị <code>before-open</code>/<code>before-close</code> preventDefault(), hoặc dialog đã ở đúng trạng thái đó rồi).</p>
   `,
 
   // ---- Demos: paste/edit the raw HTML inside each renderDemo() below ----

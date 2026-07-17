@@ -1,6 +1,6 @@
 import "@six-js/core/style.css";
 import "./styles/base.css";
-import { six } from "@six-js/core";
+import { enableElements } from "@six-js/core";
 import { renderHeader } from "./layout/header/header";
 import { mountThemeToggle } from "./layout/header/theme";
 import { renderFooter } from "./layout/footer/footer";
@@ -29,7 +29,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <section class="hero__boxes container">
     <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--1">to()</sx-animate>
     <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--2">timeline()</sx-animate>
-    <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--3">matchMedia()</sx-animate>
+    <sx-animate type="fade-up" cascade delay="0.8" class="hero-box hero-box--3">context()</sx-animate>
   </section>
 
   <section class="container home-links">
@@ -48,7 +48,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
     <sx-animate type="fade-up" cascade delay="1">
       <a href="/animatable.html">
         <h3>Animatable →</h3>
-        <p>six.to(), six.timeline(), stagger, onScroll, matchMedia() — toàn bộ animation engine.</p>
+        <p>six.to(), six.timeline(), stagger, onScroll, smoothScroll(), context(), breakpoint() — toàn bộ animation engine.</p>
       </a>
     </sx-animate>
     <sx-animate type="fade-up" cascade delay="1">
@@ -63,4 +63,4 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 `;
 
 mountThemeToggle(document);
-six.initElements();
+enableElements();

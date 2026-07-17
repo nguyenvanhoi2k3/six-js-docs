@@ -1,4 +1,4 @@
-import { six } from "@six-js/core";
+import { enableElements } from "@six-js/core";
 import type { NavGroup } from "../nav/nav-data";
 import { findFirstLeaf } from "../nav/nav-data";
 import { renderSidebar } from "../nav/sidebar";
@@ -52,7 +52,7 @@ export function initSectionRouter(options: SectionRouterOptions): void {
       </article>
     `;
 
-    six.initElements();
+    enableElements();
     entry.init?.(contentEl);
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }

@@ -26,6 +26,8 @@ export const animatableNav: NavGroup[] = [
       { slug: "to", label: "six.to()" },
       { slug: "from", label: "six.from()" },
       { slug: "fromTo", label: "six.fromTo()" },
+      { slug: "keyframes", label: "keyframes" },
+      { slug: "properties", label: "Thuộc tính & Easing" },
     ],
   },
   {
@@ -39,21 +41,27 @@ export const animatableNav: NavGroup[] = [
   {
     slug: "scroll",
     label: "Cuộn trang",
-    items: [{ slug: "onScroll", label: "onScroll (ScrollTrigger)" }],
+    items: [
+      { slug: "onScroll", label: "onScroll (OnScroll)" },
+      { slug: "smoothScroll", label: "six.smoothScroll()" },
+    ],
   },
   {
     slug: "scope",
-    label: "Media scope",
-    items: [{ slug: "matchMedia", label: "six.matchMedia()" }],
+    label: "Scope",
+    items: [
+      { slug: "context", label: "six.context()" },
+      { slug: "breakpoint", label: "six.breakpoint()" },
+    ],
   },
   {
     slug: "utils",
     label: "Tiện ích",
     items: [
       { slug: "set", label: "six.set()" },
-      { slug: "setDefaults", label: "six.setDefaults()" },
-      { slug: "selectors", label: "getClass() / getId()" },
-      { slug: "initElements", label: "six.initElements()" },
+      { slug: "config", label: "six.config()" },
+      { slug: "helpers", label: "six.utils" },
+      { slug: "enableElements", label: "enableElements()" },
     ],
   },
 ];
@@ -65,7 +73,7 @@ export const pluginsNav: NavGroup[] = [
     items: [
       { slug: "overview", label: "Tổng quan" },
       { slug: "options", label: "Options" },
-      { slug: "mask", label: "mask" },
+      { slug: "overflow", label: "overflow (mask)" },
       { slug: "lifecycle", label: "split() / revert() / kill()" },
     ],
   },

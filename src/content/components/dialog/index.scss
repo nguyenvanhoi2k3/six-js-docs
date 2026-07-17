@@ -36,7 +36,7 @@ sx-dialog {
   sx-dialog[name="dialog-responsive"] {
     --sx-dialog-radius: 0;
     .dialog-cart {
-      background-color: #fff;
+      background-color: var(--surface);
       padding: 20px;
       height: 100vh;
       width: min(420px, 100vw);
