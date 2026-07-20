@@ -1,4 +1,3 @@
-import "@six-js/core/style.css";
 import "../styles/base.css";
 import { renderHeader } from "../layout/header/header";
 import { mountThemeToggle } from "../layout/header/theme";
@@ -7,15 +6,18 @@ import { componentsList } from "../layout/nav/nav-data";
 import { componentsDocs } from "../content/components";
 import { mountCodeCopy } from "../content/shared";
 import { renderFooter } from "../layout/footer/footer";
+import { h, Fragment } from "../jsx";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  ${renderHeader("components")}
-  <div class="section-layout">
-    <aside class="section-sidebar" id="sidebar"></aside>
-    <main class="section-content" id="content"></main>
-  </div>
-  ${renderFooter()}
-`;
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = (
+  <>
+    {renderHeader("components")}
+    <div class="section-layout">
+      <aside class="section-sidebar" id="sidebar" />
+      <main class="section-content" id="content" />
+    </div>
+    {renderFooter()}
+  </>
+);
 
 mountThemeToggle(document);
 mountCodeCopy();
@@ -37,17 +39,19 @@ function renderRoute() {
 
   links.forEach((a) => a.classList.toggle("is-active", a.dataset.slug === slug));
 
-  contentEl.innerHTML = `
+  contentEl.innerHTML = (
     <article class="content-pane">
-      <span class="content-pane__eyebrow">${doc.eyebrow}</span>
-      <h1>${doc.title}</h1>
-      <p class="content-pane__lead">${doc.lead}</p>
+      <span class="content-pane__eyebrow">{doc.eyebrow}</span>
+      <h1>{doc.title}</h1>
+      <p class="content-pane__lead">{doc.lead}</p>
       <div class="content-pane__panel">
-        <a class="btn btn--primary" href="/demo.html?c=${doc.slug}" target="_blank" rel="noopener">Xem demo ↗</a>
+        <a class="btn btn--primary" href={`/demo.html?c=${doc.slug}`} target="_blank" rel="noopener">
+          Xem demo ↗
+        </a>
       </div>
-      ${doc.render()}
+      {doc.render()}
     </article>
-  `;
+  );
 
   window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
 }

@@ -14,10 +14,14 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    /* JSX (custom string-returning pragma, see src/jsx.ts) */
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+
     /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]

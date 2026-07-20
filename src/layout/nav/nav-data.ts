@@ -15,10 +15,9 @@ export const componentsList: NavLeaf[] = [
   { slug: "dialog", label: "Dialog" },
   { slug: "slider", label: "Slider" },
   { slug: "marquee", label: "Marquee" },
-  { slug: "animate", label: "Animate" },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
-export const animatableNav: NavGroup[] = [
+export const coreNav: NavGroup[] = [
   {
     slug: "tween",
     label: "Tween cơ bản",
@@ -41,10 +40,7 @@ export const animatableNav: NavGroup[] = [
   {
     slug: "scroll",
     label: "Cuộn trang",
-    items: [
-      { slug: "onScroll", label: "onScroll (OnScroll)" },
-      { slug: "smoothScroll", label: "six.smoothScroll()" },
-    ],
+    items: [{ slug: "onScroll", label: "onScroll (OnScroll)" }],
   },
   {
     slug: "scope",
@@ -61,7 +57,6 @@ export const animatableNav: NavGroup[] = [
       { slug: "set", label: "six.set()" },
       { slug: "config", label: "six.config()" },
       { slug: "helpers", label: "six.utils" },
-      { slug: "enableElements", label: "enableElements()" },
     ],
   },
 ];
@@ -69,12 +64,55 @@ export const animatableNav: NavGroup[] = [
 export const pluginsNav: NavGroup[] = [
   {
     slug: "split-text",
-    label: "splitText",
+    label: "SplitText",
     items: [
       { slug: "overview", label: "Tổng quan" },
       { slug: "options", label: "Options" },
       { slug: "overflow", label: "overflow (mask)" },
       { slug: "lifecycle", label: "split() / revert() / kill()" },
+    ],
+  },
+  {
+    slug: "smooth-scroll",
+    label: "SmoothScroll",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
+      { slug: "instance", label: "Instance" },
+    ],
+  },
+  {
+    slug: "scramble-text",
+    label: "ScrambleText",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
+      { slug: "odometer", label: 'mode: "odometer"' },
+    ],
+  },
+  {
+    slug: "burst",
+    label: "Burst",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
+    ],
+  },
+  {
+    slug: "svg-motion",
+    label: "SvgMotion",
+    items: [
+      { slug: "draw", label: 'mode: "draw"' },
+      { slug: "morph", label: 'mode: "morph"' },
+      { slug: "motion-path", label: 'mode: "path"' },
+    ],
+  },
+  {
+    slug: "parallax",
+    label: "Parallax",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
     ],
   },
 ];

@@ -1,6 +1,7 @@
 import "./index.scss";
 import { attrsTable, codeBlock } from "../../shared";
 import type { ComponentDoc } from "../types";
+import { h, Fragment } from "../../../jsx";
 
 // ---- Shared CSS building blocks reused (and shown in full, self-contained form) across demos below ----
 
@@ -238,9 +239,10 @@ export const slider: ComponentDoc = {
   eyebrow: "sx-slider",
   title: "Slider",
   lead: "Slider/carousel kéo bằng chuột hoặc chạm, hỗ trợ loop, autoplay, hiệu ứng fade, pagination/progress, và đồng bộ nhiều slider.",
-  render: () => `
-    <h2>Code</h2>
-    ${codeBlock(`<sx-slider
+  render: () => (
+    <>
+      <h2>Code</h2>
+      {codeBlock(`<sx-slider
   name="slider-1"
   per-view="1"
   gap="0"
@@ -282,137 +284,69 @@ export const slider: ComponentDoc = {
   <sx-slider-progress></sx-slider-progress>
 </sx-slider>`)}
 
-    <h2>Attributes</h2>
-    ${attrsTable([
-      [
-        "name",
-        "định danh slider — cần khi dùng sync, hoặc để prev/next/pagination/progress ở ngoài trỏ vào",
-        "—",
-      ],
-      ["per-view", "số slide hiển thị cùng lúc", "1"],
-      ["gap", "khoảng cách giữa các slide (px hoặc đơn vị CSS)", "0"],
-      [
-        "drag",
-        "true | false | free — free là kéo trôi tự do có quán tính",
-        "true",
-      ],
-      ["speed", "thời gian chuyển slide, tính bằng giây (vd: 0.3)", "0.3"],
-      ["direction", "horizontal | vertical", "horizontal"],
-      ["start-index", "index slide bắt đầu", "0"],
-      ["per-move", "số slide di chuyển mỗi lần next/prev, hoặc auto", "auto"],
-      [
-        "loop",
-        "true | false — nhân bản slide đầu/cuối để cuộn vô hạn",
-        "false",
-      ],
-      ["rewind", "true | false — nhảy về đầu/cuối khi không loop", "false"],
-      ["autoplay", "bật tự động chạy", "false"],
-      ["interval", "chu kỳ tự động chạy, tính bằng giây (vd: 4)", "4"],
-      ["effect", "slide | fade", "slide"],
-      [
-        "grab-cursor",
-        "true | false — đổi con trỏ chuột thành grab/grabbing khi kéo",
-        "false",
-      ],
-      [
-        "snap",
-        'true | false — chỉ dùng với drag="free", tự căn về slide gần nhất khi thả tay',
-        "false",
-      ],
-      [
-        "auto-size",
-        "true | false — chiều rộng slide tự theo nội dung thay vì chia đều theo per-view",
-        "false",
-      ],
-      [
-        "centered",
-        "true | false — căn slide đang active vào giữa container",
-        "false",
-      ],
-      [
-        "auto-centered",
-        "true | false — như centered nhưng không chừa khoảng trống 2 đầu",
-        "false",
-      ],
-      [
-        "center-if-short",
-        "true | false — tự căn giữa khi tổng slide ngắn hơn container",
-        "false",
-      ],
-      [
-        "auto-height",
-        "true | false — chiều cao track tự co giãn theo slide đang active",
-        "false",
-      ],
-      ["right-padding", "khoảng đệm bên phải track (px hoặc đơn vị CSS)", "0"],
-      ["left-padding", "khoảng đệm bên trái track (px hoặc đơn vị CSS)", "0"],
-      [
-        "edge-resistance",
-        'độ "đàn hồi" (px) khi kéo quá biên lúc không loop',
-        "100",
-      ],
-      [
-        "vertical-scroll",
-        'true | false — cho cuộn bằng wheel khi direction="vertical"',
-        "false",
-      ],
-      [
-        "lock-active",
-        "true | false — drag slider những giữ nguyên slide đang activ. Phục vụ trong việc xem thumbnail",
-        "false",
-      ],
-      [
-        "sync",
-        "name của (các) slider khác cần đồng bộ theo, cách nhau bởi dấu phẩy",
-        "—",
-      ],
-      [
-        "breakpoints",
-        "JSON theo container width, override các attribute trên",
-        "—",
-      ],
-    ])}
+      <h2>Attributes</h2>
+      {attrsTable([
+        ["name", "định danh slider — cần khi dùng sync, hoặc để prev/next/pagination/progress ở ngoài trỏ vào", "—"],
+        ["per-view", "số slide hiển thị cùng lúc", "1"],
+        ["gap", "khoảng cách giữa các slide (px hoặc đơn vị CSS)", "0"],
+        ["drag", "true | false | free — free là kéo trôi tự do có quán tính", "true"],
+        ["speed", "thời gian chuyển slide, tính bằng giây (vd: 0.3)", "0.3"],
+        ["direction", "horizontal | vertical", "horizontal"],
+        ["start-index", "index slide bắt đầu", "0"],
+        ["per-move", "số slide di chuyển mỗi lần next/prev, hoặc auto", "auto"],
+        ["loop", "true | false — nhân bản slide đầu/cuối để cuộn vô hạn", "false"],
+        ["rewind", "true | false — nhảy về đầu/cuối khi không loop", "false"],
+        ["autoplay", "bật tự động chạy", "false"],
+        ["interval", "chu kỳ tự động chạy, tính bằng giây (vd: 4)", "4"],
+        ["effect", "slide | fade", "slide"],
+        ["grab-cursor", "true | false — đổi con trỏ chuột thành grab/grabbing khi kéo", "false"],
+        ["snap", 'true | false — chỉ dùng với drag="free", tự căn về slide gần nhất khi thả tay', "false"],
+        ["auto-size", "true | false — chiều rộng slide tự theo nội dung thay vì chia đều theo per-view", "false"],
+        ["centered", "true | false — căn slide đang active vào giữa container", "false"],
+        ["auto-centered", "true | false — như centered nhưng không chừa khoảng trống 2 đầu", "false"],
+        ["center-if-short", "true | false — tự căn giữa khi tổng slide ngắn hơn container", "false"],
+        ["auto-height", "true | false — chiều cao track tự co giãn theo slide đang active", "false"],
+        ["right-padding", "khoảng đệm bên phải track (px hoặc đơn vị CSS)", "0"],
+        ["left-padding", "khoảng đệm bên trái track (px hoặc đơn vị CSS)", "0"],
+        ["edge-resistance", 'độ "đàn hồi" (px) khi kéo quá biên lúc không loop', "100"],
+        ["vertical-scroll", 'true | false — cho cuộn bằng wheel khi direction="vertical"', "false"],
+        ["lock-active", "true | false — drag slider những giữ nguyên slide đang activ. Phục vụ trong việc xem thumbnail", "false"],
+        ["sync", "name của (các) slider khác cần đồng bộ theo, cách nhau bởi dấu phẩy", "—"],
+        ["breakpoints", "JSON theo container width, override các attribute trên", "—"],
+      ])}
 
-    <h2>sx-slider-prev / sx-slider-next</h2>
-    <p class="note">Có thể đặt bên trong <span class="c-accent">sx-slider</span>, hoặc ở ngoài (portal) và trỏ đến slider bằng attribute <span class="c-accent">name</span>.</p>
-    ${codeBlock(`<sx-slider-prev name="slider-1">Prev</sx-slider-prev>
+      <h2>sx-slider-prev / sx-slider-next</h2>
+      <p class="note">
+        Có thể đặt bên trong <span class="c-accent">sx-slider</span>, hoặc ở ngoài (portal) và trỏ đến slider bằng attribute <span class="c-accent">name</span>.
+      </p>
+      {codeBlock(`<sx-slider-prev name="slider-1">Prev</sx-slider-prev>
 <sx-slider-next name="slider-1">Next</sx-slider-next>`)}
-    ${attrsTable([
-      [
-        "name",
-        "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó",
-        "—",
-      ],
-    ])}
-    <p class="note">Tự động nhận attribute <span class="c-accent">sx-disabled</span> khi ở đầu/cuối danh sách (không loop, không rewind).</p>
+      {attrsTable([["name", "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó", "—"]])}
+      <p class="note">Tự động nhận attribute <span class="c-accent">sx-disabled</span> khi ở đầu/cuối danh sách (không loop, không rewind).</p>
 
-    <h2>sx-slider-pagination</h2>
-    ${codeBlock(`<sx-slider-pagination name="slider-1" effect="bullet"></sx-slider-pagination>`)}
-    ${attrsTable([
-      [
-        "name",
-        "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó",
-        "—",
-      ],
-      ["effect", "bullet | number | dynamic | snake | fraction", "bullet"],
-    ])}
-    <p class="note"><span class="c-accent">effect</span> chỉ quyết định HTML render ra (bullet/số/dynamic/snake/fraction) — vẫn cần tự viết CSS để có hiệu ứng hiển thị tương ứng.</p>
+      <h2>sx-slider-pagination</h2>
+      {codeBlock(`<sx-slider-pagination name="slider-1" effect="bullet"></sx-slider-pagination>`)}
+      {attrsTable([
+        ["name", "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó", "—"],
+        ["effect", "bullet | number | dynamic | snake | fraction", "bullet"],
+      ])}
+      <p class="note">
+        <span class="c-accent">effect</span> chỉ quyết định HTML render ra (bullet/số/dynamic/snake/fraction) — vẫn cần tự viết CSS để có hiệu ứng hiển thị tương ứng.
+      </p>
 
-    <h2>sx-slider-progress</h2>
-    <p class="note">Thanh tiến trình theo % đã cuộn. Có thể đặt bên trong <span class="c-accent">sx-slider</span>, hoặc ở ngoài (portal) và trỏ đến slider bằng attribute <span class="c-accent">name</span>.</p>
-    ${codeBlock(`<sx-slider-progress name="slider-1"></sx-slider-progress>`)}
-    ${attrsTable([
-      [
-        "name",
-        "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó",
-        "—",
-      ],
-    ])}
+      <h2>sx-slider-progress</h2>
+      <p class="note">
+        Thanh tiến trình theo % đã cuộn. Có thể đặt bên trong <span class="c-accent">sx-slider</span>, hoặc ở ngoài (portal) và trỏ đến slider bằng attribute <span class="c-accent">name</span>.
+      </p>
+      {codeBlock(`<sx-slider-progress name="slider-1"></sx-slider-progress>`)}
+      {attrsTable([["name", "name của sx-slider cần điều khiển — bỏ trống nếu đặt bên trong slider đó", "—"]])}
 
-    <h2>Method</h2>
-    <p class="note">Lấy element <span class="c-accent">sx-slider</span> qua <span class="c-accent">querySelector</span> để gọi trực tiếp các method điều khiển.</p>
-    ${codeBlock(
-      `const slider = document.querySelector('sx-slider[name="my-slider"]');
+      <h2>Method</h2>
+      <p class="note">
+        Lấy element <span class="c-accent">sx-slider</span> qua <span class="c-accent">querySelector</span> để gọi trực tiếp các method điều khiển.
+      </p>
+      {codeBlock(
+        `const slider = document.querySelector('sx-slider[name="my-slider"]');
 
 slider.next();
 
@@ -423,18 +357,36 @@ slider.goTo(2);
 // Lấy index hiện tại để xử lý logic riêng
 const currentIndex = slider.getCurrentIndex();
 console.log("Slide hiện tại là:", currentIndex);`,
-      "js",
-    )}
-    <table class="content-pane__attrs">
-      <thead><tr><th>Method</th><th>Mô tả</th></tr></thead>
-      <tbody>
-        <tr><td>next()</td><td>chuyển đến slide kế tiếp</td></tr>
-        <tr><td>prev()</td><td>quay về slide trước đó</td></tr>
-        <tr><td>goTo(index)</td><td>nhảy thẳng đến slide theo index (bắt đầu từ 0)</td></tr>
-        <tr><td>getCurrentIndex()</td><td>trả về index (từ 0) của slide đang active — đã quy đổi về index thật kể cả khi loop</td></tr>
-      </tbody>
-    </table>
-  `,
+        "js",
+      )}
+      <table class="content-pane__attrs">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Mô tả</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>next()</td>
+            <td>chuyển đến slide kế tiếp</td>
+          </tr>
+          <tr>
+            <td>prev()</td>
+            <td>quay về slide trước đó</td>
+          </tr>
+          <tr>
+            <td>goTo(index)</td>
+            <td>nhảy thẳng đến slide theo index (bắt đầu từ 0)</td>
+          </tr>
+          <tr>
+            <td>getCurrentIndex()</td>
+            <td>trả về index (từ 0) của slide đang active — đã quy đổi về index thật kể cả khi loop</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  ),
 
   demoSidebar: true,
 

@@ -1,3 +1,5 @@
+import { h } from "../../jsx";
+
 export interface ContentEntry {
   eyebrow: string;
   title: string;
@@ -13,6 +15,6 @@ export function placeholderEntry(eyebrow: string, title: string): ContentEntry {
     eyebrow,
     title,
     lead: "Trang demo cho mục này đang được xây dựng.",
-    render: () => `<div class="content-pane__placeholder">Nội dung đang được cập nhật — quay lại sau nhé.</div>`,
+    render: () => <div class="content-pane__placeholder">Nội dung đang được cập nhật — quay lại sau nhé.</div>,
   };
 }

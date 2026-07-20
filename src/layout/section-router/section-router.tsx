@@ -1,8 +1,8 @@
-import { enableElements } from "@six-js/core";
 import type { NavGroup } from "../nav/nav-data";
 import { findFirstLeaf } from "../nav/nav-data";
 import { renderSidebar } from "../nav/sidebar";
 import type { ContentMap } from "./content-types";
+import { h } from "../../jsx";
 
 export interface SectionRouterOptions {
   nav: NavGroup[];
@@ -39,20 +39,19 @@ export function initSectionRouter(options: SectionRouterOptions): void {
     });
 
     if (!entry) {
-      contentEl.innerHTML = `<div class="content-pane__placeholder">Không tìm thấy nội dung.</div>`;
+      contentEl.innerHTML = <div class="content-pane__placeholder">Không tìm thấy nội dung.</div>;
       return;
     }
 
-    contentEl.innerHTML = `
+    contentEl.innerHTML = (
       <article class="content-pane">
-        <span class="content-pane__eyebrow">${entry.eyebrow}</span>
-        <h1>${entry.title}</h1>
-        <p class="content-pane__lead">${entry.lead}</p>
-        ${entry.render()}
+        <span class="content-pane__eyebrow">{entry.eyebrow}</span>
+        <h1>{entry.title}</h1>
+        <p class="content-pane__lead">{entry.lead}</p>
+        {entry.render()}
       </article>
-    `;
+    );
 
-    enableElements();
     entry.init?.(contentEl);
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }

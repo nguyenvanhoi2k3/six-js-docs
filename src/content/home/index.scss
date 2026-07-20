@@ -1,0 +1,359 @@
+#home-page {
+  position: relative;
+  overflow: hidden;
+
+  .hero-layout {
+    min-height: calc(100vh - 64px);
+  }
+
+  .hero {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-6) var(--container-pad);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    align-items: center;
+    gap: var(--space-5);
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .hero-kicker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0 0 var(--space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .hero-kicker__rule {
+    flex: none;
+    width: 28px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--primary);
+  }
+
+  .hero-title {
+    position: relative;
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .hero-text--2,
+  .hero-text--3 {
+    display: block;
+  }
+
+  .hero-title__highlight {
+    display: inline-block;
+  }
+
+  .hero-title__underline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0.32em;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .hero-title__underline path {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 6;
+    /* butt, not round: mode:"draw" represents 0% as a genuine 0-length dash,
+       and only "butt" paints nothing for a 0-length dash (round/square still
+       paint their cap), so this is what keeps it invisible before its turn. */
+    stroke-linecap: butt;
+  }
+
+  .hero-desc {
+    max-width: 46ch;
+    margin: var(--space-3) 0 var(--space-4);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-snippet {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    padding: var(--space-1) var(--space-1) var(--space-1) var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+
+  .hero-snippet code {
+    padding: 0;
+    background: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  .hero-snippet__stage {
+    position: relative;
+    flex: none;
+    width: 96px;
+    height: 34px;
+    border-radius: 7px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+  }
+
+  .hero-snippet__box {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: linear-gradient(140deg, var(--primary), color-mix(in srgb, var(--primary) 55%, black));
+  }
+
+  /* ---------- Right-column decorative shape cluster ---------- */
+
+  .hero-shapes {
+    position: relative;
+    height: 100%;
+    min-height: 420px;
+  }
+
+  /* Parallax target — overlays .hero-shapes exactly (inset:0) so the wandering
+     shape inside keeps resolving its own left/top/right/bottom percentages
+     against the same box as before; only carries the cursor-driven transform,
+     never the shape's own wander transform, so the two never fight. */
+  .hero-shape-wrap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-shape--blob {
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    width: 184px;
+    height: 184px;
+    overflow: visible;
+    filter: drop-shadow(0 22px 44px rgba(10, 10, 20, 0.35));
+    animation: hero-shape-float-1 7s ease-in-out infinite;
+  }
+
+  .hero-shapes__orbit {
+    position: absolute;
+    left: 30%;
+    top: 30%;
+    width: 184px;
+    height: 184px;
+    pointer-events: none;
+    animation: hero-shape-spin 14s linear infinite;
+  }
+
+  .hero-shapes__orbit::before {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    border: 1px dashed color-mix(in srgb, var(--primary) 34%, transparent);
+    border-radius: 50%;
+  }
+
+  .hero-shapes__dot {
+    position: absolute;
+    left: 50%;
+    top: -21px;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--primary) 55%, white 30%);
+    box-shadow: 0 0 14px var(--primary);
+  }
+
+  .hero-shape--square-lg {
+    position: absolute;
+    left: 10%;
+    top: 12%;
+    width: 100px;
+    height: 100px;
+    border-radius: 24px;
+    background: linear-gradient(140deg, var(--primary), color-mix(in srgb, var(--primary) 55%, black));
+    box-shadow: 0 18px 36px rgba(10, 10, 20, 0.3);
+    will-change: transform;
+  }
+
+  .hero-shape--circle-outline {
+    position: absolute;
+    right: 8%;
+    top: 4%;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    will-change: transform;
+  }
+
+  .hero-shape--square-md {
+    position: absolute;
+    right: 14%;
+    bottom: 12%;
+    width: 84px;
+    height: 84px;
+    border-radius: 20px;
+    background: linear-gradient(140deg, color-mix(in srgb, var(--primary) 75%, white 15%), var(--primary));
+    box-shadow: 0 18px 36px rgba(10, 10, 20, 0.3);
+    will-change: transform;
+  }
+
+  .hero-shape--circle-sm {
+    position: absolute;
+    left: 8%;
+    bottom: 10%;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--primary) 55%, white 35%);
+    will-change: transform;
+  }
+
+  .hero-shape--square-outline-sm {
+    position: absolute;
+    right: 42%;
+    bottom: 2%;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    border: 2px solid color-mix(in srgb, var(--primary) 55%, white 35%);
+    will-change: transform;
+  }
+
+  @keyframes hero-shape-float-1 {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+
+  @keyframes hero-shape-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-shapes {
+      display: none;
+    }
+  }
+
+  .aurora {
+    position: absolute;
+    inset: -14%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(64px);
+    opacity: 0.62;
+  }
+  .aurora .blob {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+  }
+  /* dùng token accent của Nocturne */
+  .aurora .b1 {
+    left: 6%;
+    top: -8%;
+    width: 48%;
+    height: 72%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--primary) 52%, transparent),
+      transparent 62%
+    );
+    animation: aurora-drift-1 10s ease-in-out infinite;
+  }
+  .aurora .b2 {
+    right: 0;
+    top: 12%;
+    width: 42%;
+    height: 64%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--primary) 36%, transparent),
+      transparent 64%
+    );
+    animation: aurora-drift-2 13s ease-in-out infinite;
+  }
+  .aurora .b3 {
+    left: 20%;
+    bottom: -20%;
+    width: 52%;
+    height: 64%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--primary) 32%, transparent),
+      transparent 64%
+    );
+    animation: aurora-drift-3 16s ease-in-out infinite;
+  }
+  @keyframes aurora-drift-1 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(12%, -10%) scale(1.18);
+    }
+  }
+  @keyframes aurora-drift-2 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(-16%, 12%) scale(1.18);
+    }
+  }
+  @keyframes aurora-drift-3 {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(20%, -14%) scale(1.18);
+    }
+  }
+}
