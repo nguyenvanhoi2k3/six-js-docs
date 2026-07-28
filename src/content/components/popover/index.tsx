@@ -95,7 +95,7 @@ export const popover: ComponentDoc = {
         ["name", "string — khớp với sx-popover-trigger name", "—"],
         ["position", "top | top-start | top-end | right | right-start | right-end | bottom | bottom-start | bottom-end | left | left-start | left-end", "bottom"],
         ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "zoom"],
-        ["ease", "chuỗi CSS transition-timing-function — dùng nguyên văn, không qua tên easing của six-js", "cubic-bezier(0.4, 0, 0.2, 1)"],
+        ["ease", 'tên easing cho component (xem trang <a href="/ease.html#component">Ease</a>), hoặc chuỗi CSS transition-timing-function bất kỳ (vd: ease-in-out, cubic-bezier(...))', "cubic-bezier(0.4, 0, 0.2, 1)"],
         ["duration", "số giây (vd: 0.15)", "0.15"],
         ["offset", "khoảng cách (px) giữa trigger và popover", "8"],
         ["flip", "tự chuyển sang phía đối diện nếu phía đang chọn không đủ chỗ", "true"],

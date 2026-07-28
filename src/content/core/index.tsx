@@ -15,7 +15,7 @@ function playgroundBox(label: string): string {
 
 const tweenCommonAttrs = attrsTable([
   ["duration", "thời gian, tính bằng giây", "0.8 (six.config())"],
-  ["ease", 'tên easing (xem trang "Thuộc tính & Easing") hoặc hàm (t: number) => number', '"none" (tuyến tính, six.config())'],
+  ["ease", 'tên easing (xem trang <a href="/ease.html#core">Ease</a>) hoặc hàm (t: number) => number', '"none" (tuyến tính, six.config())'],
   ["delay", "giây trước khi tween thực sự chạy", "0"],
   ["repeat", "số lần lặp lại (-1 = vô hạn)", "0"],
   ["repeatDelay", "khoảng nghỉ giữa các lần lặp (giây)", "0"],
@@ -304,6 +304,9 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
         )}
 
         <h2>Bảng easing (ease: "...")</h2>
+        <p>
+          Danh sách đầy đủ kèm mô tả dáng từng easing tại trang <a href="/ease.html#core">Ease</a>.
+        </p>
         {codeBlock(
           `// Mỗi họ có 3 biến thể In / Out / InOut, vd quadIn, quadOut, quadInOut:
 quad · cubic · quart · quint · sine · expo · circ · back · bounce · elastic

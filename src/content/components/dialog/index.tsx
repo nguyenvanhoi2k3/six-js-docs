@@ -50,7 +50,7 @@ export const dialog: ComponentDoc = {
         ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "zoom"],
         ["position", "center | top | bottom | left | right | top-left | top-right | bottom-left | bottom-right", "center"],
         ["duration", "số giây (vd: 0.3)", "0.3"],
-        ["ease", "chuỗi CSS transition-timing-function (vd: ease-out, cubic-bezier(...)) — dùng nguyên văn cho transition CSS, không qua tên easing của six-js", "cubic-bezier(0.4, 0, 0.2, 1)"],
+        ["ease", 'tên easing cho component (xem trang <a href="/ease.html#component">Ease</a>), hoặc chuỗi CSS transition-timing-function bất kỳ (vd: ease-out, cubic-bezier(...))', "cubic-bezier(0.4, 0, 0.2, 1)"],
         ["close-on-outside-click", "true | false", "true"],
         ["close-on-esc-key", "true | false", "true"],
         ["scrollable", 'false (khoá hẳn — overflow:hidden + chặn wheel/touch) | "scrollbar" (chỉ chặn wheel/touch, vẫn hiện thanh scrollbar nền, không giật layout) | true (không khoá gì)', "false"],

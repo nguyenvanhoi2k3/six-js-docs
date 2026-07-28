@@ -13,6 +13,7 @@ export default defineConfig({
         installation: resolve(__dirname, "installation.html"),
         components: resolve(__dirname, "components.html"),
         core: resolve(__dirname, "core.html"),
+        ease: resolve(__dirname, "ease.html"),
         plugins: resolve(__dirname, "plugins.html"),
         showcase: resolve(__dirname, "showcase.html"),
         demo: resolve(__dirname, "demo.html"),

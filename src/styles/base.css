@@ -946,6 +946,74 @@ a {
   }
 }
 
+/* ---------- Ease ---------- */
+
+.ease-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 760px) {
+  .ease-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ease-demo {
+  margin-bottom: var(--space-3);
+}
+
+.ease-demo__track {
+  position: relative;
+  height: 64px;
+  width: 264px;
+  max-width: 100%;
+}
+
+.ease-demo__box {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.ease-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.ease-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.ease-chip:hover {
+  border-color: var(--primary);
+}
+
+.ease-chip.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--bg);
+  font-weight: 600;
+}
+
 /* ---------- Showcase ---------- */
 
 .showcase-hero {

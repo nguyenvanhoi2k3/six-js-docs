@@ -1,7 +1,7 @@
 import { VERSION } from "@six-js/core";
 import { h } from "../../jsx";
 
-export type ActiveSection = "installation" | "components" | "core" | "plugins" | "showcase";
+export type ActiveSection = "installation" | "components" | "core" | "ease" | "plugins" | "showcase";
 
 export function renderHeader(active: ActiveSection): string {
   const link = (section: ActiveSection, href: string, label: string) => (
@@ -22,6 +22,7 @@ export function renderHeader(active: ActiveSection): string {
         {link("installation", "/installation.html", "Installation")}
         {link("components", "/components.html", "Components")}
         {link("core", "/core.html", "Core")}
+        {link("ease", "/ease.html", "Ease")}
         {link("plugins", "/plugins.html", "Plugins")}
         {link("showcase", "/showcase.html", "Showcase")}
       </nav>
