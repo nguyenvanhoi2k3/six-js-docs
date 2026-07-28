@@ -60,18 +60,37 @@ export const dialog: ComponentDoc = {
         ["threshold (trên sx-dialog-pull)", "0 – 1, tỉ lệ khoảng cách kéo trước khi tự đóng", "0.25"],
       ])}
 
+      <h2>Methods</h2>
+      <p>
+        Gọi trực tiếp trên phần tử <span class="c-accent">sx-dialog</span> (vd qua <code>document.querySelector</code>) — không cần qua <span class="c-accent">sx-dialog-trigger</span>.
+      </p>
+      {attrsTable([
+        [".open()", "mở dialog — trả về false nếu bị sx-dialog-before-open preventDefault(), hoặc dialog đã mở sẵn", "—"],
+        [".close()", "đóng dialog — trả về false nếu bị sx-dialog-before-close preventDefault(), hoặc dialog đã đóng sẵn", "—"],
+      ])}
+      <p></p>
+      {codeBlock(
+        `const dialogEl = document.querySelector('sx-dialog[name="dialog1"]');
+
+dialogEl.open();   // -> true
+dialogEl.close();  // -> true, hoặc false nếu bị chặn bởi sx-dialog-before-close`,
+        "js",
+      )}
+      <p class="note">
+        {" "}
+        Ngoài gọi method trực tiếp, có thể toggle bằng cách bắn <code>window</code> event <span class="c-accent">sx-dialog-toggle</span> với <code>detail: {"{ name }"}</code> — tự mở nếu đang đóng, tự đóng
+        nếu đang mở, giống hệt cơ chế bên trong <span class="c-accent">sx-dialog-trigger</span>.
+      </p>
+
       <h2>sx-dialog-pull</h2>
-      Đặt bên trong <span class="c-accent">sx-dialog</span>. Hướng kéo để đóng dựa vào <span class="c-accent">position</span>
+      <p>Đặt bên trong <span class="c-accent">sx-dialog</span>. Hướng kéo để đóng dựa vào <span class="c-accent">position</span></p>
       {codeBlock(`
 <sx-dialog-pull></sx-dialog-pull>`)}
       {attrsTable([["threshold", "number (0–1), tỉ lệ % kích thước dialog cần kéo qua mới tự đóng", "0.25"]])}
-      <p class="note">
-        Kéo nhanh (vuốt) cũng tự đóng dù chưa kéo đủ khoảng cách <code>threshold</code> — six-js tính thêm vận tốc kéo, vượt một ngưỡng nhất định là đóng ngay bất kể đã kéo được bao xa.
-      </p>
 
       <h2>sx-dialog-trigger</h2>
       <p>
-        Tự thêm attribute <code>sx-active</code> lên chính nó trong suốt lúc dialog cùng <code>name</code> đang mở (theo dõi qua MutationObserver, không cần code thêm) — dùng làm hook CSS để tô đậm nút/tab đang
+        Tự thêm attribute <code>sx-active</code> lên chính nó trong suốt lúc dialog cùng <code>name</code> đang mở
         mở dialog tương ứng:
       </p>
       {codeBlock(
@@ -83,7 +102,7 @@ export const dialog: ComponentDoc = {
 
       <h2>Event</h2>
       <p>
-        Bắn trên chính thẻ <span class="c-accent">sx-dialog</span> (bubbles, composed) — lắng nghe bằng <code>addEventListener</code> như event DOM thường.
+        Bắn trên chính thẻ <span class="c-accent">sx-dialog</span> — lắng nghe bằng <code>addEventListener</code> như event DOM thường.
       </p>
       {eventsTable([
         ["sx-dialog-before-open", "cancelable — gọi preventDefault() trong listener để chặn không cho mở"],
@@ -91,17 +110,13 @@ export const dialog: ComponentDoc = {
         ["sx-dialog-before-close", "cancelable — gọi preventDefault() để chặn không cho đóng (vd chờ xác nhận)"],
         ["sx-dialog-after-close", "bắn sau khi hiệu ứng đóng (duration) hoàn tất"],
       ])}
+      <h2></h2>
       {codeBlock(
         `document.querySelector('sx-dialog[name="dialog1"]').addEventListener("sx-dialog-before-close", (e) => {
   if (!confirm("Đóng dialog?")) e.preventDefault();
 });`,
         "js",
       )}
-      <p class="note">
-        Mở/đóng bằng JS (không qua <span class="c-accent">sx-dialog-trigger</span>) bằng cách bắn <code>window</code> event <span class="c-accent">sx-dialog-toggle</span> với <code>detail: {"{ name }"}</code>,
-        hoặc gọi trực tiếp <code>dialogEl.open()</code> / <code>dialogEl.close()</code> — cả hai đều trả về <code>boolean</code> (false nếu bị <code>before-open</code>/<code>before-close</code> preventDefault(),
-        hoặc dialog đã ở đúng trạng thái đó rồi).
-      </p>
     </>
   ),
 
@@ -329,7 +344,7 @@ export const dialog: ComponentDoc = {
                   <sx-dialog-trigger class="btn btn--ghost" name="nested-dialog-2">
                     No
                   </sx-dialog-trigger>
-                  <sx-dialog-trigger class="btn btn--primary" name="nested-dialog">
+                  <sx-dialog-trigger class="btn btn--primary" name="nested-dialog" style="margin-left: 10px;">
                     Yes
                   </sx-dialog-trigger>
                 </div>
