@@ -23,7 +23,7 @@ const tweenCommonAttrs = attrsTable([
   ["paused", "true — tạo tween ở trạng thái tạm dừng, tự .play() sau", "false"],
   ["overwrite", 'true | "auto" | false — huỷ (true) hoặc gỡ đúng property đang trùng ("auto") trên tween khác cùng target', "false"],
   ["stagger", "number | { each, from } — khi target khớp nhiều phần tử (xem trang stagger)", "—"],
-  ["onScroll", "{ trigger?, scroller?, start, end, sync, sticky, ... } — biến tween thành scroll-driven (xem trang onScroll)", "—"],
+  ["onScroll", "{ trigger?, container?, start, end, sync, sticky, ... } — biến tween thành scroll-driven (xem trang onScroll)", "—"],
   ["onStart / onUpdate / onComplete / onRepeat / onReverseComplete", "() => void — callback vòng đời", "—"],
 ]);
 
@@ -509,8 +509,8 @@ six.to(".stagger-box", {
   duration: 1,
   ease: "cubicOut",
   onScroll: {
-    scroller: "#my-scroll-container", // mặc định là window
-    start: "top bottom",              // top của .box chạm bottom của viewport/scroller
+    container: "#my-scroll-container", // mặc định là window
+    start: "top bottom",               // top của .box chạm bottom của viewport/container
     end: "top center",
   },
 });`,
@@ -552,7 +552,7 @@ OnScroll.create({
         <h2>Vars</h2>
         {attrsTable([
           ["trigger", "Element | selector — phần tử làm mốc đo vị trí. Qua six.to(...): mặc định là target, không bắt buộc khai", "—"],
-          ["scroller", "Element | selector — container cuộn (nested overflow), mặc định window", "window"],
+          ["container", "Element | selector — container cuộn (nested overflow), mặc định window", "window"],
           ["start / end", 'chuỗi "&lt;edge trigger&gt; &lt;edge viewport&gt;" (top|center|bottom|left|right|N%|Npx, cộng thêm được "+=N"/"-=N"), số, hoặc hàm trả về 1 trong 2 dạng trên', '"top bottom" / "bottom top"'],
           ["axis", '"y" (mặc định) | "x" — đổi sang đo theo trục ngang cho track cuộn ngang', '"y"'],
           ["sync", "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = scrub 1:1 theo % cuộn; number (giây) = scrub có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn", "false"],
@@ -578,7 +578,7 @@ OnScroll.create({
       </>
     ),
     init: (root) => {
-      const scroller = root.querySelector<HTMLElement>("[data-scroll-demo]")!;
+      const container = root.querySelector<HTMLElement>("[data-scroll-demo]")!;
 
       const fadeBox = root.querySelector<HTMLElement>("[data-scroll-box-fade]")!;
       six.set(fadeBox, { opacity: 0, y: 40 });
@@ -587,7 +587,7 @@ OnScroll.create({
         y: 0,
         duration: 0.6,
         ease: "cubicOut",
-        onScroll: { scroller, start: "top bottom", end: "top center" },
+        onScroll: { container, start: "top bottom", end: "top center" },
       });
 
       const popBox = root.querySelector<HTMLElement>("[data-scroll-box-pop]")!;
@@ -598,14 +598,14 @@ OnScroll.create({
         rotate: 0,
         duration: 0.6,
         ease: "backOut",
-        onScroll: { scroller, start: "top bottom", end: "top center" },
+        onScroll: { container, start: "top bottom", end: "top center" },
       });
 
       const progressTrack = root.querySelector<HTMLElement>("[data-scroll-progress-track]")!;
       const progressBar = root.querySelector<HTMLElement>("[data-scroll-progress]")!;
       six.to(progressBar, {
         width: "100%",
-        onScroll: { scroller, trigger: progressTrack, start: "top bottom", end: "bottom top", sync: true },
+        onScroll: { container, trigger: progressTrack, start: "top bottom", end: "bottom top", sync: true },
       });
     },
   },

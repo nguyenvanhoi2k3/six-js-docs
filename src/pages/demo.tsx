@@ -32,6 +32,13 @@ function renderDemoBody(sectionId: string, d: ComponentDemo): string {
         ) : (
           ""
         )}
+        {d.js ? (
+          <button type="button" class="demo-tabs__btn" data-tab-btn="js">
+            JS
+          </button>
+        ) : (
+          ""
+        )}
       </div>
       {style}
       <div class="demo-tabs__panel is-active" data-tab-panel="preview">
@@ -47,6 +54,13 @@ function renderDemoBody(sectionId: string, d: ComponentDemo): string {
       ) : (
         ""
       )}
+      {d.js ? (
+        <div class="demo-tabs__panel" data-tab-panel="js">
+          {codeBlock(d.js, "js")}
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
@@ -56,6 +70,8 @@ function setupScrollSpy(doc: ComponentDoc) {
   const heading = sidebar?.querySelector<HTMLElement>(".section-sidebar__heading");
   const links = Array.from(sidebar?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
   if (!sidebar || !links.length) return;
+
+  if (heading) heading.textContent = doc.title;
 
   const linkById = new Map(links.map((a) => [a.getAttribute("href")?.slice(1) ?? "", a]));
 
@@ -67,7 +83,6 @@ function setupScrollSpy(doc: ComponentDoc) {
     link.classList.add("is-active");
 
     const label = link.textContent?.trim();
-    if (heading) heading.textContent = label ? `${doc.title} — ${label}` : doc.title;
     document.title = label ? `${doc.title} — ${label} — demo` : `${doc.title} — demo`;
   };
 

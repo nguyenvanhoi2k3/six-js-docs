@@ -10,6 +10,13 @@ export interface ComponentDemo {
   html?: string;
   /** Raw CSS for this demo — shown in the CSS tab and injected live, scoped to the demo section. */
   css?: string;
+  /**
+   * Example JS shown in a "JS" tab — the clean, copy-paste-ready usage a consumer would actually
+   * write (e.g. listening for an event, calling a public method), NOT the internal wiring this
+   * specific demo uses to hook up its own buttons (that stays in initDemo, which may query by
+   * data-attribute/id in ways not meant as an API example).
+   */
+  js?: string;
   /** Only needed if the demo has JS wiring (buttons, custom attribute toggles, ...). */
   initDemo?: (root: HTMLElement) => void;
 }

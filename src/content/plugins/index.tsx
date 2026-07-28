@@ -250,8 +250,8 @@ split.kill();`,
           `import { SmoothScroll } from "@six-js/core/SmoothScroll";
 
 const smooth = new SmoothScroll({
-  scroller: "#my-scroll-container", // mặc định window
-  lerp: 0.1,                        // độ "trễ" khi cuộn bằng wheel — bỏ qua nếu dùng duration
+  container: "#my-scroll-container", // mặc định window
+  lerp: 0.1,                         // độ "trễ" khi cuộn bằng wheel — bỏ qua nếu dùng duration
 });
 
 smooth.scrollTo("#section-2", { offset: -20 });
@@ -269,9 +269,9 @@ smooth.kill();`,
       </>
     ),
     init: (root) => {
-      const scroller = root.querySelector<HTMLElement>("[data-smooth-demo]")!;
+      const container = root.querySelector<HTMLElement>("[data-smooth-demo]")!;
       smoothDemoInstance?.kill();
-      smoothDemoInstance = new SmoothScroll({ scroller, lerp: 0.12 });
+      smoothDemoInstance = new SmoothScroll({ container, lerp: 0.12 });
       root.querySelector<HTMLButtonElement>("[data-scroll-top]")!.addEventListener("click", () => smoothDemoInstance?.scrollTo("top"));
       root.querySelector<HTMLButtonElement>("[data-scroll-bottom]")!.addEventListener("click", () => smoothDemoInstance?.scrollTo("bottom"));
     },
@@ -284,7 +284,7 @@ smooth.kill();`,
     render: () => (
       <>
         {attrsTable([
-          ["scroller", "Element | selector — container cuộn (giống OnScrollVars.scroller)", "window"],
+          ["container", "Element | selector — container cuộn (giống OnScrollVars.container)", "window"],
           ["axis", '"y" | "x"', '"y"'],
           ["lerp", "cường độ giảm chấn 0–1 khi cuộn bằng wheel (đã tinh chỉnh sẵn cho 60fps) — bỏ qua nếu đã set duration", "0.1"],
           ["duration", "giây — chuyển sang chế độ tween thời lượng cố định (thay vì giảm chấn liên tục) cho input wheel", "—"],
@@ -317,7 +317,7 @@ smooth.kill();`,
         ])}
 
         <p class="note">
-          Mỗi lần ghi vị trí, six-js tự bắn kèm một sự kiện <code>"scroll"</code> đồng bộ (cùng frame) lên chính scroller — nhờ vậy <code>OnScroll</code> luôn cập nhật đúng khung hình, không bị trễ 1 frame
+          Mỗi lần ghi vị trí, six-js tự bắn kèm một sự kiện <code>"scroll"</code> đồng bộ (cùng frame) lên chính container — nhờ vậy <code>OnScroll</code> luôn cập nhật đúng khung hình, không bị trễ 1 frame
           chờ sự kiện scroll thật (bất đồng bộ) của trình duyệt.
         </p>
         <p class="note">
@@ -325,7 +325,7 @@ smooth.kill();`,
           nên nền trang tự động bị khoá cuộn khi có dialog đang mở, không cần code thêm gì.
         </p>
         <p>
-          six-js tự gắn/gỡ 3 class theo trạng thái lên gốc scroller (<code>document.documentElement</code> nếu scroller là window): <code>six-smooth</code>, <code>six-smooth-scrolling</code>,{" "}
+          six-js tự gắn/gỡ 3 class theo trạng thái lên gốc container (<code>document.documentElement</code> nếu container là window): <code>six-smooth</code>, <code>six-smooth-scrolling</code>,{" "}
           <code>six-smooth-stopped</code> — tiện làm hook CSS (vd đổi con trỏ chuột khi đang cuộn).
         </p>
       </>
@@ -419,7 +419,7 @@ ScrambleText(".headline", {
   "scramble-text/odometer": {
     eyebrow: "Plugins",
     title: 'mode: "odometer"',
-    lead: "Mỗi ký tự tự quay trên một cuộn số dọc rồi dừng đúng ký tự đích — kiểu bộ đếm cơ khí (odometer), khác với xáo tại chỗ của mode mặc định. Đây là bổ sung riêng của six-js, không có trong GSAP.",
+    lead: "Mỗi ký tự tự quay trên một cuộn số dọc rồi dừng đúng ký tự đích — kiểu bộ đếm cơ khí (odometer), khác với xáo tại chỗ của mode mặc định. Đây là bổ sung riêng của six-js, không phải kiểu hiệu ứng phổ biến ở các thư viện animation khác.",
     render: () => (
       <>
         <div class="content-pane__panel" style="align-items:center;">

@@ -1,7 +1,7 @@
 import { VERSION } from "@six-js/core";
 import { h } from "../../jsx";
 
-export type ActiveSection = "home" | "installation" | "components" | "core" | "plugins" | "showcase";
+export type ActiveSection = "installation" | "components" | "core" | "plugins" | "showcase";
 
 export function renderHeader(active: ActiveSection): string {
   const link = (section: ActiveSection, href: string, label: string) => (
@@ -12,7 +12,7 @@ export function renderHeader(active: ActiveSection): string {
 
   return (
     <header class="site-header">
-      <a class="site-header__brand" href="/index.html">
+      <a class="site-header__brand" href="/installation.html">
         <img class="logo_icon" src="/sixjs_logo_fav_56x56.svg" alt="" width="885" height="252" />
         <img class="logo_text logo_text--light" src="/sixjs_logo_text.png" alt="" width="885" height="252" />
         <img class="logo_text logo_text--dark" src="/sixjs_logo_darkmode.png" alt="" width="885" height="252" />

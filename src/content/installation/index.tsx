@@ -19,6 +19,8 @@ const COMPONENTS: ComponentOption[] = [
   { key: "dialog", label: "sx-dialog", register: "registerDialog" },
   { key: "slider", label: "sx-slider", register: "registerSlider" },
   { key: "marquee", label: "sx-marquee", register: "registerMarquee" },
+  { key: "accordion", label: "sx-accordion", register: "registerAccordion" },
+  { key: "popover", label: "sx-popover", register: "registerPopover" },
 ];
 
 const PLUGINS: PluginOption[] = [
@@ -34,20 +36,26 @@ type Mode = "npm" | "cdn";
 interface PickerState {
   mode: Mode;
   components: Set<string>;
+  allComponents: boolean;
   plugins: Set<string>;
 }
 
 function generateNpmCode(state: PickerState): string {
-  const components = COMPONENTS.filter((c) => state.components.has(c.key));
+  const components = state.allComponents ? COMPONENTS : COMPONENTS.filter((c) => state.components.has(c.key));
   const plugins = PLUGINS.filter((p) => state.plugins.has(p.key));
+  const hasComponents = state.allComponents || components.length > 0;
 
   const importLines = [`import { six } from "@six-js/core";`];
-  if (components.length) importLines.push(`import "@six-js/core/components.css";`, `import { ${components.map((c) => c.register).join(", ")} } from "@six-js/core/Components";`);
+  if (hasComponents) {
+    importLines.push(`import "@six-js/core/components.css";`);
+    importLines.push(state.allComponents ? `import { registerComponents } from "@six-js/core/Components";` : `import { ${components.map((c) => c.register).join(", ")} } from "@six-js/core/Components";`);
+  }
   plugins.forEach((p) => importLines.push(`import { ${p.named} } from "@six-js/core/${p.subpath}";`));
 
   const bodyLines: string[] = [];
-  if (components.length) {
-    components.forEach((c) => bodyLines.push(`${c.register}();`));
+  if (hasComponents) {
+    if (state.allComponents) bodyLines.push(`registerComponents();`);
+    else components.forEach((c) => bodyLines.push(`${c.register}();`));
     bodyLines.push("");
   }
   bodyLines.push(`// six.to(".el", { x: 400, duration: 1.5, ease: "quintInOut" });`);
@@ -56,17 +64,19 @@ function generateNpmCode(state: PickerState): string {
 }
 
 function generateCdnCode(state: PickerState): string {
-  const components = COMPONENTS.filter((c) => state.components.has(c.key));
+  const components = state.allComponents ? COMPONENTS : COMPONENTS.filter((c) => state.components.has(c.key));
   const plugins = PLUGINS.filter((p) => state.plugins.has(p.key));
+  const hasComponents = state.allComponents || components.length > 0;
   const base = "https://cdn.jsdelivr.net/npm/@six-js/core/dist";
 
   const tagLines = [`<script src="${base}/six-js.umd.js"></script>`];
-  if (components.length) tagLines.push(`<link rel="stylesheet" href="${base}/components.css" />`, `<script src="${base}/Components.umd.js"></script>`);
+  if (hasComponents) tagLines.push(`<link rel="stylesheet" href="${base}/components.css" />`, `<script src="${base}/Components.umd.js"></script>`);
   plugins.forEach((p) => tagLines.push(`<script src="${base}/${p.umd}"></script>`));
 
   const bodyLines: string[] = [];
-  if (components.length) {
-    components.forEach((c) => bodyLines.push(`  Components.${c.register}();`));
+  if (hasComponents) {
+    if (state.allComponents) bodyLines.push(`  Components.registerComponents();`);
+    else components.forEach((c) => bodyLines.push(`  Components.${c.register}();`));
     bodyLines.push("");
   }
   bodyLines.push(`  six.to(".box", { x: 400, duration: 1.5, ease: "quintInOut" });`);
@@ -118,7 +128,12 @@ export function renderInstallation(): string {
 
           <div class="install-picker__group">
             <p class="install-picker__label">Components</p>
-            <div class="install-picker__chips">{componentChips}</div>
+            <div class="install-picker__chips">
+              <label class="install-picker__chip install-picker__chip--all">
+                <input type="checkbox" data-install-check="all-components" /> Tất cả
+              </label>
+              {componentChips}
+            </div>
           </div>
 
           <div class="install-picker__group">
@@ -128,7 +143,7 @@ export function renderInstallation(): string {
         </div>
 
         <div class="install-picker-output" data-install-output>
-          {renderOutput({ mode: "npm", components: new Set(), plugins: new Set() })}
+          {renderOutput({ mode: "npm", components: new Set(), allComponents: false, plugins: new Set() })}
         </div>
       </div>
 
@@ -137,12 +152,19 @@ export function renderInstallation(): string {
 }
 
 export function initInstallation(root: HTMLElement): void {
-  const state: PickerState = { mode: "npm", components: new Set(), plugins: new Set() };
+  const state: PickerState = { mode: "npm", components: new Set(), allComponents: false, plugins: new Set() };
   const output = root.querySelector<HTMLElement>("[data-install-output]")!;
   const modeButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-install-mode] [data-mode]"));
+  const componentInputs = Array.from(root.querySelectorAll<HTMLInputElement>('[data-install-check="component"]'));
 
   function update(): void {
     output.innerHTML = renderOutput(state);
+    // Individual component picks are moot (and visually disabled) once "all" is checked — reflects
+    // that the generated code switches to registerComponents() regardless of what's ticked below it.
+    componentInputs.forEach((input) => {
+      input.disabled = state.allComponents;
+      input.closest(".install-picker__chip")?.classList.toggle("is-disabled", state.allComponents);
+    });
   }
 
   modeButtons.forEach((btn) => {
@@ -155,6 +177,11 @@ export function initInstallation(root: HTMLElement): void {
 
   root.querySelectorAll<HTMLInputElement>("[data-install-check]").forEach((input) => {
     input.addEventListener("change", () => {
+      if (input.dataset.installCheck === "all-components") {
+        state.allComponents = input.checked;
+        update();
+        return;
+      }
       const set = input.dataset.installCheck === "component" ? state.components : state.plugins;
       if (input.checked) set.add(input.value);
       else set.delete(input.value);

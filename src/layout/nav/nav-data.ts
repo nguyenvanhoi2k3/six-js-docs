@@ -15,12 +15,14 @@ export const componentsList: NavLeaf[] = [
   { slug: "dialog", label: "Dialog" },
   { slug: "slider", label: "Slider" },
   { slug: "marquee", label: "Marquee" },
+  { slug: "accordion", label: "Accordion" },
+  { slug: "popover", label: "Popover" },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export const coreNav: NavGroup[] = [
   {
     slug: "tween",
-    label: "Tween cơ bản",
+    label: "Tweens",
     items: [
       { slug: "to", label: "six.to()" },
       { slug: "from", label: "six.from()" },
@@ -31,7 +33,7 @@ export const coreNav: NavGroup[] = [
   },
   {
     slug: "sequence",
-    label: "Sắp xếp chuyển động",
+    label: "Sequencing",
     items: [
       { slug: "timeline", label: "six.timeline()" },
       { slug: "stagger", label: "stagger" },
@@ -39,7 +41,7 @@ export const coreNav: NavGroup[] = [
   },
   {
     slug: "scroll",
-    label: "Cuộn trang",
+    label: "Scroll",
     items: [{ slug: "onScroll", label: "onScroll (OnScroll)" }],
   },
   {
@@ -52,7 +54,7 @@ export const coreNav: NavGroup[] = [
   },
   {
     slug: "utils",
-    label: "Tiện ích",
+    label: "Utilities",
     items: [
       { slug: "set", label: "six.set()" },
       { slug: "config", label: "six.config()" },

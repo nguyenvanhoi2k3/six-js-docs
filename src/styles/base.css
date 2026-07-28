@@ -6,9 +6,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
 
 html,
 body {
@@ -94,9 +91,11 @@ a {
   gap: var(--space-3);
   height: var(--header-h);
   padding: 0 var(--container-pad);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* No backdrop-filter here on purpose — blurring what's behind a sticky header forces the
+     GPU to resample continuously while the page scrolls, which was heavy enough to make
+     wheel-driven smooth scroll feel unresponsive. background is opaque enough on its own
+     that unblurred content behind wouldn't read as legible "ghosting". */
+  background: color-mix(in srgb, var(--bg) 97%, transparent);
   border-bottom: 1px solid var(--border);
 }
 
@@ -835,6 +834,20 @@ a {
 
 .install-picker__chip input {
   accent-color: var(--primary);
+}
+
+.install-picker__chip--all {
+  font-weight: 600;
+  border-style: dashed;
+}
+
+.install-picker__chip.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.install-picker__chip.is-disabled input {
+  cursor: not-allowed;
 }
 
 .demo-animate-box {

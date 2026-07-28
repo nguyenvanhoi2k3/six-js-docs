@@ -29,6 +29,32 @@ export function attrsTable(rows: [attr: string, value: string, def: string][]): 
   );
 }
 
+/**
+ * For DOM event names (dispatched/listened via addEventListener), not HTML attributes — a
+ * separate table from attrsTable() specifically so the header doesn't say "Attribute" for
+ * something you never actually write into markup.
+ */
+export function eventsTable(rows: [event: string, desc: string][]): string {
+  return (
+    <table class="content-pane__attrs">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Mô tả</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([event, desc]) => (
+          <tr>
+            <td>{event}</td>
+            <td>{desc}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 /** Prefixes every top-level selector in `css` with `scope` so it only applies within that container. Skips at-rule blocks (@media, @keyframes, ...). */
 export function scopeCss(scope: string, css: string): string {
   return css.replace(/(^|\})\s*([^{}]+)\{/g, (match, brace: string, selectorList: string) => {

@@ -1,5 +1,5 @@
 import "./index.scss";
-import { attrsTable, codeBlock } from "../../shared";
+import { attrsTable, codeBlock, eventsTable } from "../../shared";
 import type { ComponentDoc } from "../types";
 import { h, Fragment } from "../../../jsx";
 
@@ -41,7 +41,7 @@ export const dialog: ComponentDoc = {
       </p>
       <p class="note">
         {" "}
-        Cả <span class="c-accent">sx-dialog</span> và <span class="c-accent">sx-close-cursor</span> đều portal.
+        Riêng <span class="c-accent">sx-close-cursor</span> portal ra <code>document.body</code> — <span class="c-accent">sx-dialog</span> vẫn nằm đúng chỗ khai báo trong DOM.
       </p>
       <h2>Attributes</h2>
 
@@ -50,6 +50,7 @@ export const dialog: ComponentDoc = {
         ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "zoom"],
         ["position", "center | top | bottom | left | right | top-left | top-right | bottom-left | bottom-right", "center"],
         ["duration", "số giây (vd: 0.3)", "0.3"],
+        ["ease", "chuỗi CSS transition-timing-function (vd: ease-out, cubic-bezier(...)) — dùng nguyên văn cho transition CSS, không qua tên easing của six-js", "cubic-bezier(0.4, 0, 0.2, 1)"],
         ["close-on-outside-click", "true | false", "true"],
         ["close-on-esc-key", "true | false", "true"],
         ["scrollable", 'false (khoá hẳn — overflow:hidden + chặn wheel/touch) | "scrollbar" (chỉ chặn wheel/touch, vẫn hiện thanh scrollbar nền, không giật layout) | true (không khoá gì)', "false"],
@@ -80,15 +81,15 @@ export const dialog: ComponentDoc = {
         "css",
       )}
 
-      <h2>Sự kiện</h2>
+      <h2>Event</h2>
       <p>
         Bắn trên chính thẻ <span class="c-accent">sx-dialog</span> (bubbles, composed) — lắng nghe bằng <code>addEventListener</code> như event DOM thường.
       </p>
-      {attrsTable([
-        ["sx-dialog-before-open", "cancelable — gọi preventDefault() trong listener để chặn không cho mở", "—"],
-        ["sx-dialog-after-open", "bắn sau khi đã mở và focus phần tử đầu tiên xong", "—"],
-        ["sx-dialog-before-close", "cancelable — gọi preventDefault() để chặn không cho đóng (vd chờ xác nhận)", "—"],
-        ["sx-dialog-after-close", "bắn sau khi hiệu ứng đóng (duration) hoàn tất", "—"],
+      {eventsTable([
+        ["sx-dialog-before-open", "cancelable — gọi preventDefault() trong listener để chặn không cho mở"],
+        ["sx-dialog-after-open", "bắn sau khi đã mở và focus phần tử đầu tiên xong"],
+        ["sx-dialog-before-close", "cancelable — gọi preventDefault() để chặn không cho đóng (vd chờ xác nhận)"],
+        ["sx-dialog-after-close", "bắn sau khi hiệu ứng đóng (duration) hoàn tất"],
       ])}
       {codeBlock(
         `document.querySelector('sx-dialog[name="dialog1"]').addEventListener("sx-dialog-before-close", (e) => {
@@ -341,7 +342,10 @@ export const dialog: ComponentDoc = {
     {
       renderDemo: () => (
         <>
-          Co màn để xem
+          <p class="note">
+            breakpoints tính theo min-width, giống mobile-first: attribute gốc (<code>position="bottom"</code>) là baseline nhỏ nhất, mốc <code>567</code> áp dụng khi viewport ĐẠT tới đó trở lên — mở rộng cửa
+            sổ để thấy override, thu hẹp xuống dưới 567px để quay lại baseline.
+          </p>
           <div class="content-pane__panel">
             <sx-dialog-trigger class="btn btn--primary" name="dialog-responsive">
               Breakpoints
