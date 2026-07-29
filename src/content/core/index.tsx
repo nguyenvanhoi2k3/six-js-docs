@@ -338,8 +338,7 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
         </div>
 
         {codeBlock(
-          `six
-  .timeline()
+          `six.timeline()
   .from(".box-1", { opacity: 0, y: 24, duration: 0.5 })
   .from(".box-2", { opacity: 0, y: 24, duration: 0.5 }, "-=0.3")
   .from(".box-3", { opacity: 0, y: 24, duration: 0.5 }, "-=0.3")
