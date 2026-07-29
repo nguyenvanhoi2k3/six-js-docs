@@ -234,7 +234,10 @@ split.kill();`,
       <>
         <div class="content-pane__panel">
           <div data-smooth-demo style="height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;">
-            <div style="height:640px;padding:16px;color:var(--muted);font-size:13px;">Lăn chuột (wheel) bên trong khung này để thấy độ trễ mượt — hoặc bấm nút bên dưới.</div>
+            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lăn chuột (wheel) bên trong khung này để thấy độ trễ mượt — hoặc bấm nút bên dưới.</div>
+            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
+            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
+            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
           </div>
           <div class="content-pane__panel">
             <button class="btn btn--ghost btn--sm" data-scroll-top>
@@ -569,9 +572,7 @@ likeButton.addEventListener("click", (e) => {
           </button>
         </div>
 
-        <p>
-          Cả 3 hiệu ứng của SvgMotion (draw / morph / path) đều đi qua một hàm duy nhất <code>SvgMotion(target, vars)</code> — <code>vars.mode</code> chọn hiệu ứng nào chạy.
-        </p>
+
         {codeBlock(
           `import { SvgMotion } from "@six-js/core/SvgMotion";
 

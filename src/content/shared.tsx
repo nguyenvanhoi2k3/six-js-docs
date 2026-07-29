@@ -6,24 +6,38 @@ import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-bash";
 import { h } from "../jsx";
 
-export function attrsTable(rows: [attr: string, value: string, def: string][]): string {
+type AttrRow = [attr: string, desc: string, def: string] | [attr: string, desc: string, values: string, def: string];
+
+/**
+ * 3-tuple rows render the classic [Attribute, Description, Default] table. A 4-tuple row inserts
+ * its own "Value" column (allowed values, e.g. `"x" | "y"`) right after Attribute, ahead of the
+ * prose description — used for vars tables where that's worth calling out separately. Whether a
+ * whole table gets that extra column is decided once, from whether ANY row in it is a 4-tuple.
+ */
+export function attrsTable(rows: AttrRow[]): string {
+  const hasValues = rows.some((row) => row.length === 4);
   return (
     <table class="content-pane__attrs">
       <thead>
         <tr>
           <th>Attribute</th>
-          <th>Giá trị</th>
-          <th>Mặc định</th>
+          {hasValues && <th>Value</th>}
+          <th>Description</th>
+          <th>Default</th>
         </tr>
       </thead>
       <tbody>
-        {rows.map(([attr, value, def]) => (
-          <tr>
-            <td>{attr}</td>
-            <td>{value}</td>
-            <td>{def}</td>
-          </tr>
-        ))}
+        {rows.map((row) => {
+          const [attr, desc, values, def] = row.length === 4 ? row : [row[0], row[1], undefined, row[2]];
+          return (
+            <tr>
+              <td>{attr}</td>
+              {hasValues && <td>{values ?? "—"}</td>}
+              <td>{desc}</td>
+              <td>{def}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

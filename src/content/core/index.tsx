@@ -13,18 +13,25 @@ function playgroundBox(label: string): string {
   );
 }
 
+// Kept in sync with the `.from()` durations/overlaps built in the "sequence/timeline" demo's
+// init() below, so the track ticks line up with where each child tween actually starts.
+const TL_DEMO_DUR = 0.5;
+const TL_DEMO_OVERLAP = 0.3;
+const TL_DEMO_STARTS = [0, TL_DEMO_DUR - TL_DEMO_OVERLAP, 2 * (TL_DEMO_DUR - TL_DEMO_OVERLAP)];
+const TL_DEMO_TOTAL = TL_DEMO_STARTS[2] + TL_DEMO_DUR;
+
 const tweenCommonAttrs = attrsTable([
-  ["duration", "thời gian, tính bằng giây", "0.8 (six.config())"],
-  ["ease", 'tên easing (xem trang <a href="/ease.html#core">Ease</a>) hoặc hàm (t: number) => number', '"none" (tuyến tính, six.config())'],
-  ["delay", "giây trước khi tween thực sự chạy", "0"],
-  ["repeat", "số lần lặp lại (-1 = vô hạn)", "0"],
-  ["repeatDelay", "khoảng nghỉ giữa các lần lặp (giây)", "0"],
-  ["boomerang", "true | false — lặp có đảo chiều (yoyo)", "false"],
-  ["paused", "true — tạo tween ở trạng thái tạm dừng, tự .play() sau", "false"],
-  ["overwrite", 'true | "auto" | false — huỷ (true) hoặc gỡ đúng property đang trùng ("auto") trên tween khác cùng target', "false"],
-  ["stagger", "number | { each, from } — khi target khớp nhiều phần tử (xem trang stagger)", "—"],
-  ["onScroll", "{ trigger?, container?, start, end, sync, sticky, ... } — biến tween thành scroll-driven (xem trang onScroll)", "—"],
-  ["onStart / onUpdate / onComplete / onRepeat / onReverseComplete", "() => void — callback vòng đời", "—"],
+  ["duration", "thời gian, tính bằng giây", "number", "0.8 (six.config())"],
+  ["ease", 'tên easing (xem trang <a href="/ease.html#core">Ease</a>) hoặc hàm easing tuỳ chỉnh', "string | (t: number) => number", '"none" (six.config())'],
+  ["delay", "giây trước khi tween thực sự chạy", "number", "0"],
+  ["repeat", "số lần lặp lại", "number (-1 = vô hạn)", "0"],
+  ["repeatDelay", "khoảng nghỉ giữa các lần lặp (giây)", "number", "0"],
+  ["boomerang", "lặp có đảo chiều (yoyo)", "true | false", "false"],
+  ["paused", "tạo tween ở trạng thái tạm dừng, tự .play() sau", "true | false", "false"],
+  ["overwrite", 'huỷ (true) hoặc gỡ đúng property đang trùng ("auto") trên tween khác cùng target', 'true | "auto" | false', "false"],
+  ["stagger", "khi target khớp nhiều phần tử (xem trang stagger)", "number | { each, from }", "—"],
+  ["onScroll", "biến tween thành scroll-driven (xem trang onScroll)", "{ trigger?, container?, start, end, sync, sticky, ... }", "—"],
+  ["onStart / onUpdate / onComplete / onRepeat / onReverseComplete", "callback vòng đời", "() => void", "—"],
 ]);
 
 const animationLifecycleAttrs = attrsTable([
@@ -206,9 +213,9 @@ six.to(".box", {
         )}
 
         {attrsTable([
-          ["duration (trên từng chặng)", "thời lượng riêng của chặng — bỏ qua sẽ chia đều phần thời gian còn lại cho các chặng chưa khai", "chia đều / 0.5s"],
-          ["ease (trên từng chặng)", "ease riêng cho đoạn nối tới chặng đó — bỏ qua dùng ease chung của tween", "ease chung"],
-          ["duration (trên tween)", "tổng thời lượng — bắt buộc phải khai nếu dùng dạng phần trăm", "0.5"],
+          ["duration (trên từng chặng)", "thời lượng riêng của chặng — bỏ qua sẽ chia đều phần thời gian còn lại cho các chặng chưa khai", "number", "chia đều / 0.5s"],
+          ["ease (trên từng chặng)", "ease riêng cho đoạn nối tới chặng đó — bỏ qua dùng ease chung của tween", "string", "ease chung"],
+          ["duration (trên tween)", "tổng thời lượng — bắt buộc phải khai nếu dùng dạng phần trăm", "number", "0.5"],
         ])}
 
         <p class="note">Giá trị cuối của một chặng tự trở thành điểm bắt đầu (from) của chặng kế tiếp — six-js truyền thẳng giá trị đó chứ không đọc lại DOM</p>
@@ -320,30 +327,68 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
     lead: 'Gộp nhiều tween vào một hàng thời gian, canh nhau bằng vị trí tương đối ("-=0.2", "<", nhãn label...). Bản thân timeline cũng là một Animation — play/pause/reverse/repeat/boomerang y hệt một tween.',
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;">
-          <div class="demo-animate-box" data-tl-box style="width:80px;flex:none;">
-            1
+        <div class="tl-demo">
+          <div class="tl-demo__stage">
+            <div class="demo-animate-box" data-tl-box style="width:88px;flex:none;">
+              Bước 1
+            </div>
+            <span class="tl-demo__arrow" aria-hidden="true">
+            </span>
+            <div class="demo-animate-box" data-tl-box style="width:88px;flex:none;">
+              Bước 2
+            </div>
+            <span class="tl-demo__arrow" aria-hidden="true">
+            </span>
+            <div class="demo-animate-box" data-tl-box style="width:88px;flex:none;">
+              Bước 3
+            </div>
           </div>
-          <div class="demo-animate-box" data-tl-box style="width:80px;flex:none;">
-            2
-          </div>
-          <div class="demo-animate-box" data-tl-box style="width:80px;flex:none;">
-            3
+
+          <div class="tl-demo__track">
+            <div class="tl-demo__track-fill" data-tl-fill></div>
+            {TL_DEMO_STARTS.map((t) => (
+              <div class="tl-demo__tick" style={`left:${(t / TL_DEMO_TOTAL) * 100}%`}></div>
+            ))}
+            <div class="tl-demo__tick tl-demo__tick--label" style="left:100%">
+              <span class="tl-demo__tick-text">done</span>
+            </div>
+            <div class="tl-demo__playhead" data-tl-playhead></div>
           </div>
         </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-run>
-            Chạy timeline
+
+        <div class="content-pane__panel" style="align-items:center;">
+          <button class="btn btn--primary btn--sm" data-play>
+            ▶ Play
           </button>
+          <button class="btn btn--ghost btn--sm" data-reverse>
+            ⟲ Reverse
+          </button>
+          <button class="btn btn--ghost btn--sm" data-pause>
+            ⏸ Pause
+          </button>
+          <button class="btn btn--ghost btn--sm" data-restart>
+            ↺ Restart
+          </button>
+          <span class="tl-demo__status" data-tl-status>
+            Sẵn sàng
+          </span>
         </div>
 
         {codeBlock(
-          `six.timeline()
-  .from(".box-1", { opacity: 0, y: 24, duration: 0.5 })
-  .from(".box-2", { opacity: 0, y: 24, duration: 0.5 }, "-=0.3")
-  .from(".box-3", { opacity: 0, y: 24, duration: 0.5 }, "-=0.3")
+          `// mỗi bước một hiệu ứng khác nhau — đây là chỗ timeline khác stagger:
+// stagger lặp lại CÙNG một tween lệch delay, timeline ghép các tween KHÁC NHAU vào một trục thời gian
+const tl = six
+  .timeline()
+  .from(".box-1", { opacity: 0, x: -60, duration: 0.5, ease: "cubicOut" })
+  .from(".box-2", { opacity: 0, scale: 0.4, rotate: -25, duration: 0.5, ease: "backOut" }, "-=0.3")
+  .from(".box-3", { opacity: 0, y: -40, duration: 0.5, ease: "quadOut" }, "-=0.3")
   .addLabel("done")
-  .call(() => console.log("timeline xong"), "done");`,
+  .call(() => console.log("timeline xong"), "done");
+
+// timeline cũng là một Animation — play/pause/reverse/restart y hệt tween
+tl.pause();
+tl.reverse();
+tl.restart();`,
           "js",
         )}
 
@@ -369,12 +414,14 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
 
         <h2>Vars khi tạo timeline</h2>
         {attrsTable([
-          ["defaults", "TweenVars merge (ưu tiên thấp nhất) vào mọi .to/.from/.fromTo thêm vào timeline này — khỏi lặp lại duration/ease ở từng lời gọi", "—"],
-          ["onScroll", "biến CẢ timeline thành scroll-driven — bắt buộc tự khai trigger (timeline không có target mặc định để suy ra)", "—"],
+          ["defaults", "merge (ưu tiên thấp nhất) vào mọi .to/.from/.fromTo thêm vào timeline này — khỏi lặp lại duration/ease ở từng lời gọi", "TweenVars", "—"],
+          ["onScroll", "biến CẢ timeline thành scroll-driven — bắt buộc tự khai trigger (timeline không có target mặc định để suy ra)", "OnScrollVars", "—"],
         ])}
+        <p></p>
         {codeBlock(
           `const tl = six.timeline({ defaults: { duration: 0.4, ease: "quadOut" } });
-tl.to(".a", { x: 100 }).to(".b", { x: 100 }, "<"); // cả 2 dùng chung duration/ease ở trên`,
+tl.to(".a", { x: 100 })
+.to(".b", { x: 100 }, "<"); // cả 2 dùng chung duration/ease ở trên`,
           "js",
         )}
 
@@ -390,14 +437,52 @@ tl.to(".a", { x: 100 }).to(".b", { x: 100 }, "<"); // cả 2 dùng chung duratio
     ),
     init: (root) => {
       const boxes = Array.from(root.querySelectorAll<HTMLElement>("[data-tl-box]"));
-      const btn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-      btn.addEventListener("click", () => {
-        six.set(boxes, { opacity: 1, y: 0 });
-        six
-          .timeline()
-          .from(boxes[0], { opacity: 0, y: 24, duration: 0.5 })
-          .from(boxes[1], { opacity: 0, y: 24, duration: 0.5 }, "-=0.3")
-          .from(boxes[2], { opacity: 0, y: 24, duration: 0.5 }, "-=0.3");
+      const fill = root.querySelector<HTMLElement>("[data-tl-fill]")!;
+      const playhead = root.querySelector<HTMLElement>("[data-tl-playhead]")!;
+      const status = root.querySelector<HTMLElement>("[data-tl-status]")!;
+      const playBtn = root.querySelector<HTMLButtonElement>("[data-play]")!;
+      const reverseBtn = root.querySelector<HTMLButtonElement>("[data-reverse]")!;
+      const pauseBtn = root.querySelector<HTMLButtonElement>("[data-pause]")!;
+      const restartBtn = root.querySelector<HTMLButtonElement>("[data-restart]")!;
+
+      const setStatus = (text: string) => {
+        status.textContent = text;
+      };
+
+      const tl = six
+        .timeline({ paused: true })
+        .from(boxes[0], { opacity: 0, x: -60, duration: TL_DEMO_DUR, ease: "cubicOut" })
+        .from(boxes[1], { opacity: 0, scale: 0.4, rotate: -25, duration: TL_DEMO_DUR, ease: "backOut" }, `-=${TL_DEMO_OVERLAP}`)
+        .from(boxes[2], { opacity: 0, y: -40, duration: TL_DEMO_DUR, ease: "quadOut" }, `-=${TL_DEMO_OVERLAP}`)
+        .addLabel("done")
+        .call(() => setStatus("Hoàn tất"), "done");
+
+      // Đặt playhead về đúng trạng thái "from" của cả 3 box ngay từ đầu, thay vì đợi bấm Play mới hiện.
+      tl.seek(0);
+
+      tl.on("update", () => {
+        const p = (tl.totalProgress() as number) * 100;
+        fill.style.width = `${p}%`;
+        playhead.style.left = `${p}%`;
+      });
+      tl.on("start", () => setStatus("Đang chạy"));
+      tl.on("reverseComplete", () => setStatus("Về đầu"));
+
+      playBtn.addEventListener("click", () => {
+        tl.play();
+        setStatus("Đang chạy");
+      });
+      reverseBtn.addEventListener("click", () => {
+        tl.reverse();
+        setStatus("Đang đảo chiều");
+      });
+      pauseBtn.addEventListener("click", () => {
+        tl.pause();
+        setStatus("Tạm dừng");
+      });
+      restartBtn.addEventListener("click", () => {
+        tl.restart();
+        setStatus("Đang chạy");
       });
     },
   },
@@ -475,7 +560,7 @@ six.to(".stagger-box", {
           <div data-scroll-demo style="height:340px;width:100%;overflow-y:auto;border:1px solid var(--border);border-radius:8px;position:relative;">
             <div style="height:420px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;">Cuộn xuống bên trong khung này ⬇</div>
             <div class="demo-animate-box" data-scroll-box-fade style="width:130px;margin:0 auto 220px;">
-              fade + slide
+              x + rotate
             </div>
             <div class="demo-animate-box" data-scroll-box-pop style="width:130px;margin:0 auto 220px;">
               scale + rotate
@@ -492,13 +577,14 @@ six.to(".stagger-box", {
         {codeBlock(
           `six.to(".box", {
   opacity: 1,
-  y: 0,
+  x: 0,
+  rotate: 0,
   duration: 1,
   ease: "cubicOut",
   onScroll: {
     container: "#my-scroll-container", // mặc định là window
-    start: "top bottom",               // top của .box chạm bottom của viewport/container
-    end: "top center",
+    start: "top bottom", // bắt đầu chạy animation khi top của trigger chạm bottom của viewport
+    end: "top center", // kết thúc khi top của trigger chạm center của viewport
   },
 });`,
           "js",
@@ -514,15 +600,14 @@ six.to(".stagger-box", {
     trigger: ".progress-track",
     start: "top bottom",
     end: "bottom top",
-    sync: true, // width bám đúng % cuộn qua track, không "phát" theo duration
+    sync: true, // chạy animation theo cuộn chuột
   },
 });`,
           "js",
         )}
 
         <p>
-          Cú pháp qua <code>six.to/from/fromTo/timeline()</code> ở trên là bản rút gọn — <code>trigger</code> tự mặc định là chính target (bỏ qua được), <code>animation</code> tự gán. Muốn dùng độc lập (không
-          gắn animation, chỉ cần callback), tạo trực tiếp bằng <code>OnScroll.create(vars)</code>, import từ subpath riêng <code>@six-js/core/OnScroll</code>:
+        Tạo trực tiếp bằng <code>OnScroll.create(vars)</code>:
         </p>
         {codeBlock(
           `import { OnScroll } from "@six-js/core/OnScroll";
@@ -538,17 +623,32 @@ OnScroll.create({
 
         <h2>Vars</h2>
         {attrsTable([
-          ["trigger", "Element | selector — phần tử làm mốc đo vị trí. Qua six.to(...): mặc định là target, không bắt buộc khai", "—"],
-          ["container", "Element | selector — container cuộn (nested overflow), mặc định window", "window"],
-          ["start / end", 'chuỗi "&lt;edge trigger&gt; &lt;edge viewport&gt;" (top|center|bottom|left|right|N%|Npx, cộng thêm được "+=N"/"-=N"), số, hoặc hàm trả về 1 trong 2 dạng trên', '"top bottom" / "bottom top"'],
-          ["axis", '"y" (mặc định) | "x" — đổi sang đo theo trục ngang cho track cuộn ngang', '"y"'],
-          ["sync", "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = scrub 1:1 theo % cuộn; number (giây) = scrub có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn", "false"],
-          ["sticky", "true (ghim chính trigger) | Element | selector — ghim phần tử trong suốt quãng [start, end], đúng vị trí tự nhiên của nó (không nhảy lên top viewport)", "false"],
-          ["syncTo", "một Animation khác (thường là timeline có onScroll scrub riêng) — tiến độ của trigger NÀY bám theo totalProgress() của animation đó thay vì theo cuộn thật (dựng reveal lồng trong track cuộn ngang đang bị ghim)", "—"],
-          ["debug / id", "debug: true vẽ 4 vạch start/end (2 theo trang, 2 theo viewport) để canh chỉnh; id gắn nhãn phân biệt khi có nhiều trigger trên màn hình", "false"],
-          ["onEnter / onLeave / onEnterBack / onLeaveBack", "callback(self) theo từng hướng cuộn qua start/end", "—"],
-          ["onUpdate(self)", "chỉ bắn khi đang ở trong [start, end], hoặc đúng frame vào/ra — không bắn liên tục khi cuộn ở chỗ khác trên trang", "—"],
-          ["onRefresh(self)", "bắn mỗi khi refresh() đo lại vị trí", "—"],
+          ["trigger", "phần tử làm mốc đo vị trí. Qua six.to(...): mặc định là target, không bắt buộc khai", "Element | selector", "—"],
+          ["container", "container cuộn (nested overflow)", "Element | selector", "window"],
+          [
+            "start / end",
+            'chuỗi "&lt;edge trigger&gt; &lt;edge viewport&gt;", cộng thêm được "+=N"/"-=N", hoặc hàm trả về 1 trong 2 dạng trên',
+            "top|center|bottom|left|right|N%|Npx | number | (self) => string | number",
+            '"top bottom" / "bottom top"',
+          ],
+          ["axis", "đổi sang đo theo trục ngang cho track cuộn ngang", '"x" | "y"', '"y"'],
+          [
+            "sync",
+            "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = scrub 1:1 theo % cuộn; number (giây) = scrub có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn",
+            "boolean | number",
+            "false",
+          ],
+          ["sticky", "ghim phần tử trong suốt quãng [start, end], đúng vị trí tự nhiên của nó (không nhảy lên top viewport)", "true (ghim chính trigger) | Element | selector", "false"],
+          [
+            "syncTo",
+            "Cho phép trigger hoạt động với các hiệu ứng cuộn được tạo bằng animation, chẳng hạn horizontal scrolling hoặc storytelling sections, nơi nội dung được di chuyển bằng tween/timeline thay vì bằng thanh cuộn của trình duyệt.",
+            "Animation",
+            "—",
+          ],
+          ["debug / id", "debug vẽ 4 vạch start/end (2 theo trang, 2 theo viewport) để canh chỉnh; id gắn nhãn phân biệt khi có nhiều trigger trên màn hình", "boolean / string", "false / —"],
+          ["onEnter / onLeave / onEnterBack / onLeaveBack", "callback theo từng hướng cuộn qua start/end", "(self) => void", "—"],
+          ["onUpdate", "chỉ bắn khi đang ở trong [start, end], hoặc đúng frame vào/ra — không bắn liên tục khi cuộn ở chỗ khác trên trang", "(self) => void", "—"],
+          ["onRefresh", "bắn mỗi khi refresh() đo lại vị trí", "(self) => void", "—"],
         ])}
 
         <p class="note">
@@ -568,10 +668,11 @@ OnScroll.create({
       const container = root.querySelector<HTMLElement>("[data-scroll-demo]")!;
 
       const fadeBox = root.querySelector<HTMLElement>("[data-scroll-box-fade]")!;
-      six.set(fadeBox, { opacity: 0, y: 40 });
+      six.set(fadeBox, { opacity: 0, x: -80, rotate: -15 });
       six.to(fadeBox, {
         opacity: 1,
-        y: 0,
+        x: 0,
+        rotate: 0,
         duration: 0.6,
         ease: "cubicOut",
         onScroll: { container, start: "top bottom", end: "top center" },
@@ -653,6 +754,55 @@ button.addEventListener("click", scope.scope(() => {
     lead: "Gắn việc setup/teardown animation theo trạng thái CSS media query, tự chạy lại khi điều kiện đổi — khỏi phải tự lắng nghe window.matchMedia() rồi if/else + kill() tay.",
     render: () => (
       <>
+        <div class="bp-demo-layout">
+          <div>
+            <div class="bp-demo-frame" data-bp-frame>
+              <div class="demo-animate-box" data-bp-box style="width:96px;height:96px;flex:none;">
+                Desktop
+              </div>
+              <p style="margin:10px 0 0;font-family:var(--font-mono);font-size:13px;color:var(--text);" data-bp-note>
+                đang khớp "isDesktop" — quay chậm, vô hạn
+              </p>
+            </div>
+          </div>
+          <div>
+            {codeBlock(
+              `const frame = document.querySelector(".bp-demo-frame");
+const box = frame.querySelector(".box");
+const note = frame.querySelector(".note");
+
+const DESKTOP_MIN_WIDTH = 260; 
+let isDesktop = null;
+
+function applyState(desktop) {
+  if (isDesktop === desktop) return; // đã ở đúng trạng thái, khỏi chạy lại
+  isDesktop = desktop;
+
+  box.textContent = desktop ? "Desktop" : "Mobile";
+  note.textContent = desktop ? '"isDesktop"' : '"isMobile"';
+
+  six.set(box, { scale: 1 });
+  six.to(box, {
+    scale: 0.8,
+    duration: desktop ? 1 : 0.5, // desktop pulse chậm hơn mobile
+    repeat: -1,
+    boomerang: true,
+    ease: "none",
+    overwrite: true, // huỷ tween cũ mỗi lần đổi trạng thái, tránh chồng tween
+  });
+}
+
+// ResizeObserver thay cho window.matchMedia — theo dõi bề rộng của CHÍNH khung này
+const resizeObserver = new ResizeObserver(([entry]) => {
+  applyState(entry.contentRect.width >= DESKTOP_MIN_WIDTH);
+});
+resizeObserver.observe(frame);`,
+              "js",
+            )}
+          </div>
+        </div>
+
+        <p></p>
         {codeBlock(
           `const bp = six.breakpoint();
 
@@ -699,8 +849,127 @@ six.breakpoint("(min-width: 1024px)", () => {
         <p>
           Chỉ cần MỘT breakpoint đơn (bật trên ngưỡng, tắt dưới ngưỡng)? Dùng thẳng dạng sugar <code>six.breakpoint(query, callback)</code> khỏi cần gọi <code>.add()</code> tách rời.
         </p>
+
+        <h2>ctx.scope() — capture animation tạo SAU lượt chạy đầu, không phải chỉ lúc callback đang chạy</h2>
+        <p>
+          Animation tạo đồng bộ ngay trong callback tự được <code>ctx</code> capture. Nhưng animation tạo bên trong một event listener gắn từ callback đó — chạy SAU, khi <code>ctx</code> không còn là scope
+          đang active — thì KHÔNG tự capture, trừ khi bọc qua <code>ctx.scope(fn)</code>. Bấm "Pulse A" rồi "Pulse B" cho cả hai quay vô hạn, rồi bấm "Kill" để so sánh:
+        </p>
+        <div class="content-pane__panel" style="align-items:center;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div class="demo-animate-box" data-bp-pulse-a style="width:72px;height:72px;flex:none;">
+              A
+            </div>
+            <button class="btn btn--ghost btn--sm" data-bp-pulse-a-btn>
+              Pulse A (không capture)
+            </button>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+            <div class="demo-animate-box" data-bp-pulse-b style="width:72px;height:72px;flex:none;">
+              B
+            </div>
+            <button class="btn btn--ghost btn--sm" data-bp-pulse-b-btn>
+              Pulse B (ctx.scope())
+            </button>
+          </div>
+        </div>
+        <div class="content-pane__panel" style="align-items:center;">
+          <button class="btn btn--primary btn--sm" data-bp-kill>
+            Kill breakpoint này
+          </button>
+          <span style="font-family:var(--font-mono);font-size:13px;color:var(--muted);" data-bp-status>
+            Bấm Pulse A / Pulse B để bắt đầu
+          </span>
+        </div>
+        {codeBlock(
+          `six.breakpoint("(min-width: 1px)", (ctx) => {
+  btnA.addEventListener("click", () => {
+    six.to(boxA, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // KHÔNG capture — ctx đã hết active từ lâu
+  });
+
+  btnB.addEventListener("click", ctx.scope(() => {
+    six.to(boxB, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // capture vào ctx nhờ bọc qua ctx.scope()
+  }));
+});`,
+          "js",
+        )}
       </>
     ),
+    init: (root) => {
+      const frame = root.querySelector<HTMLElement>("[data-bp-frame]")!;
+      const box = root.querySelector<HTMLElement>("[data-bp-box]")!;
+      const note = root.querySelector<HTMLElement>("[data-bp-note]")!;
+
+      // six.breakpoint() thật luôn bám window.matchMedia — không có khái niệm "theo bề rộng của
+      // một khung/container". Khung kéo-giãn ở đây chỉ mô phỏng cùng ý tưởng (setup đổi khi cắt
+      // qua một ngưỡng) bằng ResizeObserver, để không bắt người xem phải resize cả trình duyệt.
+      const DESKTOP_MIN_WIDTH = 260;
+      let isDesktop: boolean | null = null;
+
+      const applyState = (desktop: boolean) => {
+        if (isDesktop === desktop) return;
+        isDesktop = desktop;
+        box.textContent = desktop ? "Desktop" : "Mobile";
+        note.textContent = desktop ? '"isDesktop"' : '"isMobile"';
+        
+        six.set(box, { scale: 1 });
+
+        if (desktop) {
+          six.to(box, { scale: 0.8, duration: 1, repeat: -1, ease: "none", overwrite: true, boomerang: true });
+        } else {
+          six.to(box, { scale: 0.8, duration: 0.5, repeat: -1, boomerang: true, ease: "none", overwrite: true });
+        }
+      };
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        applyState(entries[0].contentRect.width >= DESKTOP_MIN_WIDTH);
+      });
+      resizeObserver.observe(frame);
+
+      const boxA = root.querySelector<HTMLElement>("[data-bp-pulse-a]")!;
+      const boxB = root.querySelector<HTMLElement>("[data-bp-pulse-b]")!;
+      const btnA = root.querySelector<HTMLButtonElement>("[data-bp-pulse-a-btn]")!;
+      const btnB = root.querySelector<HTMLButtonElement>("[data-bp-pulse-b-btn]")!;
+      const killBtn = root.querySelector<HTMLButtonElement>("[data-bp-kill]")!;
+      const status = root.querySelector<HTMLElement>("[data-bp-status]")!;
+
+      const scopeDemoBp = six.breakpoint("(min-width: 1px)", (ctx) => {
+        const onPulseA = () => {
+          six.to(boxA, { rotate: 360, duration: 3, repeat: -1, ease: "none" });
+        };
+        btnA.addEventListener("click", onPulseA);
+
+        const onPulseB = ctx.scope(() => {
+          six.to(boxB, { rotate: 360, duration: 3, repeat: -1, ease: "none" });
+        });
+        btnB.addEventListener("click", onPulseB);
+
+        status.textContent = "Đang sống — bấm Pulse A, Pulse B rồi Kill để so sánh";
+
+        return () => {
+          btnA.removeEventListener("click", onPulseA);
+          btnB.removeEventListener("click", onPulseB);
+        };
+      });
+
+      killBtn.addEventListener("click", () => {
+        scopeDemoBp.kill();
+        status.textContent = "Đã kill — A vẫn quay (tạo ngoài capture), B dừng ngay (bị ctx.scope() capture)";
+      });
+
+      // Router chỉ innerHTML-thay nội dung khi chuyển trang, không tự gọi cleanup nào — cả
+      // ResizeObserver lẫn breakpoint() bên dưới đều sống mãi (và box vẫn quay/nhấp nháy vô hạn)
+      // nếu không tự dọn khi rời trang.
+      window.addEventListener(
+        "hashchange",
+        () => {
+          resizeObserver.disconnect();
+          six.to(box, { opacity: 1, duration: 0, overwrite: true });
+          scopeDemoBp.kill();
+        },
+        { once: true },
+      );
+    },
   },
 
   "utils/set": {
