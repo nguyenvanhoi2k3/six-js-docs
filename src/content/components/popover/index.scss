@@ -1,14 +1,9 @@
-// sx-popover portals to document.body on mount (see popover.ts) — it's never actually a descendant
-// of any per-demo scoped wrapper by the time it's open, so this chrome has to stay global/unscoped
-// here rather than live inline per-demo like the rest of this component's demo styling (see
-// demos[].css in index.tsx, which repeats the same rules — that copy is what actually renders in the
-// CSS tab for copy/paste; this file is what makes the live preview itself render correctly despite
-// the scoping demo.tsx would otherwise apply).
 sx-popover {
   font-size: 14px;
   color: #e1dcc9;
   background: #14161b;
   border-color: #2a2d33;
+  padding-block: 20px;
 }
 
 sx-popover .menu {

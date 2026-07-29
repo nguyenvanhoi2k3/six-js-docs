@@ -17,6 +17,7 @@ const POPOVER_CSS = `sx-popover {
   color: #e1dcc9;
   background: #14161b;
   border-color: #2a2d33;
+  padding-block: 20px;
 }
 
 sx-popover .menu {
@@ -39,6 +40,13 @@ sx-popover .menu sx-popover-trigger {
 sx-popover .menu button:hover,
 sx-popover .menu sx-popover-trigger:hover {
   background: #1a1c20;
+}
+
+/* nút site-wide (.btn--ghost) đặt cứng color: var(--text) — trên demo.html biến này bị ghim
+   gần-đen, chìm mất trên nền tối cứng của sx-popover ở trên; ghi đè để ăn theo màu chữ sáng
+   #e1dcc9 đã khai báo cho sx-popover. */
+sx-popover .btn--ghost {
+  color: inherit;
 }`;
 
 // sx-popover-trigger itself never portals, so this one is genuinely safe scoped per-demo.
@@ -66,7 +74,11 @@ const LOG_CSS = `.log {
 }`;
 
 const POSITIONS = ["top-start", "top", "top-end", "right-start", "right", "right-end", "bottom-end", "bottom", "bottom-start", "left-end", "left", "left-start"];
-const positionTriggersHtml = POSITIONS.map((p) => `  <sx-popover-trigger class="btn btn--ghost btn--sm" trigger="manual" data-position-trigger="${p}">${p}</sx-popover-trigger>`).join("\n");
+// 12 cặp trigger/popover độc lập (thay vì 1 popover dùng chung) để tab HTML là code dùng thật được luôn, không lẫn dây nối riêng cho demo.
+const positionPairsHtml = POSITIONS.map(
+  (p) => `  <sx-popover-trigger class="btn btn--ghost btn--sm" name="pos-${p}">${p}</sx-popover-trigger>
+  <sx-popover name="pos-${p}" position="${p}"><span>position="${p}"</span></sx-popover>`,
+).join("\n\n");
 
 export const popover: ComponentDoc = {
   slug: "popover",
@@ -96,7 +108,7 @@ export const popover: ComponentDoc = {
         ["position", "top | top-start | top-end | right | right-start | right-end | bottom | bottom-start | bottom-end | left | left-start | left-end", "bottom"],
         ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "zoom"],
         ["ease", 'tên easing cho component (xem trang <a href="/ease.html#component">Ease</a>), hoặc chuỗi CSS transition-timing-function bất kỳ (vd: ease-in-out, cubic-bezier(...))', "cubic-bezier(0.4, 0, 0.2, 1)"],
-        ["duration", "số giây (vd: 0.15)", "0.15"],
+        ["duration", "số giây (vd: 0.15)", "0.2"],
         ["offset", "khoảng cách (px) giữa trigger và popover", "8"],
         ["flip", "tự chuyển sang phía đối diện nếu phía đang chọn không đủ chỗ", "true"],
         ["shift", "tự dịch theo trục ngang/dọc còn lại để không tràn viewport (không đổi phía, không đổi effect)", "true"],
@@ -120,9 +132,6 @@ popoverEl.toggle();
 popoverEl.updatePosition();`,
         "js",
       )}
-      <p class="note">
-        Vị trí thật sau khi flip/shift được ghi vào <code>data-placement</code> trên chính <span class="c-accent">sx-popover</span> — hook CSS tiện dùng, vd chỉnh hướng mũi tên trỏ theo từng phía.
-      </p>
 
       <h2>sx-popover-trigger</h2>
       {attrsTable([
@@ -134,13 +143,14 @@ popoverEl.updatePosition();`,
       <p class="note">Enter/Space luôn toggle được bất kể trigger mode nào — đảm bảo thao tác bàn phím dùng được cả khi trigger đang set hover/focus.</p>
 
       <h2>Event</h2>
-      <p>4 event dưới đây bắn trên chính <span class="c-accent">sx-popover</span> (không phải window):</p>
+      <p>4 event dưới đây bắn trên chính <span class="c-accent">sx-popover</span></p>
       {eventsTable([
         ["sx-popover-before-open", "bắn NGAY TRƯỚC khi mở (chưa mở) — cancelable, gọi preventDefault() để chặn"],
         ["sx-popover-after-open", "bắn NGAY SAU khi đã mở xong hẳn"],
         ["sx-popover-before-close", "bắn NGAY TRƯỚC khi đóng (chưa đóng) — cancelable, gọi preventDefault() để chặn"],
         ["sx-popover-after-close", "bắn NGAY SAU khi đã đóng xong hẳn"],
       ])}
+      <p></p>
       {codeBlock(
         `const popoverEl = document.querySelector('sx-popover[name="menu1"]');
 
@@ -192,7 +202,6 @@ popoverEl.addEventListener('sx-popover-after-close', () => {
   <sx-popover name="basic-popover" position="bottom">
     <div style="min-width:200px">
       <p style="margin:0 0 8px">Click ra ngoài hoặc nhấn Esc để đóng.</p>
-      <button class="btn btn--ghost btn--sm">Một hành động</button>
     </div>
   </sx-popover>
 </div>`,
@@ -201,49 +210,22 @@ popoverEl.addEventListener('sx-popover-after-close', () => {
     {
       label: "12 vị trí (position)",
       html: `<div class="content-pane__panel" style="justify-content:center;padding:60px 0">
-${positionTriggersHtml}
-  <sx-popover name="position-popover" position="bottom">
-    <span id="position-popover-label"></span>
-  </sx-popover>
+${positionPairsHtml}
 </div>`,
       css: POPOVER_CSS,
-      // Only this demo needs JS: one shared sx-popover, re-anchored + repositioned per button clicked.
-      // sx-popover portals itself to document.body on connect (see popover.ts), taking its child
-      // label span with it — by the time this runs, neither is inside `root` anymore, so both must
-      // be looked up against the document instead.
-      //
-      // Triggers are all trigger="manual" here on purpose: with the default "click" mode, each
-      // trigger ALSO dispatches its own toggle on click independently of this handler, and the two
-      // fight (this handler always ends in "show", so the built-in toggle's own close never stuck).
-      // Driving open/close entirely from here means one single source of truth for "same button
-      // clicked again -> close" vs "different button clicked -> move".
-      initDemo: (root) => {
-        const popoverEl = document.querySelector<HTMLElement>('sx-popover[name="position-popover"]');
-        const label = document.querySelector<HTMLElement>("#position-popover-label");
-        let activeTrigger: HTMLElement | null = null;
+    },
+    {
+      label: "offset (khoảng cách trigger-popover)",
+      html: `<div class="content-pane__panel">
+  <sx-popover-trigger class="btn btn--ghost btn--sm" name="offset-0">offset="0"</sx-popover-trigger>
+  <sx-popover-trigger class="btn btn--ghost btn--sm" name="offset-8">offset="8" (mặc định)</sx-popover-trigger>
+  <sx-popover-trigger class="btn btn--ghost btn--sm" name="offset-24">offset="24"</sx-popover-trigger>
 
-        root.querySelectorAll<HTMLElement>("[data-position-trigger]").forEach((trigger) => {
-          trigger.addEventListener("click", () => {
-            const isOpen = popoverEl?.hasAttribute("sx-open") ?? false;
-
-            if (isOpen && activeTrigger === trigger) {
-              window.dispatchEvent(new CustomEvent("sx-popover-hide", { detail: { name: "position-popover", triggerEl: trigger } }));
-              activeTrigger = null;
-              return;
-            }
-
-            const position = trigger.dataset.positionTrigger!;
-            popoverEl?.setAttribute("position", position);
-            if (label) label.textContent = `position="${position}"`;
-            // hide then show (not toggle): moving to a DIFFERENT trigger while already open must
-            // re-anchor + reposition, not just close - toggle() would only flip state. hide() on an
-            // already-closed popover is a safe no-op (setOpenState bails when shouldOpen === isOpen).
-            window.dispatchEvent(new CustomEvent("sx-popover-hide", { detail: { name: "position-popover", triggerEl: trigger } }));
-            window.dispatchEvent(new CustomEvent("sx-popover-show", { detail: { name: "position-popover", triggerEl: trigger } }));
-            activeTrigger = trigger;
-          });
-        });
-      },
+  <sx-popover name="offset-0" position="bottom" offset="0"><span>offset="0"</span></sx-popover>
+  <sx-popover name="offset-8" position="bottom" offset="8"><span>offset="8"</span></sx-popover>
+  <sx-popover name="offset-24" position="bottom" offset="24"><span>offset="24"</span></sx-popover>
+</div>`,
+      css: POPOVER_CSS,
     },
     {
       label: "Hiệu ứng (effect)",
