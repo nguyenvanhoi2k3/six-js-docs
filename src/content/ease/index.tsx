@@ -125,22 +125,17 @@ export function renderEase(): string {
           <h2>Core (Tween)</h2>
           {demoPanel(true)}
           {coreChips()}
-          <p class="note">
-            Sai chính tả tên easing sẽ tự rơi về <code>"quadOut"</code> chứ không throw lỗi. Cũng nhận một hàm <code>(t: number) =&gt; number</code> tuỳ ý thay vì tên có sẵn. Xem thêm các thuộc tính
-            animate được tại trang <a href="/core.html#tween/properties">Thuộc tính &amp; Easing</a>.
-          </p>
         </section>
 
         <section class="ease-col" id="component">
           <h2>Component</h2>
           {demoPanel(false)}
           {componentChips()}
-          <p class="note">
-            Di chuột vào một tên để xem giá trị CSS tương ứng. Một chuỗi CSS <code>transition-timing-function</code> bất kỳ không nằm trong bảng (vd <code>ease-in-out</code>, <code>cubic-bezier(...)</code>{" "}
-            tự viết, <code>var(--my-ease)</code>) vẫn được nhận nguyên văn. Riêng họ <code>bounce*</code> không dựng được dáng nảy nhiều nhịp bằng một <code>cubic-bezier()</code> duy nhất nên chỉ xấp xỉ bằng
-            ease-in/ease-out/ease-in-out chuẩn của CSS.
-          </p>
         </section>
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
       </div>
     </article>
   );

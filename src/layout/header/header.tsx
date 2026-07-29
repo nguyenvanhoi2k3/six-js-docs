@@ -22,7 +22,7 @@ export function renderHeader(active: ActiveSection): string {
         {link("installation", "/installation.html", "Installation")}
         {link("components", "/components.html", "Components")}
         {link("core", "/core.html", "Core")}
-        {link("ease", "/ease.html", "Ease")}
+        {link("ease", "/ease.html", "Easing")}
         {link("plugins", "/plugins.html", "Plugins")}
         {link("showcase", "/showcase.html", "Showcase")}
       </nav>

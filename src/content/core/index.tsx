@@ -54,7 +54,8 @@ const coreContent: ContentMap = {
         </div>
 
         {codeBlock(
-          `six.to(".box", {
+          ` // box translateX 160px và rotate 12deg 
+six.to(".box", {
   x: 160,
   rotate: 12,
   duration: 0.6,
@@ -106,7 +107,9 @@ const coreContent: ContentMap = {
         </div>
 
         {codeBlock(
-          `six.from(".box", {
+          `
+          // box translateT từ 40px về trạng thái ban đầu 
+six.from(".box", {
   opacity: 0,
   y: 40,
   duration: 0.5,
@@ -114,11 +117,6 @@ const coreContent: ContentMap = {
 });`,
           "js",
         )}
-
-        <p class="note">Giá trị đích được chốt ngay khi tween khởi tạo (constructor tự render frame 0 đồng bộ) — nếu style hiện tại của target đổi sau đó, tween vẫn nhắm tới giá trị đã chốt từ đầu, không đọc lại DOM giữa chừng.</p>
-        <p>
-          Muốn replay lại một demo/hiệu ứng from() nhiều lần, nhớ <code>six.set()</code> target về trạng thái ban đầu trước khi gọi <code>from()</code> lần nữa (xem <code>init</code> của demo này).
-        </p>
       </>
     ),
     init: (root) => {
@@ -187,7 +185,7 @@ const coreContent: ContentMap = {
         {codeBlock(
           `// Dạng mảng — mỗi phần tử là một chặng, "duration"/"ease" riêng (tuỳ chọn)
 six.to(".box", {
-  duration: 1.2, // tổng thời lượng nếu chặng không tự khai duration riêng
+  duration: 2, // tổng thời lượng nếu chặng không tự khai duration riêng
   keyframes: [
     { x: 120, duration: 0.4 },
     { y: -40, ease: "backOut" },
@@ -197,7 +195,7 @@ six.to(".box", {
 
 // Dạng phần trăm — vị trí "N%" tính theo tổng duration của tween
 six.to(".box", {
-  duration: 1.2,
+  duration: 2,
   keyframes: {
     "0%": { x: 0, y: 0 },
     "40%": { x: 120, ease: "backOut" },
@@ -213,9 +211,9 @@ six.to(".box", {
           ["duration (trên tween)", "tổng thời lượng — bắt buộc phải khai nếu dùng dạng phần trăm", "0.5"],
         ])}
 
-        <p class="note">Giá trị cuối của một chặng tự trở thành điểm bắt đầu (from) của chặng kế tiếp — six-js truyền thẳng giá trị đó chứ không đọc lại DOM, nên việc build track "lười" (lazy, không nhất thiết đúng thứ tự chặng) giữa các chặng không gây sai lệch.</p>
+        <p class="note">Giá trị cuối của một chặng tự trở thành điểm bắt đầu (from) của chặng kế tiếp — six-js truyền thẳng giá trị đó chứ không đọc lại DOM</p>
         <p class="note">
-          Tween dùng <code>keyframes</code> không hỗ trợ <code>overwrite</code> (bị bỏ qua) và không bắn sự kiện onStart/onComplete riêng cho từng chặng — chỉ sự kiện của tween ngoài cùng được bắn.
+          Tween dùng <code>keyframes</code> không hỗ trợ <code>overwrite</code> và không bắn sự kiện onStart/onComplete riêng cho từng chặng — chỉ sự kiện của tween ngoài cùng được bắn.
         </p>
       </>
     ),
@@ -225,7 +223,7 @@ six.to(".box", {
       btn.addEventListener("click", () => {
         six.set(box, { x: 0, y: 0, rotate: 0 });
         six.to(box, {
-          duration: 1.2,
+          duration: 2,
           keyframes: [{ x: 120, duration: 0.4 }, { y: -40, ease: "backOut" }, { x: 0, y: 0, rotate: 360 }],
         });
       });
@@ -303,26 +301,13 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
           "js",
         )}
 
-        <h2>Bảng easing (ease: "...")</h2>
+        <h2>Ease</h2>
         <p>
           Danh sách đầy đủ kèm mô tả dáng từng easing tại trang <a href="/ease.html#core">Ease</a>.
         </p>
-        {codeBlock(
-          `// Mỗi họ có 3 biến thể In / Out / InOut, vd quadIn, quadOut, quadInOut:
-quad · cubic · quart · quint · sine · expo · circ · back · bounce · elastic
-
-// Không cong:
-none    // tuyến tính — mặc định gốc khi không truyền ease và chưa gọi six.config()
-linear  // alias của none
-
-// Chữ ký riêng của six-js (không theo tên thư viện nào khác):
-smooth  // easeInOut rất mượt, không "coast" ở 2 đầu (quintic smootherstep)
-spring  // damped-spring, overshoot rồi tắt dần (~1.75 dao động)
-jelly   // giống spring nhưng lỏng & tắt chậm hơn (~1.25 dao động)`,
-          "js",
-        )}
+      
         <p class="note">
-          Truyền tên easing không tồn tại (sai chính tả) sẽ tự rơi về <code>"quadOut"</code> chứ không throw lỗi — kiểm tra kỹ tên nếu thấy easing "lạ". Cũng có thể truyền thẳng hàm{" "}
+          Truyền tên easing không tồn tại (sai chính tả) sẽ tự rơi về <code>"quadOut"</code> chứ không throw lỗi. Cũng có thể truyền thẳng hàm{" "}
           <code>(t: number) =&gt; number</code> (t và kết quả trong khoảng 0–1) thay vì tên có sẵn.
         </p>
       </>

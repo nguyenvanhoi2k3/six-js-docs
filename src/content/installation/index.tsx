@@ -58,7 +58,7 @@ function generateNpmCode(state: PickerState): string {
     else components.forEach((c) => bodyLines.push(`${c.register}();`));
     bodyLines.push("");
   }
-  bodyLines.push(`// six.to(".el", { x: 400, duration: 1.5, ease: "quintInOut" });`);
+  bodyLines.push(`// your code`);
 
   return `${importLines.join("\n")}\n\n${bodyLines.join("\n")}`;
 }
