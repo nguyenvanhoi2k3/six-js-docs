@@ -45,7 +45,7 @@ function renderRoute() {
       <h1>{doc.title}</h1>
       <p class="content-pane__lead">{doc.lead}</p>
       <div class="content-pane__panel">
-        <a class="btn btn--primary" href={`/demo.html?c=${doc.slug}`} target="_blank" rel="noopener">
+        <a class="btn btn--primary" href={`demo.html?c=${doc.slug}`} target="_blank" rel="noopener">
           Xem demo ↗
         </a>
       </div>

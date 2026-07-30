@@ -12,19 +12,19 @@ export function renderHeader(active: ActiveSection): string {
 
   return (
     <header class="site-header">
-      <a class="site-header__brand" href="/installation.html">
-        <img class="logo_icon" src="/sixjs_logo_fav_56x56.svg" alt="" width="885" height="252" />
-        <img class="logo_text logo_text--light" src="/sixjs_logo_text.png" alt="" width="885" height="252" />
-        <img class="logo_text logo_text--dark" src="/sixjs_logo_darkmode.png" alt="" width="885" height="252" />
+      <a class="site-header__brand" href="installation.html">
+        <img class="logo_icon" src="sixjs_logo_fav_56x56.svg" alt="" width="885" height="252" />
+        <img class="logo_text logo_text--light" src="sixjs_logo_text.png" alt="" width="885" height="252" />
+        <img class="logo_text logo_text--dark" src="sixjs_logo_darkmode.png" alt="" width="885" height="252" />
       </a>
 
       <nav class="site-header__nav">
-        {link("installation", "/installation.html", "Installation")}
-        {link("components", "/components.html", "Components")}
-        {link("core", "/core.html", "Core")}
-        {link("ease", "/ease.html", "Easing")}
-        {link("plugins", "/plugins.html", "Plugins")}
-        {link("showcase", "/showcase.html", "Showcase")}
+        {link("installation", "installation.html", "Installation")}
+        {link("components", "components.html", "Components")}
+        {link("core", "core.html", "Core")}
+        {link("ease", "ease.html", "Easing")}
+        {link("plugins", "plugins.html", "Plugins")}
+        {link("showcase", "showcase.html", "Showcase")}
       </nav>
 
       <div class="site-header__actions">

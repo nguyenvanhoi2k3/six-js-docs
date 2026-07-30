@@ -291,7 +291,7 @@ smooth.kill();`,
           ["axis", '"y" | "x"', '"y"'],
           ["lerp", "cường độ giảm chấn 0–1 khi cuộn bằng wheel (đã tinh chỉnh sẵn cho 60fps) — bỏ qua nếu đã set duration", "0.1"],
           ["duration", "giây — chuyển sang chế độ tween thời lượng cố định (thay vì giảm chấn liên tục) cho input wheel", "—"],
-          ["ease", 'easing (như TweenVars.ease, xem trang <a href="/ease.html#core">Ease</a>) — chỉ dùng khi có duration', '"expoOut"'],
+          ["ease", 'easing (như TweenVars.ease, xem trang <a href="ease.html#core">Ease</a>) — chỉ dùng khi có duration', '"expoOut"'],
           ["wheelMultiplier", "hệ số nhân thêm vào delta wheel", "1"],
           ["onScroll / onStart / onStop", "callback(self) mỗi lần cuộn / bắt đầu / dừng chuyển động", "—"],
         ])}
@@ -403,7 +403,7 @@ ScrambleText(".headline", {
         {attrsTable([
           ["mode", '"scramble" (mặc định, xáo tại chỗ) | "odometer" (mỗi ký tự tự "quay số" — xem trang mode: "odometer")', '"scramble"'],
           ["text", 'text đích cần hiện ra — bỏ qua (hoặc "{original}") dùng lại chính text hiện tại của target', "—"],
-          ["duration / ease", 'thời lượng &amp; easing tổng (xem trang <a href="/ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
+          ["duration / ease", 'thời lượng &amp; easing tổng (xem trang <a href="ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
           ["chars", '"upperCase" | "lowerCase" | "upperAndLowerCase" | "numeric" | chuỗi ký tự tuỳ ý — nguồn ký tự xáo/filler', '"upperCase"'],
           ["stagger", "trễ thêm mỗi phần tử khi target khớp nhiều element", "—"],
           ["rightToLeft", "reveal từ phải sang trái thay vì trái sang phải (mặc định)", "false"],
@@ -588,7 +588,7 @@ SvgMotion(".signature", {
         {attrsTable([
           ["from", 'điểm bắt đầu của đoạn hiện ra — ratio ("0%"/0..1) hoặc cặp [start, end] rõ ràng', '"0%"'],
           ["to", '1 giá trị nghĩa là [0, value] (vẽ trọn từ đầu); chuỗi 2 token ("20% 80%") hoặc cặp [start, end] di chuyển độc lập 2 đầu — hiệu ứng đoạn "sao chổi" trượt dọc nét', '"100%"'],
-          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="/ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
+          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
           ["stagger", "trễ thêm mỗi shape khi target khớp nhiều phần tử (vd cả một chữ gồm nhiều &lt;path&gt;)", "—"],
         ])}
 
@@ -651,7 +651,7 @@ SvgMotion(".blob", {
 
         {attrsTable([
           ["toShape", 'shape đích — Element, selector, hoặc chuỗi d thô (dựng thành một &lt;path&gt; tách rời, không cần gắn vào DOM/hiển thị). Chỉ dùng cho mode: "morph"', "—"],
-          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="/ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
+          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
           ["precision", "số điểm lấy mẫu để xấp xỉ 2 shape — cao hơn mượt/sát hình hơn, tốn thêm một lần tính lúc khởi tạo (không tốn mỗi frame)", "120"],
         ])}
 
@@ -707,7 +707,7 @@ SvgMotion(".plane", {
           ["path", 'guide curve — SVGGeometryElement, selector trỏ tới nó, hoặc chuỗi d thô (dựng thành path tách rời, không cần hiển thị). Chỉ dùng cho mode: "path"', "—"],
           ["autoRotate", "true dùng thẳng góc tiếp tuyến của path; số cộng thêm độ lệch cố định (bù hướng vẽ gốc của artwork target)", "false"],
           ["from / to", "tiến độ bắt đầu / kết thúc dọc path, 0–1", "0 / 1"],
-          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="/ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
+          ["duration / ease", 'thời lượng &amp; easing (xem trang <a href="ease.html#core">Ease</a>)', "0.8s (six.config()) / none"],
           ["stagger", "trễ thêm mỗi phần tử khi target khớp nhiều element", "—"],
         ])}
 
