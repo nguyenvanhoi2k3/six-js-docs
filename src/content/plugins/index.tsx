@@ -229,7 +229,7 @@ split.kill();`,
   "smooth-scroll/overview": {
     eyebrow: "Plugins",
     title: "SmoothScroll",
-    lead: "Cuộn mượt (inertia/damping khi lăn chuột) — di chuyển vị trí cuộn NGUYÊN BẢN của trang (window.scrollTo/scrollTop thật), không phải transform giả lập, nên link neo, tìm-trong-trang, IntersectionObserver, onScroll... vẫn hoạt động bình thường.",
+    lead: "Cuộn mượt (inertia/damping khi lăn chuột)",
     render: () => (
       <>
         <div class="content-pane__panel">
@@ -422,7 +422,7 @@ ScrambleText(".headline", {
   "scramble-text/odometer": {
     eyebrow: "Plugins",
     title: 'mode: "odometer"',
-    lead: "Mỗi ký tự tự quay trên một cuộn số dọc rồi dừng đúng ký tự đích — kiểu bộ đếm cơ khí (odometer), khác với xáo tại chỗ của mode mặc định. Đây là bổ sung riêng của six-js, không phải kiểu hiệu ứng phổ biến ở các thư viện animation khác.",
+    lead: "Mỗi ký tự tự quay trên một cuộn số dọc rồi dừng đúng ký tự đích — kiểu bộ đếm cơ khí (odometer), khác với xáo tại chỗ của mode mặc định.",
     render: () => (
       <>
         <div class="content-pane__panel" style="align-items:center;">
@@ -464,7 +464,7 @@ ScrambleText(".counter", {
 
       runBtn.addEventListener("click", () => {
         const next = String(Math.floor(Math.random() * 999999)).padStart(6, "0");
-        ScrambleText(target, { mode: "odometer", text: next, chars: "numeric", duration: 1.4, reelSize: 12, charStagger: 0.04 });
+        ScrambleText(target, { mode: "odometer", text: next,ease: "expoOut", chars: "numeric", duration: 1.4, reelSize: 12, charStagger: 0.04 });
       });
     },
   },
