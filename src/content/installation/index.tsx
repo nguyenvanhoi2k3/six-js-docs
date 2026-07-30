@@ -1,4 +1,4 @@
-import { attrsTable, codeBlock } from "../shared";
+import { codeBlock } from "../shared";
 import { h, Fragment } from "../../jsx";
 
 interface ComponentOption {

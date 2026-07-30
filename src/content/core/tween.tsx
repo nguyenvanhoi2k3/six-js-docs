@@ -6,7 +6,7 @@ import { playgroundBox } from "./shared";
 
 const tweenCommonAttrs = attrsTable([
   ["duration", "thời gian, tính bằng giây", "number", "0.8 (six.config())"],
-  ["ease", 'tên easing (xem trang <a href="/ease.html#core">Ease</a>) hoặc hàm easing tuỳ chỉnh', "string | (t: number) => number", '"none" (six.config())'],
+  ["ease", 'tên easing (xem trang <a href="ease.html#core">Ease</a>) hoặc hàm easing tuỳ chỉnh', "string | (t: number) => number", '"none" (six.config())'],
   ["delay", "giây trước khi tween thực sự chạy", "number", "0"],
   ["repeat", "số lần lặp lại", "number (-1 = vô hạn)", "0"],
   ["repeatDelay", "khoảng nghỉ giữa các lần lặp (giây)", "number", "0"],
@@ -294,7 +294,7 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
 
         <h2>Ease</h2>
         <p>
-          Danh sách đầy đủ kèm mô tả dáng từng easing tại trang <a href="/ease.html#core">Ease</a>.
+          Danh sách đầy đủ kèm mô tả dáng từng easing tại trang <a href="ease.html#core">Ease</a>.
         </p>
 
         <p class="note">
