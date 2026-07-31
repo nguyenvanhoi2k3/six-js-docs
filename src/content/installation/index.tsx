@@ -32,13 +32,21 @@ const PLUGINS: PluginOption[] = [
 ];
 
 type Mode = "npm" | "cdn";
+type PackageManager = "npm" | "pnpm" | "yarn";
 
 interface PickerState {
   mode: Mode;
+  pm: PackageManager;
   components: Set<string>;
   allComponents: boolean;
   plugins: Set<string>;
 }
+
+const INSTALL_COMMAND: Record<PackageManager, string> = {
+  npm: "npm install @six-js/core",
+  pnpm: "pnpm add @six-js/core",
+  yarn: "yarn add @six-js/core",
+};
 
 function generateNpmCode(state: PickerState): string {
   const components = state.allComponents ? COMPONENTS : COMPONENTS.filter((c) => state.components.has(c.key));
@@ -88,7 +96,7 @@ function renderOutput(state: PickerState): string {
   if (state.mode === "npm") {
     return (
       <>
-        {codeBlock(`npm install @six-js/core`, "bash")}
+        {codeBlock(INSTALL_COMMAND[state.pm], "bash")}
         {codeBlock(generateNpmCode(state), "js")}
       </>
     );
@@ -126,6 +134,21 @@ export function renderInstallation(): string {
             </div>
           </div>
 
+          <div class="install-picker__group" data-pm-group>
+            <p class="install-picker__label">Package manager</p>
+            <div class="install-picker__mode" data-install-pm>
+              <button type="button" class="btn btn--ghost btn--sm is-active" data-pm="npm">
+                npm
+              </button>
+              <button type="button" class="btn btn--ghost btn--sm" data-pm="pnpm">
+                pnpm
+              </button>
+              <button type="button" class="btn btn--ghost btn--sm" data-pm="yarn">
+                yarn
+              </button>
+            </div>
+          </div>
+
           <div class="install-picker__group">
             <p class="install-picker__label">Components</p>
             <div class="install-picker__chips">
@@ -143,7 +166,7 @@ export function renderInstallation(): string {
         </div>
 
         <div class="install-picker-output" data-install-output>
-          {renderOutput({ mode: "npm", components: new Set(), allComponents: false, plugins: new Set() })}
+          {renderOutput({ mode: "npm", pm: "npm", components: new Set(), allComponents: false, plugins: new Set() })}
         </div>
       </div>
 
@@ -152,13 +175,17 @@ export function renderInstallation(): string {
 }
 
 export function initInstallation(root: HTMLElement): void {
-  const state: PickerState = { mode: "npm", components: new Set(), allComponents: false, plugins: new Set() };
+  const state: PickerState = { mode: "npm", pm: "npm", components: new Set(), allComponents: false, plugins: new Set() };
   const output = root.querySelector<HTMLElement>("[data-install-output]")!;
   const modeButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-install-mode] [data-mode]"));
+  const pmGroup = root.querySelector<HTMLElement>("[data-pm-group]")!;
+  const pmButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-install-pm] [data-pm]"));
   const componentInputs = Array.from(root.querySelectorAll<HTMLInputElement>('[data-install-check="component"]'));
 
   function update(): void {
     output.innerHTML = renderOutput(state);
+    // No package manager involved in CDN mode — nothing to `install`, just <script> tags.
+    pmGroup.hidden = state.mode !== "npm";
     // Individual component picks are moot (and visually disabled) once "all" is checked — reflects
     // that the generated code switches to registerComponents() regardless of what's ticked below it.
     componentInputs.forEach((input) => {
@@ -171,6 +198,14 @@ export function initInstallation(root: HTMLElement): void {
     btn.addEventListener("click", () => {
       state.mode = btn.dataset.mode as Mode;
       modeButtons.forEach((b) => b.classList.toggle("is-active", b === btn));
+      update();
+    });
+  });
+
+  pmButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      state.pm = btn.dataset.pm as PackageManager;
+      pmButtons.forEach((b) => b.classList.toggle("is-active", b === btn));
       update();
     });
   });
