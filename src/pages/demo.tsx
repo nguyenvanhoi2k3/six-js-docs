@@ -5,7 +5,7 @@ import { registerComponents } from "@six-js/core/Components";
 
 registerComponents();
 import { componentsDocs } from "../content/components";
-import { codeBlock, mountCodeCopy, scopeCss } from "../content/shared";
+import { codeBlock, mountCodeCopy, mountDemoTabs, scopeCss } from "../content/shared";
 import type { ComponentDemo, ComponentDoc } from "../content/components/types";
 import { h } from "../jsx";
 
@@ -162,17 +162,6 @@ function render() {
   setupScrollSpy(doc);
 }
 
-root.addEventListener("click", (e) => {
-  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-tab-btn]");
-  if (!btn) return;
-
-  const wrap = btn.closest(".demo-tabs");
-  if (!wrap) return;
-
-  const target = btn.dataset.tabBtn;
-  wrap.querySelectorAll<HTMLElement>("[data-tab-btn]").forEach((b) => b.classList.toggle("is-active", b === btn));
-  wrap.querySelectorAll<HTMLElement>("[data-tab-panel]").forEach((p) => p.classList.toggle("is-active", p.dataset.tabPanel === target));
-});
-
+mountDemoTabs();
 mountCodeCopy();
 render();

@@ -1210,6 +1210,7 @@ a {
 }
 
 .showcase-code-dialog {
+  position: relative;
   width: 90vw;
   height: 92vh;
   display: flex;
@@ -1224,6 +1225,16 @@ pre {
 .showcase-code-dialog h2 {
   flex: none;
   margin: 0;
+  padding-right: 72px;
+}
+
+.showcase-code-dialog .demo-tabs {
+  flex: 1;
+  min-height: 0;
+}
+
+.showcase-code-dialog .demo-tabs__nav {
+  flex: none;
 }
 
 .showcase-code-dialog__body {
@@ -1238,8 +1249,10 @@ pre {
 }
 
 .showcase-code-dialog .btn {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
   flex: none;
-  align-self: flex-start;
 }
 
 .showcase-card__media {

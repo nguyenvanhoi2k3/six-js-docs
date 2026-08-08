@@ -158,3 +158,23 @@ export function mountCodeCopy(): void {
       .catch(() => {});
   });
 }
+
+let tabListenerMounted = false;
+
+/** Wires up any `.demo-tabs` block: click a `[data-tab-btn]`, show the matching `[data-tab-panel]` within the same block. */
+export function mountDemoTabs(): void {
+  if (tabListenerMounted) return;
+  tabListenerMounted = true;
+
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-tab-btn]");
+    if (!btn) return;
+
+    const wrap = btn.closest(".demo-tabs");
+    if (!wrap) return;
+
+    const target = btn.dataset.tabBtn;
+    wrap.querySelectorAll<HTMLElement>("[data-tab-btn]").forEach((b) => b.classList.toggle("is-active", b === btn));
+    wrap.querySelectorAll<HTMLElement>("[data-tab-panel]").forEach((p) => p.classList.toggle("is-active", p.dataset.tabPanel === target));
+  });
+}
