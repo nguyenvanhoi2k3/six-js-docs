@@ -17,6 +17,7 @@ export const componentsList: NavLeaf[] = [
   { slug: "marquee", label: "Marquee" },
   { slug: "accordion", label: "Accordion" },
   { slug: "popover", label: "Popover" },
+  { slug: "image-compare", label: "Image Compare" },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export const coreNav: NavGroup[] = [

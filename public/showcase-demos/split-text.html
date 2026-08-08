@@ -5,170 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SplitText demo</title>
     <style>
-/* 1. Use a more-intuitive box-sizing model */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+      /* 1. Use a more-intuitive box-sizing model */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
 
-/* 2. Remove default margin */
-*:not(dialog) {
-  margin: 0;
-}
+      /* -------------------- */
+      .box {
+        width: 200px;
+        height: 200px;
+        background-color: #30364f;
+        color: #f0f0db;
+      }
 
-/* 3. Enable keyword animations */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    interpolate-size: allow-keywords;
-  }
-}
+      .box2 {
+        width: 200px;
+        height: 200px;
+        background-color: #ffb4b4;
+      }
 
-body {
-  /* 4. Increase line-height */
-  line-height: 1.5;
-  /* 5. Improve text rendering */
-  -webkit-font-smoothing: antialiased;
-  font-family: sans-serif;
-}
+      .box3 {
+        width: 200px;
+        height: 200px;
+        background-color: #c6ffb4;
+      }
 
-/* 6. Improve media defaults */
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
+      .slide {
+        background-color: #ccc;
+        width: 100%;
+        height: 400px;
+      }
 
-/* 7. Inherit fonts for form controls */
-input,
-button,
-textarea,
-select {
-  font: inherit;
-}
+      .space {
+        height: 100vh;
+      }
 
-/* 8. Avoid text overflows */
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  overflow-wrap: break-word;
-}
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-/* 9. Improve line wrapping */
-p {
-  text-wrap: pretty;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-wrap: balance;
-}
+      .flex {
+        display: flex;
+      }
 
-/*
-  10. Create a root stacking context
-*/
-#root,
-#__next {
-  isolation: isolate;
-}
+      .jc-center {
+        justify-content: center;
+      }
 
-/* -------------------- */
-.box {
-  width: 200px;
-  height: 200px;
-  background-color: #30364f;
-  color: #f0f0db;
-}
+      .ai-center {
+        align-items: center;
+      }
 
-.box2 {
-  width: 200px;
-  height: 200px;
-  background-color: #ffb4b4;
-}
+      /* -------- */
 
-.box3 {
-  width: 200px;
-  height: 200px;
-  background-color: #c6ffb4;
-}
+      .img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 200px;
+        opacity: 0;
+      }
 
-.slide {
-  background-color: #ccc;
-  width: 100%;
-  height: 400px;
-}
+      /* -------- cursor follow demo -------- */
+      .cursor-box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 60px;
+        height: 60px;
+        background-color: #78a5ee;
+        border-radius: 8px;
+        pointer-events: none;
+        z-index: 9999;
+      }
 
-.space {
-  height: 100vh;
-}
+      .container {
+        font-size: 104px;
+        font-weight: 900;
+        font-family: sans-serif;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+        background-color: #0a0d14;
+        color: #e1dcc9;
+      }
 
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.flex {
-  display: flex;
-}
-
-.jc-center {
-  justify-content: center;
-}
-
-.ai-center {
-  align-items: center;
-}
-
-/* -------- */
-
-.img {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 200px;
-  opacity: 0;
-}
-
-/* -------- cursor follow demo -------- */
-.cursor-box {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 60px;
-  height: 60px;
-  background-color: #78a5ee;
-  border-radius: 8px;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.container {
-  font-size: 104px;
-  font-weight: 900;
-  font-family: sans-serif;
-}
-html,
-body {
-  overflow-x: hidden;
-  background-color: #0A0D14;
-  color: #E1DCC9;
-}
-
-.space {
-  height: 100vh;
-}
-
+      .space {
+        height: 100vh;
+      }
     </style>
     <style>
       body {
@@ -295,24 +224,34 @@ body {
 
   <body>
     <section class="hero">
-      <h2>1. chars + words stagger reveal (autoSplit + wordsClass hidden away)</h2>
+      <h2>
+        1. chars + words stagger reveal (autoSplit + wordsClass hidden away)
+      </h2>
       <h1 id="heroTitle">Split every letter apart.</h1>
     </section>
 
     <section class="reveal">
       <h2>2. overflow: true — clip-mask style, per line</h2>
-      <p id="revealText">Each line slides up from behind a clipped mask, the same trick the SplitText plugin this was modeled on gives you for free.</p>
+      <p id="revealText">
+        Each line slides up from behind a clipped mask, the same trick the
+        SplitText plugin this was modeled on gives you for free.
+      </p>
     </section>
 
     <section class="skip-demo">
       <h2>3. skip + always-on accessibility (aria-label / aria-hidden)</h2>
-      <p id="skipText">Rated <i class="icon">★★★★★</i> by everyone who split their text today.</p>
+      <p id="skipText">
+        Rated <i class="icon">★★★★★</i> by everyone who split their text today.
+      </p>
       <div class="readout" id="ariaReadout"></div>
     </section>
 
     <section class="lifecycle">
       <h2>4. split() / revert() / kill() lifecycle</h2>
-      <p id="lifecycleText">Click the buttons below and watch this sentence get shredded and restored.</p>
+      <p id="lifecycleText">
+        Click the buttons below and watch this sentence get shredded and
+        restored.
+      </p>
       <div class="controls">
         <button id="btnRevert">revert()</button>
         <button id="btnSplit">split() again</button>
@@ -323,9 +262,15 @@ body {
 
     <section class="resize-demo">
       <h2>5. hidden autoSplit — drag the corner, lines re-wrap on their own</h2>
-      <p>No autoSplit flag anywhere in this demo's code - it's always on for line splits. Drag the bottom-right corner of the box.</p>
+      <p>
+        No autoSplit flag anywhere in this demo's code - it's always on for line
+        splits. Drag the bottom-right corner of the box.
+      </p>
       <div class="resize-box">
-        <p id="resizeText">Resize this box and these lines will automatically re-split themselves to match the new width, with no code re-running the split by hand.</p>
+        <p id="resizeText">
+          Resize this box and these lines will automatically re-split themselves
+          to match the new width, with no code re-running the split by hand.
+        </p>
       </div>
       <div id="lineCount"></div>
     </section>
@@ -371,15 +316,28 @@ body {
         wordsClass: "word",
         skip: document.querySelector("#skipText .icon"),
       });
-      six.from(skipSplit.words, { opacity: 0, y: 20, duration: 0.6, stagger: 0.04 });
+      six.from(skipSplit.words, {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        stagger: 0.04,
+      });
 
       document.getElementById("ariaReadout").textContent =
         `container aria-label: "${document.getElementById("skipText").getAttribute("aria-label")}"\n` +
         `first word aria-hidden: ${skipSplit.words[0].getAttribute("aria-hidden")}`;
 
       // 4. lifecycle playground
-      let lifecycleSplit = new SplitText("#lifecycleText", { type: "words", wordsClass: "word" });
-      six.from(lifecycleSplit.words, { opacity: 0, y: 15, duration: 0.5, stagger: 0.03 });
+      let lifecycleSplit = new SplitText("#lifecycleText", {
+        type: "words",
+        wordsClass: "word",
+      });
+      six.from(lifecycleSplit.words, {
+        opacity: 0,
+        y: 15,
+        duration: 0.5,
+        stagger: 0.03,
+      });
 
       const status = document.getElementById("status");
       const setStatus = (msg) => (status.textContent = msg);
@@ -392,7 +350,12 @@ body {
 
       document.getElementById("btnSplit").addEventListener("click", () => {
         lifecycleSplit.split();
-        six.from(lifecycleSplit.words, { opacity: 0, y: 15, duration: 0.5, stagger: 0.03 });
+        six.from(lifecycleSplit.words, {
+          opacity: 0,
+          y: 15,
+          duration: 0.5,
+          stagger: 0.03,
+        });
         setStatus(`split again - ${lifecycleSplit.words.length} words`);
       });
 
@@ -408,7 +371,8 @@ body {
       const resizeSplit = new SplitText("#resizeText", {
         type: "lines",
         linesClass: "line",
-        onSplit: (self) => (lineCount.textContent = `${self.lines.length} line(s)`),
+        onSplit: (self) =>
+          (lineCount.textContent = `${self.lines.length} line(s)`),
       });
     </script>
   </body>

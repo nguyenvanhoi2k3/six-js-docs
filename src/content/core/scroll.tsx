@@ -23,7 +23,7 @@ export const scrollContent: ContentMap = {
               <div style="height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;">
                 <div data-scroll-progress style="height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--accent));"></div>
               </div>
-              <p style="text-align:center;color:var(--muted);font-size:12px;margin:8px 0 0;">scrub 1:1 theo % cuộn (sync: true)</p>
+              <p style="text-align:center;color:var(--muted);font-size:12px;margin:8px 0 0;">bám sát 1:1 theo % cuộn (sync: true)</p>
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@ export const scrollContent: ContentMap = {
         )}
 
         <p>
-          Mỗi tween tự chọn cách phát riêng qua <code>onScroll</code> — toggle một lần khi cuộn qua ngưỡng (2 box phía trên), hoặc scrub bám sát % cuộn bằng <code>sync: true</code> (progress bar phía dưới):
+          Mỗi tween tự chọn cách phát riêng qua <code>onScroll</code> — toggle một lần khi cuộn qua ngưỡng (2 box phía trên), hoặc bám sát % cuộn bằng <code>sync: true</code> (progress bar phía dưới):
         </p>
         {codeBlock(
           `six.to(".progress-bar", {
@@ -88,7 +88,7 @@ OnScroll.create({
           ["axis", "đổi sang đo theo trục ngang cho track cuộn ngang", '"x" | "y"', '"y"'],
           [
             "sync",
-            "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = scrub 1:1 theo % cuộn; number (giây) = scrub có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn",
+            "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = bám sát 1:1 theo % cuộn; number (giây) = bám sát có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn",
             "boolean | number",
             "false",
           ],
