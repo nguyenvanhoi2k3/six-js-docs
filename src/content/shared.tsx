@@ -159,6 +159,41 @@ export function mountCodeCopy(): void {
   });
 }
 
+/**
+ * Strips each block's own common leading whitespace, rather than the whole file's — a demo file
+ * nests <style>/<script> at different depths, so a global dedent would leave later blocks jagged
+ * relative to earlier ones.
+ */
+export function dedent(text: string): string {
+  const lines = text.replace(/\r\n/g, "\n").split("\n");
+  while (lines.length && lines[0].trim() === "") lines.shift();
+  while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
+
+  const indents = lines.filter((line) => line.trim() !== "").map((line) => line.match(/^ */)![0].length);
+  const minIndent = indents.length ? Math.min(...indents) : 0;
+
+  return lines.map((line) => line.slice(minIndent)).join("\n");
+}
+
+/** Splits a standalone demo HTML file into its HTML / CSS / JS parts, CodePen-style. */
+export function splitDemoSource(source: string): { html: string; css: string; js: string } {
+  const doc = new DOMParser().parseFromString(source, "text/html");
+
+  const css = Array.from(doc.querySelectorAll("style"))
+    .map((el) => dedent(el.textContent ?? ""))
+    .filter(Boolean)
+    .join("\n\n");
+
+  const js = Array.from(doc.querySelectorAll("script"))
+    .map((el) => dedent(el.textContent ?? ""))
+    .filter(Boolean)
+    .join("\n\n");
+
+  doc.querySelectorAll("style, script").forEach((el) => el.remove());
+
+  return { html: dedent(doc.body.innerHTML), css, js };
+}
+
 let tabListenerMounted = false;
 
 /** Wires up any `.demo-tabs` block: click a `[data-tab-btn]`, show the matching `[data-tab-panel]` within the same block. */

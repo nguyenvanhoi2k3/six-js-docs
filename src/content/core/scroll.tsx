@@ -7,7 +7,7 @@ export const scrollContent: ContentMap = {
   "scroll/onScroll": {
     eyebrow: "Core",
     title: "onScroll (OnScroll)",
-    lead: "Truyền onScroll vào vars của to/from/fromTo/timeline để biến animation thành scroll-driven — thay vì phát theo thời gian, nó phát theo vị trí cuộn của trang (hoặc một container bất kỳ).",
+    lead: "Truyền onScroll vào vars của to/from/fromTo/timeline để animation chạy theo vị trí cuộn trang (hoặc một container bất kỳ) thay vì theo thời gian.",
     render: () => (
       <>
         <div class="content-pane__panel">
@@ -45,7 +45,7 @@ export const scrollContent: ContentMap = {
         )}
 
         <p>
-          Mỗi tween tự chọn cách phát riêng qua <code>onScroll</code> — toggle một lần khi cuộn qua ngưỡng (2 box phía trên), hoặc bám sát % cuộn bằng <code>sync: true</code> (progress bar phía dưới):
+          Mỗi tween tự chọn cách chạy: toggle một lần khi cuộn qua ngưỡng (2 box phía trên), hoặc bám sát % cuộn bằng <code>sync: true</code> (progress bar phía dưới):
         </p>
         {codeBlock(
           `six.to(".progress-bar", {
@@ -81,40 +81,100 @@ OnScroll.create({
           ["container", "container cuộn (nested overflow)", "Element | selector", "window"],
           [
             "start / end",
-            'chuỗi "&lt;edge trigger&gt; &lt;edge viewport&gt;", cộng thêm được "+=N"/"-=N", hoặc hàm trả về 1 trong 2 dạng trên',
-            "top|center|bottom|left|right|N%|Npx | number | (self) => string | number",
+            'chuỗi "cạnh trigger cạnh viewport" (vd "top bottom"), hoặc hàm trả về vị trí đó — cú pháp đầy đủ ngay bên dưới',
+            "top | center | bottom | left | right | N% | Npx | number | (self) => string | number",
             '"top bottom" / "bottom top"',
           ],
           ["axis", "đổi sang đo theo trục ngang cho track cuộn ngang", '"x" | "y"', '"y"'],
           [
             "sync",
-            "false = chỉ toggle play() khi cuộn qua start (xem ghi chú bên dưới); true = bám sát 1:1 theo % cuộn; number (giây) = bám sát có làm mượt (ease expoOut) trong từng đó giây mỗi lần cuộn",
+            "false: animate khi cuộn qua vùng start. true: animate sync theo cuộn. Số (giây): animate sync theo cuộn nhưng có quán tính theo số giây đó",
             "boolean | number",
             "false",
           ],
-          ["sticky", "ghim phần tử trong suốt quãng [start, end], đúng vị trí tự nhiên của nó (không nhảy lên top viewport)", "true (ghim chính trigger) | Element | selector", "false"],
+          ["sticky", "ghim phần tử tại vị trí tự nhiên của nó trong suốt quãng [start, end] (không nhảy lên top viewport)", "true (ghim chính trigger) | Element | selector", "false"],
           [
             "syncTo",
-            "Cho phép trigger hoạt động với các hiệu ứng cuộn được tạo bằng animation, chẳng hạn horizontal scrolling hoặc storytelling sections, nơi nội dung được di chuyển bằng tween/timeline thay vì bằng thanh cuộn của trình duyệt.",
+            "dùng khi nội dung cuộn bằng tween/timeline khác (vd horizontal scroll, storytelling section) thay vì thanh cuộn trình duyệt",
             "Animation",
             "—",
           ],
-          ["debug / id", "debug vẽ 4 vạch start/end (2 theo trang, 2 theo viewport) để canh chỉnh; id gắn nhãn phân biệt khi có nhiều trigger trên màn hình", "boolean / string", "false / —"],
+          ["debug / id", "debug: vẽ vạch start/end để canh chỉnh. id: gắn nhãn khi có nhiều trigger trên màn hình", "boolean / string", "false / —"],
           ["onEnter / onLeave / onEnterBack / onLeaveBack", "callback theo từng hướng cuộn qua start/end", "(self) => void", "—"],
-          ["onUpdate", "chỉ bắn khi đang ở trong [start, end], hoặc đúng frame vào/ra — không bắn liên tục khi cuộn ở chỗ khác trên trang", "(self) => void", "—"],
+          ["onUpdate", "chỉ bắn khi đang ở trong [start, end] (và đúng frame vào/ra)", "(self) => void", "—"],
           ["onRefresh", "bắn mỗi khi refresh() đo lại vị trí", "(self) => void", "—"],
         ])}
 
+        <h2>Cú pháp start / end</h2>
+        <p>
+          Mỗi giá trị là chuỗi hai từ: <code>"&lt;cạnh trigger&gt; &lt;cạnh viewport&gt;"</code> — animation chạy tới đúng lúc hai cạnh đó chạm nhau khi cuộn. Chỉ viết một từ (vd <code>"center"</code>) thì
+          từ còn lại tự là <code>"top"</code>.
+        </p>
+        <table class="content-pane__attrs">
+          <thead>
+            <tr>
+              <th>Viết</th>
+              <th>Nghĩa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <code>top</code> / <code>center</code> / <code>bottom</code>
+              </td>
+              <td>0% / 50% / 100% theo trục dọc (mặc định)</td>
+            </tr>
+            <tr>
+              <td>
+                <code>left</code> / <code>center</code> / <code>right</code>
+              </td>
+              <td>
+                0% / 50% / 100% theo trục ngang — dùng khi <code>axis: "x"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>"30%"</code>
+              </td>
+              <td>đúng 30% chiều cao (hoặc rộng) của trigger/viewport</td>
+            </tr>
+            <tr>
+              <td>
+                <code>"80"</code> (số thường)
+              </td>
+              <td>mốc tại đúng 80px tính từ đầu (top/left)</td>
+            </tr>
+            <tr>
+              <td>
+                <code>"top+=100"</code> / <code>"top-=50"</code>
+              </td>
+              <td>cộng/trừ thêm px vào ngay cạnh đó — viết liền, không có khoảng trắng</td>
+            </tr>
+            <tr>
+              <td>
+                <code>"+=500"</code> / <code>"-=200"</code> (đứng một mình)
+              </td>
+              <td>
+                chỉ dùng cho <code>end</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        {codeBlock(
+          `onScroll: { start: "top bottom" }    // top trigger chạm bottom viewport — bắt đầu ngay khi trigger vừa lọt vào màn hình
+onScroll: { start: "center center" } // giữa trigger chạm giữa màn hình
+onScroll: { start: "top 80%" }       // top trigger chạm mốc 80% chiều cao viewport
+onScroll: { start: "top+=100 top" }  // như "top top" nhưng lùi thêm 100px
+onScroll: { start: "top center", end: "+=500" } // end khi cách start 500px`,
+          "js",
+        )}
+
         <p class="note">
-          <strong>Mặc định khi không có sync</strong>: chỉ cuộn XUÔI qua <code>start</code> mới gọi <code>.play()</code> animation; cuộn ngược qua start, hoặc cuộn qua end theo cả hai hướng, KHÔNG tự gọi{" "}
-          <code>.reverse()</code>/<code>.pause()</code> — chỉ callback tương ứng được bắn. Muốn animation tự lùi lại khi cuộn ngược lên, tự gọi animation.reverse() trong <code>onLeaveBack</code>.
+          <code>sticky</code> có thể ghim một phần tử khác với trigger: trigger chỉ đo quãng cuộn, <code>sticky</code> chỉ định phần tử bị ghim.
         </p>
         <p class="note">
-          <code>sticky</code> có thể ghim một phần tử KHÁC với trigger — trigger chỉ dùng để đo quãng cuộn, <code>sticky</code> chỉ định phần tử thực sự bị ghim.
-        </p>
-        <p class="note">
-          Sau khi DOM/layout đổi (ảnh load xong, thêm/xoá nội dung làm lệch vị trí), gọi <code>OnScroll.refresh()</code> (refresh toàn bộ instance đang có) hoặc giữ lại instance trả về từ{" "}
-          <code>OnScroll.create()</code> để tự gọi <code>.refresh()</code> riêng nó.
+          Layout đổi (ảnh load xong, thêm/xoá nội dung)? Gọi <code>OnScroll.refresh()</code> để đo lại toàn bộ, hoặc <code>.refresh()</code> trên riêng instance trả về từ <code>OnScroll.create()</code>.
         </p>
       </>
     ),

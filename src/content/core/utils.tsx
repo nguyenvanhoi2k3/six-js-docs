@@ -74,7 +74,7 @@ six.utils.random([1, 2, 3]);            // -> 1 phần tử ngẫu nhiên trong 
         )}
 
         {attrsTable([
-          ["arrayOf(target, scope?)", "chuẩn hoá mọi kiểu target six-js chấp nhận (selector, Element, NodeList, mảng...) thành Element[] — chính logic six-js dùng nội bộ cho to/from/fromTo", "—"],
+          ["arrayOf(target, scope?)", "chuẩn hoá mọi kiểu target six-js chấp nhận (selector, Element, NodeList, mảng...) thành Element[]", "—"],
           ["getById(id)", "document.getElementById — id thuần, không có dấu #", "—"],
           ["getByClass(className, scope?)", "document.getElementsByClassName — class thuần, không có dấu . ; scope mặc định là document", "—"],
           ["clamp(min, max, value?)", "giới hạn value trong [min, max]; bỏ value sẽ trả về hàm curry (value) => number", "—"],

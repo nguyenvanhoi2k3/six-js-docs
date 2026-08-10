@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horizontal Storytelling demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+        background-color: #0a0d14;
+        color: #e1dcc9;
+        font-family: sans-serif;
+      }
+
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      .space {
+        height: 100vh;
+      }
+
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        font-size: 104px;
+        font-weight: 900;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="space flex-center">SCROLL DOWN</div>
+    <div class="container">
+      <div class="track" style="position: relative; display: flex; gap: 20px">
+        <span class="char char1">Every</span>
+        <span class="char char2">scroll</span>
+        <span class="char char3">unfolds</span>
+        <span class="char char4">the</span>
+        <span class="char char5">story</span>
+        <span class="char char6" style="display: flex">captivating</span>
+        <span class="char char7">elegantly </span>
+        <div
+          style="
+            width: 888px;
+            display: flex;
+            justify-content: center;
+            flex-shrink: 0;
+          "
+        >
+          <span
+            style="
+              background: #f1e5a1;
+              display: flex;
+              gap: 20px;
+              color: #0a0d14;
+              padding-inline: 10px;
+              border-radius: 10px;
+            "
+          >
+            <span class="char char8">crafted</span>
+            <span class="char char9" style="overflow: hidden">with</span>
+            <span class="char char10" style="overflow: hidden">six</span>
+          </span>
+        </div>
+        <span
+          class="char char11"
+          style="position: relative; display: inline-block; perspective: 800px"
+        >
+          <div
+            class="small-text"
+            style="
+              position: absolute;
+              bottom: -8px;
+              right: -8px;
+              font-size: 20px;
+              background: #e98b50;
+              padding-inline: 10px;
+              color: #0a0d14;
+              border-radius: 5px;
+              transform-origin: bottom center;
+            "
+          >
+            <span style="display: inline-block; transform: rotateX(180deg)"
+              >Small text</span
+            >
+          </div>
+          <span
+            style="
+              position: relative;
+              z-index: 1;
+              display: block;
+              background: #8b1e2d;
+              border-radius: 10px;
+              padding-inline: 10px;
+            "
+          >
+            wonder
+          </span>
+        </span>
+        <a href="#" style="color: #ef6905" class="char char12">explore</a>
+        <span class="char char13">beautifully</span>
+        <span class="char char14">in</span>
+        <span class="char char15">motion</span>
+
+        <svg
+          class="square-svg"
+          style="position: absolute; top: -130%; left: 150%"
+          width="200"
+          height="200"
+          viewBox="0 0 200 200"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M100 22L178 100L100 178L22 100L100 22Z"
+            fill="url(#paint0_linear_615_44)"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear_615_44"
+              x1="22"
+              y1="22"
+              x2="178"
+              y2="178"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#FDE68A" />
+              <stop offset="0.5" stop-color="#FB923C" />
+              <stop offset="1" stop-color="#DB2777" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <svg
+          class="click-svg"
+          style="position: absolute; bottom: -127%; left: 287%"
+          width="200"
+          height="200"
+          viewBox="0 0 200 200"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M100 34V22M74 44L62 34M126 44L138 34"
+            stroke="url(#paint0_linear_615_88)"
+            stroke-width="7"
+            stroke-linecap="round"
+          />
+          <path
+            d="M110 62C110 56.4772 105.523 52 100 52C94.4772 52 90 56.4772 90 62V102C90 107.523 94.4772 112 100 112C105.523 112 110 107.523 110 102V62Z"
+            fill="url(#paint1_linear_615_88)"
+          />
+          <path
+            d="M70 100C70 91 77 84 86 84H118C133 84 145 96 145 111V131C145 148 132 161 115 161H100C83 161 70 148 70 131V100Z"
+            fill="url(#paint2_linear_615_88)"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear_615_88"
+              x1="62"
+              y1="22"
+              x2="73.7521"
+              y2="62.5981"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#60A5FA" />
+              <stop offset="1" stop-color="#7C3AED" />
+            </linearGradient>
+            <linearGradient
+              id="paint1_linear_615_88"
+              x1="90"
+              y1="52"
+              x2="126"
+              y2="64"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#60A5FA" />
+              <stop offset="1" stop-color="#7C3AED" />
+            </linearGradient>
+            <linearGradient
+              id="paint2_linear_615_88"
+              x1="70"
+              y1="84"
+              x2="146.973"
+              y2="158.974"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#60A5FA" />
+              <stop offset="1" stop-color="#7C3AED" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+    <div class="space flex-center">END</div>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+      import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
+
+      const smooth = new SmoothScroll();
+
+      const track = document.querySelector(".track");
+
+      // dịch chuyển toàn bộ track sang trái khi scroll
+      const scrollTween = six.to(track, {
+        x: -(track.scrollWidth - window.innerWidth),
+        ease: "none",
+        onScroll: {
+          trigger: track,
+          start: "center center",
+          end: 3200, // càng nhỏ thì scroll càng nhanh
+          sync: 1,
+          sticky: true,
+        },
+      });
+
+      // animate cách các char xuất hiện khi scroll
+
+      // "the story"
+      const char4 = document.querySelector(".char4");
+      const char5 = document.querySelector(".char5");
+
+      six
+        .timeline({
+          onScroll: {
+            trigger: char4,
+            syncTo: scrollTween,
+            axis: "x",
+            start: "left 60%", // animate khi left của trigger chạm 60% viewport
+          },
+        })
+        .from(char4, {
+          opacity: 0,
+          y: -300,
+          rotate: -30,
+          duration: 0.6,
+          ease: "backOut",
+        })
+        .from(
+          char5,
+          {
+            opacity: 0,
+            y: -300,
+            rotate: 30,
+            duration: 0.5,
+            ease: "backOut",
+            delay: 0.2,
+          },
+          0,
+        );
+
+      // "captivating"
+      const char6 = document.querySelector(".char6");
+      const char6Split = new SplitText(char6, { type: "chars" });
+      six.from(char6Split.chars, {
+        opacity: 0,
+        y: 100,
+        duration: 0.6,
+        ease: "quintOut",
+        stagger: 0.04,
+        delay: 0.2,
+        onScroll: {
+          trigger: char6,
+          syncTo: scrollTween,
+          axis: "x",
+          start: "left 70%",
+        },
+      });
+
+      // "elegantly"
+      six.from(".char7", {
+        opacity: 0,
+        scale: 3,
+        duration: 0.4,
+        ease: "sineInOut",
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "left 60%",
+        },
+      });
+
+      // "crafted with six"
+      six
+        .timeline({
+          defaults: { duration: 0.4, ease: "cubicInOut" },
+          onScroll: {
+            trigger: ".char9",
+            syncTo: scrollTween,
+            axis: "x",
+            start: "left 90%", // animate khi left của trigger chạm 60% viewport
+          },
+        })
+        .from(".char9", { width: 0 })
+        .from(".char10", { width: 0 }, "<+=0.3");
+
+      // small text
+      const smTextTween = six.to(".small-text", {
+        rotateX: 180,
+        duration: 0.2,
+        paused: true,
+      });
+
+      // wonder
+      six.from(".char11", {
+        duration: 0.6,
+        opacity: 0,
+        perspective: 500,
+        transformOrigin: "top center",
+        rotateX: 90,
+        ease: "bounceOut",
+        delay: 0.2,
+        onComplete: () => smTextTween.play(),
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "left 80%",
+        },
+      });
+
+      // "beautifully in"
+      const char13 = document.querySelector(".char13");
+      const char14 = document.querySelector(".char14");
+      six.from([char13, char14], {
+        opacity: 0,
+        y: 80,
+        stagger: 0.2,
+        ease: "smooth",
+        duration: 0.5,
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "left 60%",
+        },
+      });
+
+      // motion
+      six.from(".char15", {
+        opacity: 0,
+        y: 80,
+        stagger: 0.2,
+        ease: "smooth",
+        duration: 0.5,
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "center 100%",
+        },
+      });
+
+      // square svg
+      const rotateTween = six.to(".square-svg", {
+        rotate: 360,
+        duration: 0.7,
+        ease: "quadInOut",
+        repeat: -1,
+        repeatDelay: 0.7,
+        paused: true,
+      });
+
+      // square svg
+      six.to(".square-svg", {
+        x: 700,
+        ease: "sineInOut",
+        onStart: () => rotateTween.play(), //rotate khi bắt đầu translateX
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "center center",
+          sync: 0.5,
+        },
+      });
+
+      // explore
+      const charBounce = six
+        .timeline({ paused: true })
+        .to(".char12", {
+          y: -18,
+          duration: 0.2,
+          ease: "quadInOut",
+        })
+        .to(".char12", {
+          y: 0,
+          duration: 0.4,
+          ease: "bounceOut",
+        });
+
+      // click svg
+      const scaleTween = six.timeline({
+        repeat: -1,
+        repeatDelay: 1,
+        paused: true,
+        onStart: () => charBounce.restart(),
+        onRepeat: () => charBounce.restart(),
+      });
+
+      scaleTween
+        .to(".click-svg", {
+          scale: 0.82,
+          duration: 0.12,
+          ease: "quadOut",
+        })
+        .to(".click-svg", {
+          scale: 1,
+          duration: 0.35,
+          ease: "backOut",
+        });
+      six.from(".click-svg", {
+        opacity: 0,
+        scale: 1.2,
+        ease: "quadOut",
+        duration: 0.4,
+        onStart: () => scaleTween.play(),
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "center 80%",
+        },
+      });
+    </script>
+  </body>
+</html>

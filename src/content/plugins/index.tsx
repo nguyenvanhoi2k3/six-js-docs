@@ -1,36 +1,16 @@
-import { six } from "@six-js/core";
-import { SplitText } from "@six-js/core/SplitText";
-import { SmoothScroll } from "@six-js/core/SmoothScroll";
-import { ScrambleText } from "@six-js/core/ScrambleText";
 import { Burst } from "@six-js/core/Burst";
-import { SvgMotion } from "@six-js/core/SvgMotion";
-import { Parallax, type ParallaxController } from "@six-js/core/Parallax";
 import type { ContentMap } from "../../layout/section-router/content-types";
 import { attrsTable, codeBlock } from "../shared";
 import { h, Fragment } from "../../jsx";
 
-function splitDemoText(id: string, text: string): string {
-  return (
-    <>
-      <div class="content-pane__panel" style="align-items:center;">
-        <h2 id={id} style="margin:0;font-size:28px;">
-          {text}
-        </h2>
-      </div>
-      <div class="content-pane__panel">
-        <button class="btn btn--primary btn--sm" data-run>
-          Split &amp; reveal
-        </button>
-        <button class="btn btn--ghost btn--sm" data-revert>
-          Revert
-        </button>
-      </div>
-    </>
-  );
-}
-
-let smoothDemoInstance: SmoothScroll | null = null;
-let parallaxDemoInstance: ParallaxController | null = null;
+// Rich, full-page standalone demos (own dark styling, multi-section) — reused as-is from the
+// old showcase-demos assets rather than ported into the docs' light-themed demo.html, so "Xem
+// demo ↗" opens them directly instead of routing through the ComponentDemo tab system.
+const SPLIT_TEXT_DEMO_URL = "plugin-demos/split-text.html";
+const SMOOTH_SCROLL_DEMO_URL = "plugin-demos/smooth-scroll.html";
+const SCRAMBLE_TEXT_DEMO_URL = "plugin-demos/scramble-text.html";
+const SVG_MOTION_DEMO_URL = "plugin-demos/svg-motion.html";
+const PARALLAX_DEMO_URL = "plugin-demos/parallax.html";
 
 const pluginsContent: ContentMap = {
   "split-text/overview": {
@@ -39,8 +19,6 @@ const pluginsContent: ContentMap = {
     lead: "Tách text của một element thành mảng chars/words/lines để animate từng phần.",
     render: () => (
       <>
-        {splitDemoText("split-overview-target", "Six-js splits text.")}
-
         {codeBlock(
           `import { six } from "@six-js/core";
 import { SplitText } from "@six-js/core/SplitText";
@@ -65,24 +43,7 @@ six.from(split.chars, {
         </p>
       </>
     ),
-    init: (root) => {
-      const target = root.querySelector<HTMLElement>("#split-overview-target")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-      const revertBtn = root.querySelector<HTMLButtonElement>("[data-revert]")!;
-      let split: SplitText | null = null;
-
-      runBtn.addEventListener("click", () => {
-        split?.revert();
-        split = new SplitText(target, { type: "chars,words" });
-        six.set(split.chars, { opacity: 0, y: 20 });
-        six.to(split.chars, { opacity: 1, y: 0, duration: 0.4, stagger: 0.02 });
-      });
-
-      revertBtn.addEventListener("click", () => {
-        split?.revert();
-        split = null;
-      });
-    },
+    demoUrl: SPLIT_TEXT_DEMO_URL,
   },
 
   "split-text/options": {
@@ -132,6 +93,7 @@ six.from(split.chars, {
         </p>
       </>
     ),
+    demoUrl: SPLIT_TEXT_DEMO_URL,
   },
 
   "split-text/overflow": {
@@ -140,8 +102,6 @@ six.from(split.chars, {
     lead: 'Bọc chars/words/lines trong một box overflow:clip — dùng để làm hiệu ứng reveal kiểu "kéo rèm" mà không đổi nội dung split.chars/words/lines trỏ tới.',
     render: () => (
       <>
-        {splitDemoText("split-mask-target", "Reveal theo từng dòng, đẹp và mượt.")}
-
         {codeBlock(
           `const split = new SplitText(".headline", {
   type: "lines",
@@ -166,24 +126,7 @@ console.log(split.masks);`,
         </p>
       </>
     ),
-    init: (root) => {
-      const target = root.querySelector<HTMLElement>("#split-mask-target")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-      const revertBtn = root.querySelector<HTMLButtonElement>("[data-revert]")!;
-      let split: SplitText | null = null;
-
-      runBtn.addEventListener("click", () => {
-        split?.revert();
-        split = new SplitText(target, { type: "lines", overflow: "lines" });
-        six.set(split.lines, { y: "100%" });
-        six.to(split.lines, { y: "0%", duration: 0.6, ease: "cubicOut", stagger: 0.08 });
-      });
-
-      revertBtn.addEventListener("click", () => {
-        split?.revert();
-        split = null;
-      });
-    },
+    demoUrl: SPLIT_TEXT_DEMO_URL,
   },
 
   "split-text/lifecycle": {
@@ -224,6 +167,7 @@ split.kill();`,
         </p>
       </>
     ),
+    demoUrl: SPLIT_TEXT_DEMO_URL,
   },
 
   "smooth-scroll/overview": {
@@ -232,23 +176,6 @@ split.kill();`,
     lead: "Cuộn mượt (inertia/damping khi lăn chuột)",
     render: () => (
       <>
-        <div class="content-pane__panel">
-          <div data-smooth-demo style="height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;">
-            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lăn chuột (wheel) bên trong khung này để thấy độ trễ mượt — hoặc bấm nút bên dưới.</div>
-            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
-            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
-            <div style="height:240px;padding:16px;color:var(--muted);font-size:13px;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente repellat cum architecto totam tenetur laboriosam assumenda placeat dolore laborum. Ab!</div>
-          </div>
-          <div class="content-pane__panel">
-            <button class="btn btn--ghost btn--sm" data-scroll-top>
-              Lên đầu
-            </button>
-            <button class="btn btn--ghost btn--sm" data-scroll-bottom>
-              Xuống cuối
-            </button>
-          </div>
-        </div>
-
         {codeBlock(
           `import { SmoothScroll } from "@six-js/core/SmoothScroll";
 
@@ -271,13 +198,7 @@ smooth.kill();`,
         <p class="note">Chạm (touch) được để nguyên native, không làm mượt lại bằng JS — vì momentum-scroll thật của hệ điều hành thường đã mượt sẵn.</p>
       </>
     ),
-    init: (root) => {
-      const container = root.querySelector<HTMLElement>("[data-smooth-demo]")!;
-      smoothDemoInstance?.kill();
-      smoothDemoInstance = new SmoothScroll({ container, lerp: 0.12 });
-      root.querySelector<HTMLButtonElement>("[data-scroll-top]")!.addEventListener("click", () => smoothDemoInstance?.scrollTo("top"));
-      root.querySelector<HTMLButtonElement>("[data-scroll-bottom]")!.addEventListener("click", () => smoothDemoInstance?.scrollTo("bottom"));
-    },
+    demoUrl: SMOOTH_SCROLL_DEMO_URL,
   },
 
   "smooth-scroll/options": {
@@ -301,6 +222,7 @@ smooth.kill();`,
         </p>
       </>
     ),
+    demoUrl: SMOOTH_SCROLL_DEMO_URL,
   },
 
   "smooth-scroll/instance": {
@@ -333,25 +255,15 @@ smooth.kill();`,
         </p>
       </>
     ),
+    demoUrl: SMOOTH_SCROLL_DEMO_URL,
   },
 
   "scramble-text/overview": {
     eyebrow: "Plugins",
     title: "ScrambleText",
-    lead: 'Xáo chữ ngẫu nhiên rồi "chốt" dần về text đích, từ trái sang phải — hiệu ứng kiểu terminal/hacker quen thuộc.',
+    lead: 'Xáo chữ ngẫu nhiên rồi "chốt" dần về text đích',
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;">
-          <h2 id="scramble-overview-target" style="margin:0;font-size:28px;">
-            SIX-JS SCRAMBLE TEXT
-          </h2>
-        </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-run>
-            Scramble &amp; reveal
-          </button>
-        </div>
-
         {codeBlock(
           `import { ScrambleText } from "@six-js/core/ScrambleText";
 
@@ -370,15 +282,7 @@ ScrambleText(".headline", {
         <p class="note">Bỏ qua <code>text</code> (hoặc truyền đúng chuỗi hiện tại) để chỉ chạy hiệu ứng "quét qua rồi giữ nguyên" trên text đã đúng sẵn, không đổi nội dung.</p>
       </>
     ),
-    init: (root) => {
-      const target = root.querySelector<HTMLElement>("#scramble-overview-target")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-      const original = target.textContent ?? "";
-
-      runBtn.addEventListener("click", () => {
-        ScrambleText(target, { text: original, duration: 1.2, chars: "upperCase" });
-      });
-    },
+    demoUrl: SCRAMBLE_TEXT_DEMO_URL,
   },
 
   "scramble-text/options": {
@@ -417,6 +321,7 @@ ScrambleText(".headline", {
         <p class="note">Resolving nhiều phần tử (target khớp &gt; 1 element) build một animation riêng cho mỗi phần tử rồi gộp vào một <code>Timeline</code> — pause/reverse/kill cả nhóm như một khối.</p>
       </>
     ),
+    demoUrl: SCRAMBLE_TEXT_DEMO_URL,
   },
 
   "scramble-text/odometer": {
@@ -425,17 +330,6 @@ ScrambleText(".headline", {
     lead: "Mỗi ký tự tự quay trên một cuộn số dọc rồi dừng đúng ký tự đích — kiểu bộ đếm cơ khí (odometer), khác với xáo tại chỗ của mode mặc định.",
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;">
-          <h2 id="odometer-target" style="margin:0;font-size:32px;font-family:var(--font-mono);">
-            000000
-          </h2>
-        </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-run>
-            Chạy odometer
-          </button>
-        </div>
-
         {codeBlock(
           `import { ScrambleText } from "@six-js/core/ScrambleText";
 
@@ -458,32 +352,15 @@ ScrambleText(".counter", {
         ])}
       </>
     ),
-    init: (root) => {
-      const target = root.querySelector<HTMLElement>("#odometer-target")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-
-      runBtn.addEventListener("click", () => {
-        const next = String(Math.floor(Math.random() * 999999)).padStart(6, "0");
-        ScrambleText(target, { mode: "odometer", text: next,ease: "expoOut", chars: "numeric", duration: 1.4, reelSize: 12, charStagger: 0.04 });
-      });
-    },
+    demoUrl: SCRAMBLE_TEXT_DEMO_URL,
   },
 
   "burst/overview": {
     eyebrow: "Plugins",
     title: "Burst",
-    lead: "Hiệu ứng pháo hoa/confetti bắn ra một lần — vật lý phóng vật thật (vận tốc phóng + trọng lực), không phải easing giả lập.",
+    lead: "Giúp tạo hiệu ứng vật lý phóng elements lên trên rồi rơi tự do (vận tốc phóng + trọng lực)",
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;justify-content:center;min-height:140px;">
-          <button class="btn btn--primary" data-burst-btn>
-            🎉 Bấm để burst
-          </button>
-          <span data-burst-icon style="display:none;">
-            ❤️
-          </span>
-        </div>
-
         {codeBlock(
           `import { Burst } from "@six-js/core/Burst";
 
@@ -504,25 +381,41 @@ likeButton.addEventListener("click", (e) => {
           đang có trên trang (vd chữ đã <code>SplitText</code> rơi vỡ ra); truyền <code>clone: N</code> để nhân bản <code>targets</code> làm N hạt dùng-một-lần, phóng ra từ vị trí <code>origin</code> — dùng cho
           hiệu ứng confetti/"like nổ tim" kinh điển.
         </p>
-        <p class="note">
-          Hạt rơi tự nhiên tới khi thật sự khuất khỏi viewport rồi mới fade (mặc định <code>fade: true</code>) — không giới hạn theo một <code>duration</code> cố định nào.
-        </p>
       </>
     ),
-    init: (root) => {
-      const btn = root.querySelector<HTMLButtonElement>("[data-burst-btn]")!;
-      const icon = root.querySelector<HTMLElement>("[data-burst-icon]")!;
+    demos: [
+      {
+        html: `<div class="content-pane__panel" style="align-items:center;justify-content:center;min-height:140px;">
+  <button class="btn btn--primary" data-burst-btn>🎉 Bấm để burst</button>
+  <span data-burst-icon style="display:none;">❤️</span>
+</div>`,
+        js: `import { Burst } from "@six-js/core/Burst";
 
-      btn.addEventListener("click", () => {
-        Burst(btn, {
-          targets: icon,
-          clone: 24,
-          spread: [-40, 40],
-          power: [220, 420],
-          gravity: 700,
-        });
-      });
-    },
+likeButton.addEventListener("click", () => {
+  Burst(likeButton, {
+    targets: heartIcon,
+    clone: 24,
+    spread: [-40, 40],
+    power: [220, 420],
+    gravity: 700,
+  });
+});`,
+        initDemo: (root) => {
+          const btn = root.querySelector<HTMLButtonElement>("[data-burst-btn]")!;
+          const icon = root.querySelector<HTMLElement>("[data-burst-icon]")!;
+
+          btn.addEventListener("click", () => {
+            Burst(btn, {
+              targets: icon,
+              clone: 24,
+              spread: [-40, 40],
+              power: [220, 420],
+              gravity: 700,
+            });
+          });
+        },
+      },
+    ],
   },
 
   "burst/options": {
@@ -558,21 +451,6 @@ likeButton.addEventListener("click", (e) => {
     lead: 'Animate stroke-dasharray/stroke-dashoffset để "vẽ" dần một nét SVG (hoặc ẩn dần) — hiệu ứng vẽ chữ ký, vẽ nét minh hoạ kinh điển.',
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;justify-content:center;">
-          <svg viewBox="0 0 200 100" width="240" height="120">
-            <path data-draw-path d="M10,50 Q50,10 100,50 T190,50" fill="none" stroke="var(--primary)" stroke-width="4" stroke-linecap="round" />
-          </svg>
-        </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-run>
-            Vẽ
-          </button>
-          <button class="btn btn--ghost btn--sm" data-reset>
-            Reset
-          </button>
-        </div>
-
-
         {codeBlock(
           `import { SvgMotion } from "@six-js/core/SvgMotion";
 
@@ -598,19 +476,7 @@ SvgMotion(".signature", {
         </p>
       </>
     ),
-    init: (root) => {
-      const path = root.querySelector<SVGPathElement>("[data-draw-path]")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-      const resetBtn = root.querySelector<HTMLButtonElement>("[data-reset]")!;
-
-      resetBtn.addEventListener("click", () => {
-        SvgMotion(path, { mode: "draw", to: "0%", duration: 0.3 });
-      });
-
-      runBtn.addEventListener("click", () => {
-        SvgMotion(path, { mode: "draw", duration: 1.4, ease: "cubicOut" });
-      });
-    },
+    demoUrl: SVG_MOTION_DEMO_URL,
   },
 
   "svg-motion/morph": {
@@ -619,24 +485,6 @@ SvgMotion(".signature", {
     lead: "Animate thuộc tính d của target sang hình dạng của một shape khác, bằng cách lấy mẫu điểm trên cả 2 rồi nội suy vị trí từng cặp điểm.",
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;justify-content:center;">
-          <svg viewBox="0 0 100 100" width="160" height="160">
-            <defs>
-              <path id="morph-star" d="M50,4 L61,37 L96,37 L68,58 L79,91 L50,70 L21,91 L32,58 L4,37 L39,37 Z"></path>
-              <path id="morph-blob" d="M50,10 C75,10 90,30 90,50 C90,72 72,90 50,90 C28,90 10,72 10,50 C10,28 28,10 50,10 Z"></path>
-            </defs>
-            <path data-morph-target d="M50,10 C75,10 90,30 90,50 C90,72 72,90 50,90 C28,90 10,72 10,50 C10,28 28,10 50,10 Z" fill="var(--primary)"></path>
-          </svg>
-        </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-morph-to="star">
-            Morph → Star
-          </button>
-          <button class="btn btn--ghost btn--sm" data-morph-to="blob">
-            Morph → Blob
-          </button>
-        </div>
-
         {codeBlock(
           `import { SvgMotion } from "@six-js/core/SvgMotion";
 
@@ -661,15 +509,7 @@ SvgMotion(".blob", {
         </p>
       </>
     ),
-    init: (root) => {
-      const target = root.querySelector<SVGPathElement>("[data-morph-target]")!;
-      root.querySelectorAll<HTMLButtonElement>("[data-morph-to]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const shape = btn.dataset.morphTo === "star" ? "#morph-star" : "#morph-blob";
-          SvgMotion(target, { mode: "morph", toShape: shape, duration: 0.8, ease: "quadInOut" });
-        });
-      });
-    },
+    demoUrl: SVG_MOTION_DEMO_URL,
   },
 
   "svg-motion/motion-path": {
@@ -678,18 +518,6 @@ SvgMotion(".blob", {
     lead: "Di chuyển target dọc theo một path SVG dẫn đường (vd máy bay lượn theo đường sóng) — áp dụng như một độ lệch (delta) từ điểm đầu path, không nhảy sang toạ độ tuyệt đối của path.",
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;justify-content:center;">
-          <svg viewBox="0 0 300 100" width="320" height="120">
-            <path data-motion-guide id="motion-guide" d="M10,80 C60,10 140,150 190,50 S260,10 290,50" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 4" />
-            <circle data-motion-target cx="10" cy="80" r="7" fill="var(--accent)" />
-          </svg>
-        </div>
-        <div class="content-pane__panel">
-          <button class="btn btn--primary btn--sm" data-run>
-            Bay dọc path
-          </button>
-        </div>
-
         {codeBlock(
           `import { SvgMotion } from "@six-js/core/SvgMotion";
 
@@ -716,16 +544,7 @@ SvgMotion(".plane", {
         </p>
       </>
     ),
-    init: (root) => {
-      const guide = root.querySelector<SVGPathElement>("[data-motion-guide]")!;
-      const dot = root.querySelector<SVGCircleElement>("[data-motion-target]")!;
-      const runBtn = root.querySelector<HTMLButtonElement>("[data-run]")!;
-
-      runBtn.addEventListener("click", () => {
-        six.set(dot, { x: 0, y: 0 });
-        SvgMotion(dot, { mode: "path", path: guide, duration: 2, ease: "quadInOut" });
-      });
-    },
+    demoUrl: SVG_MOTION_DEMO_URL,
   },
 
   "parallax/overview": {
@@ -734,34 +553,6 @@ SvgMotion(".plane", {
     lead: "Các phần tử lệch theo con trỏ chuột với độ 'sâu' (depth) khác nhau — mỗi phần tử một tốc độ trôi riêng, tạo cảm giác lớp trước/lớp sau.",
     render: () => (
       <>
-        <div class="content-pane__panel" style="align-items:center;">
-          <div
-            data-parallax-stage
-            style="position:relative;width:100%;max-width:420px;height:200px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface);"
-          >
-            <span
-              data-parallax-demo
-              sx-parallax-strength="-14"
-              style="position:absolute;left:10%;top:18%;width:80px;height:80px;border-radius:50%;background:color-mix(in srgb, var(--primary) 22%, transparent);"
-            ></span>
-            <span
-              data-parallax-demo
-              sx-parallax-strength="18"
-              style="position:absolute;right:16%;top:14%;width:34px;height:34px;border-radius:9px;background:var(--primary);opacity:.7;"
-            ></span>
-            <span
-              data-parallax-demo
-              sx-parallax-strength="42"
-              style="position:absolute;left:40%;bottom:16%;width:18px;height:18px;border-radius:50%;background:var(--primary);"
-            ></span>
-            <span
-              data-parallax-demo
-              sx-parallax-strength="-8"
-              style="position:absolute;right:12%;bottom:18%;width:54px;height:54px;border-radius:16px;background:color-mix(in srgb, var(--primary) 16%, transparent);"
-            ></span>
-          </div>
-        </div>
-
         {codeBlock(
           `import { Parallax } from "@six-js/core/Parallax";
 
@@ -778,11 +569,7 @@ Parallax(".layer", { strength: 30, lerp: 0.1 });`,
         <p class="note">Di chuyển chuột ở bất kỳ đâu trên trang, không chỉ trong khung demo — Parallax không giới hạn theo container.</p>
       </>
     ),
-    init: (root) => {
-      const dots = root.querySelectorAll<HTMLElement>("[data-parallax-demo]");
-      parallaxDemoInstance?.kill();
-      parallaxDemoInstance = Parallax(dots, { lerp: 0.12 });
-    },
+    demoUrl: PARALLAX_DEMO_URL,
   },
 
   "parallax/options": {
@@ -814,6 +601,7 @@ Parallax(".layer", { strength: 30, lerp: 0.1 });`,
         <p class="note">v1 chỉ hỗ trợ mousemove trên toàn window — chưa có chế độ scoped theo container/hover, chưa hỗ trợ touch/device-orientation.</p>
       </>
     ),
+    demoUrl: PARALLAX_DEMO_URL,
   },
 };
 

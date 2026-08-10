@@ -14,7 +14,7 @@ export const sequenceContent: ContentMap = {
   "sequence/timeline": {
     eyebrow: "Core",
     title: "six.timeline()",
-    lead: 'Gộp nhiều tween vào một hàng thời gian, canh nhau bằng vị trí tương đối ("-=0.2", "<", nhãn label...). Bản thân timeline cũng là một Animation — play/pause/reverse/repeat/boomerang y hệt một tween.',
+    lead: 'Gộp nhiều tween vào một hàng thời gian, canh nhau bằng vị trí tương đối như "-=0.2", "<", hoặc label. Timeline cũng là một Animation — play/pause/reverse y hệt tween.',
     render: () => (
       <>
         <div class="tl-demo">
@@ -65,8 +65,8 @@ export const sequenceContent: ContentMap = {
         </div>
 
         {codeBlock(
-          `// mỗi bước một hiệu ứng khác nhau — đây là chỗ timeline khác stagger:
-// stagger lặp lại CÙNG một tween lệch delay, timeline ghép các tween KHÁC NHAU vào một trục thời gian
+          `// mỗi bước là một tween khác nhau, nối theo vị trí tương đối
+// (stagger thì lặp lại cùng một tween, chỉ lệch delay)
 const tl = six
   .timeline()
   .from(".box-1", { opacity: 0, x: -60, duration: 0.5, ease: "cubicOut" })
@@ -82,30 +82,31 @@ tl.restart();`,
           "js",
         )}
 
-        <h2>Tham số vị trí (position) — đối số cuối của to/from/fromTo/set/call/add/addLabel</h2>
+        <h2>Tham số position</h2>
+        <p>Đối số cuối của to/from/fromTo/set/call/add/addLabel — quyết định tween/label mới nằm ở đâu trên timeline:</p>
         {attrsTable([
           ["(bỏ trống)", "nối tiếp ngay sau khi tween/label thêm trước đó kết thúc", "—"],
           ["số giây", "vị trí tuyệt đối trên timeline", "—"],
           ['"<" / "<+=0.2" / "<-=0.2"', "cùng lúc bắt đầu với tween thêm trước đó (kèm lệch thêm nếu có)", "—"],
-          ['">" / ">+=0.2"', "ngay sau khi tween thêm trước đó KẾT THÚC (kèm lệch thêm nếu có)", "—"],
+          ['">" / ">+=0.2"', "ngay sau khi tween thêm trước đó kết thúc (kèm lệch thêm nếu có)", "—"],
           ['"+=0.5" / "-=0.5"', "lệch so với vị trí cuối hiện tại của timeline (cursor)", "—"],
           ['"tênLabel" / "tênLabel+=0.3"', "vị trí của label đã addLabel() (kèm lệch thêm nếu có)", "—"],
         ])}
 
         <h2>Methods</h2>
         {attrsTable([
-          [".to/.from/.fromTo(target, vars, position?)", "thêm tween con — vars nhận thêm stagger, không nhận onScroll riêng (đặt onScroll ở six.timeline({ onScroll }) cho cả timeline)", "—"],
+          [".to/.from/.fromTo(target, vars, position?)", "thêm tween con. Nhận stagger nhưng không nhận onScroll riêng — đặt onScroll ở six.timeline({ onScroll }) cho cả timeline", "—"],
           [".set(target, vars, position?)", "tween duration 0 — set giá trị ngay khi timeline chạy tới vị trí đó", "—"],
           [".call(fn, position?)", "chèn một callback (không animate gì) vào đúng vị trí đó", "—"],
-          [".add(childAnimation, position?)", "gắn thẳng một Tween/Timeline đã tạo sẵn (vd lồng timeline khác) vào vị trí đó", "—"],
+          [".add(childAnimation, position?)", "gắn một Tween/Timeline đã tạo sẵn (vd lồng timeline con) vào vị trí đó", "—"],
           [".addLabel(name, position?)", "đặt tên cho một vị trí để tham chiếu lại bằng chuỗi position sau này", "—"],
           [".getLabelTime(name)", "đọc lại thời điểm (giây) của một label", "—"],
         ])}
 
         <h2>Vars khi tạo timeline</h2>
         {attrsTable([
-          ["defaults", "merge (ưu tiên thấp nhất) vào mọi .to/.from/.fromTo thêm vào timeline này — khỏi lặp lại duration/ease ở từng lời gọi", "TweenVars", "—"],
-          ["onScroll", "biến CẢ timeline thành scroll-driven — bắt buộc tự khai trigger (timeline không có target mặc định để suy ra)", "OnScrollVars", "—"],
+          ["defaults", "giá trị mặc định cho mọi .to/.from/.fromTo trong timeline này — khỏi lặp lại duration/ease mỗi lần gọi", "TweenVars", "—"],
+          ["onScroll", "biến cả timeline thành scroll-driven — phải tự khai trigger vì timeline không có target mặc định", "OnScrollVars", "—"],
         ])}
         <p></p>
         {codeBlock(
@@ -116,12 +117,11 @@ tl.to(".a", { x: 100 })
         )}
 
         <p>
-          Timeline kế thừa toàn bộ <a href="#tween/to">API vòng đời của Animation</a>, và nhận cả <code>repeat</code>/<code>repeatDelay</code>/<code>boomerang</code>/<code>delay</code> giống một tween — lặp
-          lại/đảo chiều cả cụm animation bên trong như một khối duy nhất.
+          Timeline kế thừa toàn bộ <a href="#tween/to">API vòng đời của Animation</a>, và nhận cả <code>repeat</code>/<code>repeatDelay</code>/<code>boomerang</code>/<code>delay</code> như một tween bình
+          thường — lặp lại/đảo chiều cả cụm bên trong như một khối duy nhất.
         </p>
         <p class="note">
-          Có thể lồng timeline trong timeline bằng <code>.add(timelineKhac, position)</code> — thời gian được truyền xuống dạng phép biến đổi toạ độ, nên pause/reverse ở timeline cha vẫn tính đúng cho
-          timeline con bên trong.
+          Có thể lồng timeline trong timeline bằng <code>.add(timelineKhác, position)</code> — pause/reverse ở timeline cha vẫn hoạt động đúng cho timeline con bên trong.
         </p>
       </>
     ),
@@ -180,7 +180,7 @@ tl.to(".a", { x: 100 })
   "sequence/stagger": {
     eyebrow: "Core",
     title: "stagger",
-    lead: "Truyền stagger vào vars của to/from/fromTo khi target khớp nhiều phần tử — mỗi phần tử là một Tween riêng, chỉ khác nhau delay so le.",
+    lead: "Truyền stagger vào vars của to/from/fromTo khi target khớp nhiều phần tử — mỗi phần tử chạy tween riêng, lệch nhau một khoảng delay.",
     render: () => (
       <>
         <div class="content-pane__panel" style="align-items:center;">
@@ -223,11 +223,11 @@ six.to(".stagger-box", {
         ])}
 
         <p>
-          Khi truyền <code>stagger</code> trực tiếp vào <code>six.to()</code>/<code>from()</code>/<code>fromTo()</code> (không qua timeline), kết quả trả về là một <code>Timeline</code> gộp toàn bộ tween con —
-          pause/reverse/kill cả nhóm được như một khối, thay vì một mảng Tween rời rạc.
+          Dùng <code>stagger</code> trực tiếp trong <code>six.to()</code>/<code>from()</code>/<code>fromTo()</code> sẽ trả về một <code>Timeline</code> gộp toàn bộ tween con — pause/reverse/kill được cả nhóm
+          cùng lúc.
         </p>
         <p class="note">
-          stagger cũng dùng được bên trong <code>timeline.to/from/fromTo(...)</code> — cú pháp y hệt, chỉ khác là các tween con được thêm vào đúng vị trí đó trên timeline thay vì trên root.
+          Dùng được y hệt bên trong <code>timeline.to/from/fromTo(...)</code> — các tween con được thêm vào đúng vị trí đó trên timeline.
         </p>
       </>
     ),

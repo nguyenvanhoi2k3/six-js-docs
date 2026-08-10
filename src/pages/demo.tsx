@@ -5,11 +5,34 @@ import { registerComponents } from "@six-js/core/Components";
 
 registerComponents();
 import { componentsDocs } from "../content/components";
+import { pluginsContent } from "../content/plugins";
 import { codeBlock, mountCodeCopy, mountDemoTabs, scopeCss } from "../content/shared";
 import type { ComponentDemo, ComponentDoc } from "../content/components/types";
 import { h } from "../jsx";
 
 const root = document.querySelector<HTMLDivElement>("#app")!;
+
+type DemoDoc = Pick<ComponentDoc, "slug" | "eyebrow" | "title" | "demos" | "demoSidebar">;
+
+/** Resolves `?c=<componentSlug>` (components) or `?p=<pluginContentKey>` (plugins) into a common shape demo.html can render. */
+function findDoc(): DemoDoc | undefined {
+  const params = new URLSearchParams(location.search);
+
+  const componentSlug = params.get("c");
+  if (componentSlug) return componentsDocs.find((d) => d.slug === componentSlug);
+
+  const pluginKey = params.get("p");
+  const entry = pluginKey ? pluginsContent[pluginKey] : undefined;
+  if (!entry?.demos?.length) return undefined;
+
+  return {
+    slug: pluginKey!.replace(/\//g, "--"),
+    eyebrow: entry.eyebrow,
+    title: entry.title,
+    demos: entry.demos,
+    demoSidebar: entry.demos.length > 1,
+  };
+}
 
 function renderDemoBody(sectionId: string, d: ComponentDemo): string {
   if (!d.html) return d.renderDemo?.() ?? "";
@@ -65,7 +88,7 @@ function renderDemoBody(sectionId: string, d: ComponentDemo): string {
   );
 }
 
-function setupScrollSpy(doc: ComponentDoc) {
+function setupScrollSpy(doc: DemoDoc) {
   const sidebar = root.querySelector<HTMLElement>(".demo-sidebar");
   const heading = sidebar?.querySelector<HTMLElement>(".section-sidebar__heading");
   const links = Array.from(sidebar?.querySelectorAll<HTMLAnchorElement>("a") ?? []);
@@ -105,13 +128,12 @@ function setupScrollSpy(doc: ComponentDoc) {
 }
 
 function render() {
-  const slug = new URLSearchParams(location.search).get("c") ?? "";
-  const doc = componentsDocs.find((d) => d.slug === slug);
+  const doc = findDoc();
 
   if (!doc) {
     root.innerHTML = (
       <div class="demo-stage">
-        <p style="color:var(--muted);font-family:var(--font-sans)">Không tìm thấy demo cho "{slug}".</p>
+        <p style="color:var(--muted);font-family:var(--font-sans)">Không tìm thấy demo.</p>
       </div>
     );
     return;

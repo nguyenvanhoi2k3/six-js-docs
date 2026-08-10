@@ -5,22 +5,36 @@ import { renderHeader } from "../layout/header/header";
 import { mountThemeToggle } from "../layout/header/theme";
 import { renderFooter } from "../layout/footer/footer";
 import { showcaseItems } from "../content/showcase";
-import { codeBlock, mountCodeCopy, mountDemoTabs } from "../content/shared";
+import { codeBlock, mountCodeCopy, mountDemoTabs, splitDemoSource } from "../content/shared";
 import { h, Fragment } from "../jsx";
 
 registerDialog();
 
 const dialogName = (i: number) => `showcase-code-${i}`;
 
+const allPlugins = Array.from(new Set(showcaseItems.flatMap((item) => item.plugins)));
+
 const cards = showcaseItems.map((item, i) => (
-  <div class="showcase-card" data-showcase-card data-search={`${item.title} ${item.subtitle}`.toLowerCase()}>
+  <div class="showcase-card" data-showcase-card data-search={item.title.toLowerCase()} data-plugins={item.plugins.join(",")}>
     <a class="showcase-card__link" href={item.demoUrl} target="_blank" rel="noopener">
       <span class="showcase-card__tag badge">{item.title}</span>
-      <div class="showcase-card__media" style={`background:${item.gradient}`} />
-      <div class="showcase-card__overlay">
-        <span class="showcase-card__title">{item.title}</span>
-        <span class="showcase-card__site">{item.subtitle}</span>
-      </div>
+      {item.thumbVideo ? (
+        <video
+          class="showcase-card__media"
+          data-showcase-hover-video
+          src={item.thumbVideo}
+          poster={item.thumb}
+          style={`background:${item.gradient}`}
+          muted
+          loop
+          playsinline
+          preload="metadata"
+        />
+      ) : item.thumb ? (
+        <img class="showcase-card__media" src={item.thumb} alt={item.title} loading="lazy" style={`background:${item.gradient}`} />
+      ) : (
+        <div class="showcase-card__media" style={`background:${item.gradient}`} />
+      )}
     </a>
     <sx-dialog-trigger class="showcase-card__code-btn" name={dialogName(i)} aria-label="Xem code" title="Xem code">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#e6d1d1" viewBox="0 0 256 256">
@@ -68,7 +82,17 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = (
         <p>Demo trực tiếp cho từng plugin. Click vào một ô để mở trang demo trong tab mới, hoặc bấm icon để xem code.</p>
       </header>
       <div class="showcase-search-bar">
-        <input type="search" class="showcase-search" placeholder="Tìm theo tên plugin..." data-showcase-search />
+        <input type="search" class="showcase-search" placeholder="Tìm theo tên demo..." data-showcase-search />
+        <div class="ease-chips" data-showcase-filters>
+          <button type="button" class="ease-chip is-active" data-plugin-filter="all">
+            Tất cả
+          </button>
+          {allPlugins.map((plugin) => (
+            <button type="button" class="ease-chip" data-plugin-filter={plugin}>
+              {plugin}
+            </button>
+          ))}
+        </div>
       </div>
       <section class="showcase-grid" data-showcase-grid>
         {cards}
@@ -88,56 +112,70 @@ mountCodeCopy();
 const searchInput = document.querySelector<HTMLInputElement>("[data-showcase-search]")!;
 const cardEls = Array.from(document.querySelectorAll<HTMLElement>("[data-showcase-card]"));
 const emptyState = document.querySelector<HTMLElement>("[data-showcase-empty]")!;
+const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-plugin-filter]"));
 
-searchInput.addEventListener("input", () => {
+// A demo can use several plugins at once (eg. Horizontal Storytelling uses OnScroll +
+// SmoothScroll + SplitText), so filters are OR'd together rather than requiring every active
+// plugin to be present on the same card.
+const activeFilters = new Set<string>();
+
+function applyShowcaseFilters() {
   const query = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
 
   cardEls.forEach((card) => {
-    const matches = !query || (card.dataset.search ?? "").includes(query);
+    const matchesSearch = !query || (card.dataset.search ?? "").includes(query);
+    const cardPlugins = (card.dataset.plugins ?? "").split(",");
+    const matchesPlugin = activeFilters.size === 0 || cardPlugins.some((plugin) => activeFilters.has(plugin));
+    const matches = matchesSearch && matchesPlugin;
     card.hidden = !matches;
     if (matches) visibleCount++;
   });
 
   emptyState.hidden = visibleCount > 0;
+}
+
+searchInput.addEventListener("input", applyShowcaseFilters);
+
+filterBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const plugin = btn.dataset.pluginFilter!;
+    if (plugin === "all") {
+      activeFilters.clear();
+    } else if (activeFilters.has(plugin)) {
+      activeFilters.delete(plugin);
+    } else {
+      activeFilters.add(plugin);
+    }
+
+    filterBtns.forEach((b) => {
+      const p = b.dataset.pluginFilter!;
+      b.classList.toggle("is-active", p === "all" ? activeFilters.size === 0 : activeFilters.has(p));
+    });
+
+    applyShowcaseFilters();
+  });
 });
 
 mountDemoTabs();
 
-/**
- * Strips each block's own common leading whitespace, rather than the whole file's — the demo
- * HTML nests <style>/<script> at different depths, so a global dedent would leave later blocks
- * jagged relative to earlier ones.
- */
-function dedent(text: string): string {
-  const lines = text.replace(/\r\n/g, "\n").split("\n");
-  while (lines.length && lines[0].trim() === "") lines.shift();
-  while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
+// Cards with a `thumbVideo` render a muted <video poster> in place of the static thumb —
+// only play it while the card is actually hovered, so idle cards stay cheap.
+document.querySelectorAll<HTMLVideoElement>("[data-showcase-hover-video]").forEach((video) => {
+  const card = video.closest<HTMLElement>("[data-showcase-card]");
+  if (!card) return;
 
-  const indents = lines.filter((line) => line.trim() !== "").map((line) => line.match(/^ */)![0].length);
-  const minIndent = indents.length ? Math.min(...indents) : 0;
-
-  return lines.map((line) => line.slice(minIndent)).join("\n");
-}
-
-/** Splits a standalone demo HTML file into its HTML / CSS / JS parts, CodePen-style. */
-function splitDemoSource(source: string): { html: string; css: string; js: string } {
-  const doc = new DOMParser().parseFromString(source, "text/html");
-
-  const css = Array.from(doc.querySelectorAll("style"))
-    .map((el) => dedent(el.textContent ?? ""))
-    .filter(Boolean)
-    .join("\n\n");
-
-  const js = Array.from(doc.querySelectorAll("script"))
-    .map((el) => dedent(el.textContent ?? ""))
-    .filter(Boolean)
-    .join("\n\n");
-
-  doc.querySelectorAll("style, script").forEach((el) => el.remove());
-
-  return { html: dedent(doc.body.innerHTML), css, js };
-}
+  card.addEventListener("mouseenter", () => {
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  });
+  card.addEventListener("mouseleave", () => {
+    video.pause();
+    // A paused video freezes on its last frame rather than reverting to `poster` —
+    // reloading the element is the only way to bring the static thumb back.
+    video.load();
+  });
+});
 
 // Fetched lazily (only once a dialog is actually opened) and cached per index, rather than
 // bundling all 6 demo files' source as inline strings up front for content nobody may ever look at.

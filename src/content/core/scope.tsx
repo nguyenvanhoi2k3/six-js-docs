@@ -7,16 +7,15 @@ export const scopeContent: ContentMap = {
   "scope/context": {
     eyebrow: "Core",
     title: "six.context()",
-    lead: "Scope dọn dẹp chung: mọi Tween/Timeline (hoặc bất kỳ thứ gì có .kill()) tạo ra bên trong sẽ tự được scope này capture, để dọn hàng loạt bằng một lần revert()/kill().",
+    lead: "Gom mọi Tween/Timeline (hoặc bất kỳ thứ gì có .kill()) tạo ra bên trong vào một scope, để dọn dẹp hàng loạt bằng một lần revert()/kill().",
     render: () => (
       <>
         {codeBlock(
           `const scope = six.context((self) => {
-  // mọi six.to/from/fromTo/timeline gọi đồng bộ ở đây
-  // sẽ tự bị scope "bắt" và kill khi scope.revert()/kill()
+  // mọi animation tạo ở đây tự được scope bắt, dọn khi revert()/kill()
   six.to(".hero", { x: 40, duration: 0.4 });
 
-  // tự thêm những thứ khác cần dọn (ResizeObserver, event listener...) qua self.add()
+  // thêm thủ công những thứ khác cần dọn (ResizeObserver, event listener...) qua self.add()
   const ro = new ResizeObserver(() => {});
   ro.observe(document.body);
   self.add({ kill: () => ro.disconnect() });
@@ -28,8 +27,8 @@ scope.revert();
 // giống revert() nhưng đánh dấu scope đã "chết" — run() sau đó sẽ throw
 scope.kill();
 
-// bọc một callback chạy SAU (event listener, timeout...) để animation tạo bên trong
-// nó vẫn được scope này capture — auto-capture chỉ hoạt động trong lúc run() còn đang chạy
+// bọc callback chạy sau (event listener, timeout) để animation bên trong
+// vẫn được scope capture như bình thường
 button.addEventListener("click", scope.scope(() => {
   six.to(".hero", { x: 80, duration: 0.3 });
 }));`,
@@ -38,17 +37,16 @@ button.addEventListener("click", scope.scope(() => {
 
         {attrsTable([
           ["context(fn?)", "tạo Context mới; nếu truyền fn, gọi run(fn) ngay lập tức", "—"],
-          ["scope.run(fn)", "đặt scope này làm scope đang active trong lúc fn chạy — mọi animation tạo bên trong tự được capture", "—"],
-          ["scope.scope(fn)", "bọc fn thành một hàm mới — mỗi lần hàm đó được GỌI (dù là sau này, từ event listener/timeout), animation tạo bên trong vẫn tự capture vào scope này", "—"],
-          ["scope.add(target)", "tự thêm một Killable (bất kỳ thứ gì có .kill()) vào danh sách sẽ bị dọn khi revert", "—"],
-          ["scope.revert()", "gọi kill() trên toàn bộ đối tượng đã capture rồi xoá danh sách — scope vẫn dùng lại được (run() tiếp)", "—"],
+          ["scope.run(fn)", "chạy fn với scope này đang active — animation tạo bên trong tự được capture", "—"],
+          ["scope.scope(fn)", "bọc fn thành hàm mới — mỗi lần gọi (kể cả sau này, từ event listener/timeout), animation tạo bên trong vẫn tự capture vào scope", "—"],
+          ["scope.add(target)", "thêm thủ công một Killable (bất kỳ gì có .kill()) để dọn cùng lúc revert()", "—"],
+          ["scope.revert()", "kill toàn bộ đối tượng đã capture. Scope vẫn dùng lại được — gọi run() tiếp", "—"],
           ["scope.kill()", "revert() + đánh dấu scope đã chết — gọi run() sau đó sẽ throw", "—"],
           ["scope.isDead", "getter — true sau khi đã kill()", "—"],
         ])}
 
         <p class="note">
-          Cần chạy lại theo breakpoint (bật/tắt animation theo <code>window.matchMedia</code>)? Dùng <a href="#scope/breakpoint">six.breakpoint()</a> thay vì tự lắng nghe{" "}
-          <code>matchMedia(...).addEventListener("change", ...)</code> tay — breakpoint() được xây trên chính Context này nên vẫn auto-capture y hệt.
+          Cần bật/tắt animation theo breakpoint (<code>window.matchMedia</code>)? Dùng <a href="#scope/breakpoint">six.breakpoint()</a> — cũng auto-capture y hệt, khỏi tự lắng nghe matchMedia tay.
         </p>
       </>
     ),
@@ -57,7 +55,7 @@ button.addEventListener("click", scope.scope(() => {
   "scope/breakpoint": {
     eyebrow: "Core",
     title: "six.breakpoint()",
-    lead: "Gắn việc setup/teardown animation theo trạng thái CSS media query, tự chạy lại khi điều kiện đổi — khỏi phải tự lắng nghe window.matchMedia() rồi if/else + kill() tay.",
+    lead: "Setup/teardown animation theo media query, tự chạy lại khi điều kiện đổi — khỏi tự lắng nghe window.matchMedia() rồi if/else + kill() tay.",
     render: () => (
       <>
         <div class="bp-demo-layout">
@@ -144,22 +142,21 @@ six.breakpoint("(min-width: 1024px)", () => {
           ["breakpoint(conditions, callback)", "sugar cho breakpoint().add(conditions, callback)", "—"],
           [".add(conditions, callback)", "conditions: 1 chuỗi query, hoặc object map { tên: query }. callback(ctx) chạy khi match, có thể return cleanup", "—"],
           ["ctx.matches", "object map { tên: boolean } — chỉ có ý nghĩa khi conditions là object map (nhiều query cùng lúc)", "—"],
-          [".revert()", "dọn phần đang active của MỌI add() (kill animation đã capture, chạy cleanup) — vẫn tiếp tục lắng nghe media query", "—"],
+          [".revert()", "dọn phần đang active của mọi add() (kill animation, chạy cleanup) nhưng vẫn tiếp tục lắng nghe", "—"],
           [".kill()", "revert() + gỡ hẳn mọi MediaQueryList listener — instance chết hẳn, add() sau sẽ throw", "—"],
         ])}
 
         <p class="note">
-          Mỗi <code>.add()</code> có một <code>Context</code> riêng (soft revert khi điều kiện đổi, không detach listener) — vì vậy tạo instance breakpoint bên trong một <code>six.context()</code> đang active
-          thì cả cụm cũng tự bị scope ngoài capture, dọn một lượt khi scope ngoài <code>revert()</code>/<code>kill()</code>.
+          Tạo breakpoint bên trong một <code>six.context()</code> đang active thì cả cụm cũng tự được scope ngoài capture — dọn cùng lúc khi scope ngoài <code>revert()</code>/<code>kill()</code>.
         </p>
         <p>
-          Chỉ cần MỘT breakpoint đơn (bật trên ngưỡng, tắt dưới ngưỡng)? Dùng thẳng dạng sugar <code>six.breakpoint(query, callback)</code> khỏi cần gọi <code>.add()</code> tách rời.
+          Chỉ cần một điều kiện đơn? Dùng thẳng <code>six.breakpoint(query, callback)</code> khỏi gọi <code>.add()</code> riêng.
         </p>
 
-        <h2>ctx.scope() — capture animation tạo SAU lượt chạy đầu, không phải chỉ lúc callback đang chạy</h2>
+        <h2>ctx.scope()</h2>
         <p>
-          Animation tạo đồng bộ ngay trong callback tự được <code>ctx</code> capture. Nhưng animation tạo bên trong một event listener gắn từ callback đó — chạy SAU, khi <code>ctx</code> không còn là scope
-          đang active — thì KHÔNG tự capture, trừ khi bọc qua <code>ctx.scope(fn)</code>. Bấm "Pulse A" rồi "Pulse B" cho cả hai quay vô hạn, rồi bấm "Kill" để so sánh:
+          Animation tạo ngay trong callback tự được <code>ctx</code> capture. Nhưng animation tạo bên trong một event listener gắn từ callback đó (chạy sau) thì không tự capture — trừ khi bọc qua{" "}
+          <code>ctx.scope(fn)</code>. Bấm "Pulse A" rồi "Pulse B" cho cả hai quay vô hạn, rồi bấm "Kill" để so sánh:
         </p>
         <div class="content-pane__panel" style="align-items:center;">
           <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
@@ -190,11 +187,11 @@ six.breakpoint("(min-width: 1024px)", () => {
         {codeBlock(
           `six.breakpoint("(min-width: 1px)", (ctx) => {
   btnA.addEventListener("click", () => {
-    six.to(boxA, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // KHÔNG capture — ctx đã hết active từ lâu
+    six.to(boxA, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // không capture
   });
 
   btnB.addEventListener("click", ctx.scope(() => {
-    six.to(boxB, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // capture vào ctx nhờ bọc qua ctx.scope()
+    six.to(boxB, { rotate: 360, duration: 3, repeat: -1, ease: "none" }); // capture nhờ ctx.scope()
   }));
 });`,
           "js",

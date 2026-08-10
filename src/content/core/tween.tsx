@@ -65,8 +65,7 @@ six.to(".box", {
         {animationLifecycleAttrs}
 
         <p class="note">
-          <code>overwrite: true</code> huỷ toàn bộ tween cũ đang chiếm target (mọi property của nó, không chỉ property trùng); <code>overwrite: "auto"</code> chỉ gỡ đúng property trùng khỏi tween cũ — các
-          property khác của nó vẫn chạy tiếp. Không áp dụng cho tween dùng <code>keyframes</code>.
+          <code>true</code> huỷ toàn bộ tween cũ trên target; <code>"auto"</code> chỉ gỡ property trùng, các property khác của tween cũ vẫn chạy tiếp.
         </p>
         <p>
           Xem những thuộc tính nào animate được và toàn bộ bảng easing tại trang <a href="#tween/properties">Thuộc tính &amp; Easing</a>.
@@ -87,7 +86,7 @@ six.to(".box", {
   "tween/from": {
     eyebrow: "Core",
     title: "six.from()",
-    lead: "Ngược với to(): khai báo giá trị bắt đầu trong vars, six-js tự lấy giá trị HIỆN TẠI của target (đọc ngay lúc tạo tween) làm điểm đến.",
+    lead: "Ngược với to(): bạn khai báo giá trị bắt đầu, six-js tự lấy giá trị hiện tại của target làm điểm đến.",
     render: () => (
       <>
         {playgroundBox("from()")}
@@ -143,12 +142,9 @@ six.from(".box", {
         )}
 
         <p class="note">
-          <code>scale</code> là shorthand — tự mở rộng thành cả <code>scaleX</code> và <code>scaleY</code> (mỗi cái có track/overwrite riêng).
+          <code>scale</code> là shorthand cho cả <code>scaleX</code> và <code>scaleY</code>.
         </p>
-        <p>
-          Một property có thể chỉ khai trong <code>fromVars</code> hoặc chỉ trong <code>toVars</code> — đầu nào thiếu sẽ tự đọc giá trị hiện tại của target cho đúng đầu đó, giống hệt to()/from() dùng riêng
-          cho property đó.
-        </p>
+        <p>Bỏ qua một property ở đầu nào đó (chỉ khai trong fromVars hoặc toVars) thì six-js tự lấy giá trị hiện tại của target cho đầu còn thiếu.</p>
       </>
     ),
     init: (root) => {
@@ -202,9 +198,9 @@ six.to(".box", {
           ["duration (trên tween)", "tổng thời lượng — bắt buộc phải khai nếu dùng dạng phần trăm", "number", "0.5"],
         ])}
 
-        <p class="note">Giá trị cuối của một chặng tự trở thành điểm bắt đầu (from) của chặng kế tiếp — six-js truyền thẳng giá trị đó chứ không đọc lại DOM</p>
+        <p class="note">Giá trị cuối mỗi chặng tự thành điểm bắt đầu của chặng kế tiếp.</p>
         <p class="note">
-          Tween dùng <code>keyframes</code> không hỗ trợ <code>overwrite</code> và không bắn sự kiện onStart/onComplete riêng cho từng chặng — chỉ sự kiện của tween ngoài cùng được bắn.
+          <code>keyframes</code> không dùng được với <code>overwrite</code>, và chỉ bắn onStart/onComplete một lần cho cả tween — không tách riêng theo từng chặng.
         </p>
       </>
     ),
@@ -224,18 +220,18 @@ six.to(".box", {
   "tween/properties": {
     eyebrow: "Core",
     title: "Thuộc tính & Easing",
-    lead: "six-js tự nhận diện loại thuộc tính (transform, màu, chuỗi phức hợp, biến CSS, thuộc tính DOM thường...) và đơn vị đo dựa trên giá trị bạn truyền — không cần khai loại thủ công.",
+    lead: "six-js tự nhận diện loại thuộc tính và đơn vị đo dựa trên giá trị bạn truyền — không cần khai loại thủ công.",
     render: () => (
       <>
         <h2>Transform</h2>
         {attrsTable([
-          ["x, y, z", 'translate — px mặc định; truyền chuỗi "N%" cho x/y để dịch theo % kích thước chính nó (tương tự xPercent/yPercent)', "px"],
+          ["x, y, z", 'translate — px mặc định; truyền chuỗi "N%" cho x/y để dịch theo % kích thước chính nó', "px"],
           ["rotate, rotateX, rotateY", "góc xoay", "deg"],
           ["scale", "shorthand — tự mở rộng thành scaleX + scaleY", "1"],
           ["scaleX, scaleY", "tỉ lệ theo từng trục", "1"],
           ["skewX, skewY", "góc nghiêng", "deg"],
         ])}
-        <p>Mỗi thuộc tính transform animate độc lập, kể cả khi nằm ở nhiều tween khác nhau chạy chồng lên nhau — không cần tự dựng chuỗi transform hay lo ghi đè mất giá trị đã set trước đó:</p>
+        <p>Mỗi thuộc tính transform animate độc lập, kể cả khi ở nhiều tween chạy chồng nhau:</p>
         {codeBlock(
           `six.to(".card", { x: 120, duration: 0.6 });
 six.to(".card", { rotate: 8, scale: 1.05, duration: 0.4, delay: 0.15 }); // chạy song song, x không bị ảnh hưởng`,
@@ -244,12 +240,11 @@ six.to(".card", { rotate: 8, scale: 1.05, duration: 0.4, delay: 0.15 }); // ch�
 
         <h2>Màu sắc</h2>
         <p>
-          Tự nhận diện: <code>backgroundColor, color, borderColor, outlineColor, fill, stroke, stopColor</code> — hỗ trợ hex, <code>rgb()/rgba()</code> (cả cú pháp dấu phẩy lẫn cú pháp space hiện đại) và tên
-          màu CSS.
+          Tự nhận diện <code>backgroundColor, color, borderColor, outlineColor, fill, stroke, stopColor</code> — hỗ trợ hex, <code>rgb()/rgba()</code> và tên màu CSS.
         </p>
 
         <h2>Chuỗi phức hợp</h2>
-        <p>Animate thẳng các thuộc tính dạng chuỗi nhiều giá trị, kể cả khi có màu nhúng bên trong — không cần tách số ra tween tay:</p>
+        <p>Animate thẳng các thuộc tính dạng chuỗi nhiều giá trị, kể cả khi có màu nhúng bên trong:</p>
         {codeBlock(
           `six.to(".card", {
   boxShadow: "0 24px 48px rgba(0,0,0,.4)",
@@ -266,9 +261,9 @@ six.to(".card", { rotate: 8, scale: 1.05, duration: 0.4, delay: 0.15 }); // ch�
 
         <h2>Biến CSS, style thường, thuộc tính khác</h2>
         {attrsTable([
-          ["--my-var", "biến CSS tuỳ chỉnh — tự nhận numeric hay discrete dựa trên giá trị hiện tại/giá trị truyền vào", "—"],
-          ["style property khác", "numeric (đơn vị px mặc định, trừ opacity/zIndex/flexGrow/flexShrink/order/fontWeight — không đơn vị) nếu giá trị là số, ngược lại discrete (đổi tức thời ở cuối)", "px"],
-          ["scrollTop, currentTime, volume, ...", "thuộc tính JS number thường (không phải style, không qua CSSOM) — six-js gán thẳng vào field đó", "—"],
+          ["--my-var", "biến CSS tuỳ chỉnh — tự nhận numeric hay discrete tuỳ giá trị truyền vào", "—"],
+          ["style property khác", "số → numeric (mặc định đơn vị px, trừ opacity/zIndex/flexGrow/flexShrink/order/fontWeight); còn lại → đổi tức thời ở cuối tween", "px"],
+          ["scrollTop, currentTime, volume, ...", "thuộc tính JS number thường, không qua style — six-js gán thẳng vào field đó", "—"],
           ["còn lại (SVG cx/cy, data-*, ...)", "rơi về setAttribute(prop, value)", "—"],
         ])}
         <p>SVG attribute animate được y hệt style thường, cùng một lời gọi:</p>
@@ -298,8 +293,7 @@ six.to(".box", { scaleX: "/=2" }); // chia đôi`,
         </p>
 
         <p class="note">
-          Truyền tên easing không tồn tại (sai chính tả) sẽ tự rơi về <code>"quadOut"</code> chứ không throw lỗi. Cũng có thể truyền thẳng hàm{" "}
-          <code>(t: number) =&gt; number</code> (t và kết quả trong khoảng 0–1) thay vì tên có sẵn.
+          Tên easing sai chính tả sẽ tự rơi về <code>"quadOut"</code> thay vì throw lỗi. Cũng có thể truyền thẳng hàm <code>(t: number) =&gt; number</code> thay vì dùng tên có sẵn.
         </p>
       </>
     ),
