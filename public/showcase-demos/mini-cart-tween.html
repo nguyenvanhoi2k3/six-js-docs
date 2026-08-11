@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mini cart tween demo</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        background: #0a0d14;
+        color: #e1dcc9;
+        font-family: sans-serif;
+      }
+      .page {
+        padding: 60px 24px;
+      }
+      .trigger {
+        background: #1c1a33;
+        color: #e1dcc9;
+        border: 1px solid #3a3660;
+        border-radius: 999px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .trigger:hover {
+        background: #2a2650;
+      }
+      .trigger:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      p.hint {
+        max-width: 520px;
+        opacity: 0.65;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 16px 0 6px;
+      }
+      #status {
+        font-size: 16px;
+        opacity: 0.6;
+      }
+
+      #cart {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        bottom: 20px;
+        width: 340px;
+        background: #1c1a33;
+        border: 1px solid #3a3660;
+        border-radius: 16px;
+        box-shadow: -24px 0 60px rgba(0, 0, 0, 0.55);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 10;
+      }
+      .cart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid #2c2f4a;
+        flex-shrink: 0;
+      }
+      .cart-header h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .close-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid #3a3660;
+        background: transparent;
+        color: #e1dcc9;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .close-btn:hover {
+        background: #2a2650;
+      }
+      .cart-items {
+        list-style: none;
+        margin: 0;
+        padding: 12px 20px;
+        overflow-y: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .cart-item .swatch {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        flex-shrink: 0;
+      }
+      .cart-item .name {
+        font-size: 14px;
+      }
+      .cart-item .price {
+        font-size: 13px;
+        color: #ffd166;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <button type="button" id="open-cart" class="trigger">🛒 Open cart</button>
+      <div style="padding-top: 20px; font-size: 20px">
+        Code modal cart mini sử dụng core Tween <br />thay vì Component Dialog để tự do custom animate theo ý muốn
+      </div>
+      <div style="padding-top: 20px" id="status">Trạng thái: sẵn sàng</div>
+    </div>
+    <div style="height: 100vh"></div>
+    <div style="height: 100vh"></div>
+    <div id="cart">
+      <div class="cart-header">
+        <h2>Cart</h2>
+        <button type="button" id="cart-close" class="close-btn" aria-label="Đóng giỏ hàng">✕</button>
+      </div>
+      <ul class="cart-items">
+        <li class="cart-item">
+          <div class="swatch" style="background: #4a6fd6"></div>
+          <div class="name">Áo thun basic</div>
+          <div class="price">259.000₫</div>
+        </li>
+        <li class="cart-item">
+          <div class="swatch" style="background: #78a5ee"></div>
+          <div class="name">Balo canvas</div>
+          <div class="price">590.000₫</div>
+        </li>
+        <li class="cart-item">
+          <div class="swatch" style="background: #c6ffb4"></div>
+          <div class="name">Tai nghe bluetooth</div>
+          <div class="price">831.000₫</div>
+        </li>
+      </ul>
+    </div>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { Burst } from "https://unpkg.com/@six-js/core@latest/dist/Burst.js";
+
+      const CART_WIDTH = 340;
+      const CART_MARGIN = 20;
+      const CART_OFFSCREEN = CART_WIDTH + CART_MARGIN + 60;
+
+      const cart = document.getElementById("cart");
+      const openBtn = document.getElementById("open-cart");
+      const closeBtn = document.getElementById("cart-close");
+      const statusEl = document.getElementById("status");
+
+      let falling = false;
+      let openTween = null;
+
+      function setStatus(text) {
+        statusEl.textContent = `Trạng thái: ${text}`;
+      }
+
+      function resetCartStyle() {
+        cart.style.position = "";
+        cart.style.left = "";
+        cart.style.top = "";
+        cart.style.margin = "";
+        cart.style.pointerEvents = "";
+        cart.style.willChange = "";
+        cart.style.transform = "";
+        cart.style.opacity = "";
+      }
+
+      six.set(cart, { x: CART_OFFSCREEN });
+
+      openBtn.addEventListener("click", () => {
+        if (falling) return;
+        openTween?.kill();
+        openTween = six.to(cart, { x: 0, duration: 0.5, ease: "backOut" });
+        setStatus("đang mở");
+      });
+
+      closeBtn.addEventListener("click", () => {
+        if (falling) return;
+        falling = true;
+        openTween?.kill();
+        openBtn.disabled = true;
+        setStatus("giỏ hàng đang rơi…");
+
+        Burst(cart, {
+          targets: cart,
+          power: 0,
+          gravity: 2000,
+          rotationSpeed: -6,
+          fade: false,
+          onComplete() {
+            resetCartStyle();
+            six.set(cart, { x: CART_OFFSCREEN });
+            falling = false;
+            openBtn.disabled = false;
+            setStatus("sẵn sàng");
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

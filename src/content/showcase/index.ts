@@ -33,7 +33,15 @@ export const showcaseItems: ShowcaseItem[] = [
     gradient: "linear-gradient(135deg,#78a5ee,#1c1a2b)",
     demoUrl: "showcase-demos/svg-scroll-progress.html",
     plugins: ["SvgMotion", "OnScroll"],
-     thumb: "showcase-thumbs/scroll-progress-ring.jpg",
+    thumb: "showcase-thumbs/scroll-progress-ring.jpg",
     thumbVideo: "showcase-thumbs/scroll-progress-ring.mp4",
+  },
+  {
+    title: "Cart Free Fall",
+    gradient: "linear-gradient(135deg,#4a6fd6,#1c1a33)",
+    demoUrl: "showcase-demos/mini-cart-tween.html",
+    plugins: ["Burst"],
+    thumb: "showcase-thumbs/cart-free-fall.jpg",
+    thumbVideo: "showcase-thumbs/cart-free-fall.mp4",
   },
 ];

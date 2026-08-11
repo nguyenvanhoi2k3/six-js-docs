@@ -366,9 +366,9 @@ ScrambleText(".counter", {
 
 likeButton.addEventListener("click", (e) => {
   Burst(e.currentTarget, {
-    targets: "#heart-icon", // template — bị clone ra, không đụng tới bản gốc
+    targets: "#heart-icon", // template bị clone ra
     clone: 24,
-    spread: [-40, 40],      // bắn lệch quanh hướng "lên" (0deg)
+    spread: [-40, 40],      // bắn theo hướng từ -40deg -> 40deg
     power: [220, 420],
     gravity: 700,
   });
@@ -428,11 +428,11 @@ likeButton.addEventListener("click", () => {
           ["targets", "selector/Element/danh sách — phần tử bị burst. Không có clone: chính các phần tử này bị phóng trực tiếp. Có clone: dùng làm template để nhân bản", "—"],
           ["clone", "số bản sao dùng-một-lần cần tạo, phóng ra từ vị trí origin — bỏ qua (mặc định) để phóng thẳng targets", "—"],
           ["container", "nơi chèn các clone — document.body cho clone position:fixed (bám viewport); container khác cho clone position:absolute (giới hạn trong container đó)", "document.body"],
-          ["spread", "[min, max] góc phóng (độ) — 0 = hướng lên, tăng dần theo chiều kim đồng hồ", "[0, 360]"],
-          ["power", "[min, max] tốc độ phóng (px/giây)", "[160, 380]"],
+          ["spread", "[min, max] góc phóng (độ) — 0 = hướng lên, tăng dần theo chiều kim đồng hồ. Truyền 1 số thay vì mảng để mọi hạt bắn cùng 1 góc, không toả ra", "[0, 360]"],
+          ["power", "[min, max] tốc độ phóng (px/giây), hoặc 1 số cố định. power: 0 nghĩa là không bắn — chỉ rơi tự do theo gravity", "[160, 380]"],
           ["gravity", "gia tốc rơi xuống (px/giây²)", "650"],
-          ["scale", "[min, max] tỉ lệ kích thước — chỉ áp dụng cho hạt CLONE", "[0.5, 1.1]"],
-          ["rotationSpeed", "[min, max] tốc độ xoay (độ/giây, có dấu — chiều xoay cũng ngẫu nhiên)", "[-360, 360]"],
+          ["scale", "[min, max] tỉ lệ kích thước, hoặc 1 số cố định — chỉ áp dụng cho hạt CLONE", "[0.5, 1.1]"],
+          ["rotationSpeed", "[min, max] tốc độ xoay (độ/giây, có dấu — chiều xoay cũng ngẫu nhiên), hoặc 1 số cố định để mọi hạt xoay cùng tốc độ", "[-360, 360]"],
           ["fade", "true — fade opacity về 0 ngay khi hạt thật sự rơi khuất khỏi viewport (không phải theo hẹn giờ)", "true"],
           ["stagger", "trễ phóng thêm giữa mỗi hạt (giây)", "0"],
           ["onComplete", "callback khi mọi hạt đã xong (rơi khuất + fade xong, hoặc tắt fade thì ngay khi khuất)", "—"],
