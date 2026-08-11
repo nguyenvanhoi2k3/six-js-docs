@@ -2,14 +2,15 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 
 export default defineConfig(({ command }) => ({
-  // GitHub Pages serves this project from /six-js-docs/, not the domain root - only matters for
-  // the production build (dev server stays at "/" for local convenience). Every internal
+  // GitHub Pages serves this project from /six-js-docs/, not the domain root, while Vercel
+  // (detected via its VERCEL env var) serves it from the domain root - only matters for the
+  // production build (dev server stays at "/" for local convenience). Every internal
   // link/asset path built at runtime (header nav, "Xem demo" buttons, in-content <a> refs) is
   // written as a plain relative path (no leading "/") specifically so it resolves correctly
   // under either base without needing this value threaded through the app - see the sibling
   // .html entries (already asset-referenced with a leading "/") which Vite itself rewrites
   // against `base` at build time.
-  base: command === "build" ? "/six-js-docs/" : "/",
+  base: command === "build" ? (process.env.VERCEL ? "/" : "/six-js-docs/") : "/",
   esbuild: {
     jsxFactory: "h",
     jsxFragmentFactory: "Fragment",
