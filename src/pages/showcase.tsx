@@ -79,7 +79,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = (
     <div class="container">
       <header class="showcase-hero">
         <h1>Showcase</h1>
-        <p>Demo trực tiếp cho từng plugin. Click vào một ô để mở trang demo trong tab mới, hoặc bấm icon để xem code.</p>
+        <p>Demo trực tiếp cho các plugin. Click vào một ô để mở trang demo trong tab mới, hoặc bấm icon để xem code.</p>
       </header>
       <div class="showcase-search-bar">
         <input type="search" class="showcase-search" placeholder="Tìm theo tên demo..." data-showcase-search />

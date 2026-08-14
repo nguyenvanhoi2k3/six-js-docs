@@ -1130,8 +1130,8 @@ a {
 /* ---------- Showcase ---------- */
 
 .showcase-hero {
-  padding: var(--space-5) 0 var(--space-2);
-  max-width: 760px;
+  padding: var(--space-3) 0 var(--space-2);
+  max-width: 780px;
 }
 
 .showcase-hero h1 {

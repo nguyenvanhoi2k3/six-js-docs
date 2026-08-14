@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Horizontal Scroll Gallery demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+        background-color: #0a0d14;
+        color: #e1dcc9;
+        font-family: sans-serif;
+      }
+
+      .spacer {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.35;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .gallery-track {
+        display: flex;
+        gap: 20px;
+        padding: 0 20px;
+        width: max-content;
+      }
+
+      .gallery-track img {
+        width: 400px;
+        height: 500px;
+        object-fit: cover;
+        will-change: transform;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="spacer">scroll down ↓</div>
+
+    <div class="gallery-track">
+      <img src="./horizontal-scroll-gallery/image1.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image2.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image3.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image4.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image5.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image6.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image7.jpg" alt="" />
+      <img src="./horizontal-scroll-gallery/image8.jpg" alt="" />
+    </div>
+
+    <div class="spacer" style="opacity: 0.15">— the end —</div>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+
+      new SmoothScroll();
+
+      const track = document.querySelector(".gallery-track");
+      const images = track.querySelectorAll("img");
+
+      let tween,
+        lastProgress = 0,
+        lastTime = performance.now(),
+        resetTimer;
+
+      tween = six.to(track, {
+        x: -(track.scrollWidth - window.innerWidth),
+        ease: "none",
+
+        onScroll: {
+          trigger: track,
+          start: "center center",
+          end: 1500,
+          sync: 1,
+          sticky: true,
+        },
+
+        onUpdate: () => {
+          if (!tween) return;
+          const now = performance.now();
+          const progress = tween.totalProgress();
+          const velocity =
+            (progress - lastProgress) / ((now - lastTime) / 1000 || 1);
+          lastProgress = progress;
+          lastTime = now;
+
+          six.set(images, { skewX: six.utils.clamp(-14, 14, velocity * 5) });
+          clearTimeout(resetTimer);
+          resetTimer = setTimeout(
+            () => six.to(images, { skewX: 0, duration: 0.6, ease: "quintOut" }),
+            120,
+          );
+        },
+      });
+    </script>
+  </body>
+</html>
