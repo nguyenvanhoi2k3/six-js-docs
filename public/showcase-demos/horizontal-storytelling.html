@@ -9,6 +9,8 @@
       *::before,
       *::after {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
       html,
       body {
@@ -36,6 +38,7 @@
       .container {
         font-size: 104px;
         font-weight: 900;
+        padding: 20px;
       }
     </style>
   </head>
@@ -217,7 +220,7 @@
 
       // dịch chuyển toàn bộ track sang trái khi scroll
       const scrollTween = six.to(track, {
-        x: -(track.scrollWidth - window.innerWidth),
+        x: -(track.scrollWidth - window.innerWidth) - 50,
         ease: "none",
         onScroll: {
           trigger: track,
@@ -240,7 +243,7 @@
             trigger: char4,
             syncTo: scrollTween,
             axis: "x",
-            start: "left 60%", // animate khi left của trigger chạm 60% viewport
+            start: "left 50%", // animate khi left của trigger chạm 60% viewport
           },
         })
         .from(char4, {
@@ -332,6 +335,23 @@
         },
       });
 
+       // explore
+      six.from(".char12", {
+        duration: 0.6,
+        opacity: 0,
+        perspective: 500,
+        transformOrigin: "top center",
+        rotateY: 90,
+        ease: "jelly",
+        delay: 0.2,
+        onComplete: () => smTextTween.play(),
+        onScroll: {
+          syncTo: scrollTween,
+          axis: "x",
+          start: "left 80%",
+        },
+      });
+
       // "beautifully in"
       const char13 = document.querySelector(".char13");
       const char14 = document.querySelector(".char14");
@@ -339,7 +359,7 @@
         opacity: 0,
         y: 80,
         stagger: 0.2,
-        ease: "smooth",
+        ease: "sineIn",
         duration: 0.5,
         onScroll: {
           syncTo: scrollTween,
@@ -374,7 +394,7 @@
 
       // square svg
       six.to(".square-svg", {
-        x: 700,
+        x: 800,
         ease: "sineInOut",
         onStart: () => rotateTween.play(), //rotate khi bắt đầu translateX
         onScroll: {

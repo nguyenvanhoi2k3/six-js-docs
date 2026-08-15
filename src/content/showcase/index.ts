@@ -84,4 +84,12 @@ export const showcaseItems: ShowcaseItem[] = [
     thumb: "showcase-thumbs/gift-box-burst.jpg",
     thumbVideo: "showcase-thumbs/gift-box-burst.mp4",
   },
+  {
+    title: "Video Play Onscroll",
+    gradient: "linear-gradient(135deg,#c6ffb4,#1c1a2b)",
+    demoUrl: "showcase-demos/video-onscroll.html",
+    plugins: ["OnScroll", "SmoothScroll"],
+     thumb: "showcase-thumbs/video-onscroll.jpg",
+    thumbVideo: "showcase-thumbs/video-onscroll.mp4",
+  },
 ];

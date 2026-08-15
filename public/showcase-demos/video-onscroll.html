@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video play onscroll demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        overflow-x: hidden;
+        background-color: #0a0d14;
+        color: #e1dcc9;
+        font-family: sans-serif;
+      }
+      .space {
+        height: 100vh;
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="space flex-center">SCROLL DOWN</div>
+    <video
+      id="video"
+      src="./video-onscroll/video_onscroll.mp4"
+      muted
+      playsinline
+      preload="auto"
+      style="width: 100vw; height: 100vh; object-fit: cover; display: block"
+    ></video>
+    <div class="space flex-center">END</div>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+      new SmoothScroll();
+
+      const video = six.utils.getById("video");
+
+      function initScrub() {
+        six.to(video, {
+          currentTime: video.duration,
+          onScroll: {
+            sticky: true,
+            sync: 0.6,
+            start: "top top",
+            end: "+=4000", // càng nhỏ tween chạy càng nhanh
+          },
+        });
+      }
+
+      if (video.readyState >= 1) {
+        initScrub();
+      } else {
+        video.addEventListener("loadedmetadata", initScrub, { once: true });
+      }
+    </script>
+  </body>
+</html>
