@@ -109,8 +109,8 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
 
-      new SmoothScroll();
       document.addEventListener("DOMContentLoaded", () => {
+        new SmoothScroll();
         const list = six.utils.arrayOf(".parallax-container");
         list.forEach((container) => {
           const img = container.querySelector("img");
