@@ -374,85 +374,83 @@ body {
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { ScrambleText } from "https://unpkg.com/@six-js/core@latest/dist/ScrambleText.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        // 1. basic scramble reveal, character-by-character, left-to-right
-        const runHero = () =>
-          ScrambleText("#heroText", {
-            text: "SIX.JS READY",
-            duration: 1.4,
-            ease: "quadOut",
-            chars: "upperCase",
-          });
-        runHero();
-        document.getElementById("btnHero").addEventListener("click", runHero);
+      // 1. basic scramble reveal, character-by-character, left-to-right
+      const runHero = () =>
+        ScrambleText("#heroText", {
+          text: "SIX.JS READY",
+          duration: 1.4,
+          ease: "quadOut",
+          chars: "upperCase",
+        });
+      runHero();
+      document.getElementById("btnHero").addEventListener("click", runHero);
 
-        // 2. rightToLeft: same target text, opposite reveal direction
-        const runDirection = () => {
-          ScrambleText("#ltrText", { text: "REVEAL", duration: 1.6, ease: "none" });
-          ScrambleText("#rtlText", { text: "REVEAL", duration: 1.6, ease: "none", rightToLeft: true });
-        };
-        runDirection();
-        document.getElementById("btnDirection").addEventListener("click", runDirection);
+      // 2. rightToLeft: same target text, opposite reveal direction
+      const runDirection = () => {
+        ScrambleText("#ltrText", { text: "REVEAL", duration: 1.6, ease: "none" });
+        ScrambleText("#rtlText", { text: "REVEAL", duration: 1.6, ease: "none", rightToLeft: true });
+      };
+      runDirection();
+      document.getElementById("btnDirection").addEventListener("click", runDirection);
 
-        // 3. tweenLength true (grows smoothly) vs false (snaps to the new length immediately)
-        const runLength = () => {
-          // reset back to the short starting text first - otherwise after the first run both are
-          // already sitting at full length, so replaying has no length change left to tween/snap
-          // and tweenLength: true/false end up looking identical.
-          document.getElementById("lengthTrue").textContent = "SIX";
-          document.getElementById("lengthFalse").textContent = "SIX";
-          ScrambleText("#lengthTrue", { text: "SIX.JS ANIMATION ENGINE", duration: 1.8, ease: "none", tweenLength: true });
-          ScrambleText("#lengthFalse", { text: "SIX.JS ANIMATION ENGINE", duration: 1.8, ease: "none", tweenLength: false });
-        };
-        document.getElementById("btnLength").addEventListener("click", runLength);
+      // 3. tweenLength true (grows smoothly) vs false (snaps to the new length immediately)
+      const runLength = () => {
+        // reset back to the short starting text first - otherwise after the first run both are
+        // already sitting at full length, so replaying has no length change left to tween/snap
+        // and tweenLength: true/false end up looking identical.
+        document.getElementById("lengthTrue").textContent = "SIX";
+        document.getElementById("lengthFalse").textContent = "SIX";
+        ScrambleText("#lengthTrue", { text: "SIX.JS ANIMATION ENGINE", duration: 1.8, ease: "none", tweenLength: true });
+        ScrambleText("#lengthFalse", { text: "SIX.JS ANIMATION ENGINE", duration: 1.8, ease: "none", tweenLength: false });
+      };
+      document.getElementById("btnLength").addEventListener("click", runLength);
 
-        // 4. word-by-word reveal via delimiter: " " - whole words resolve at once, not per letter
-        const runWords = () =>
-          ScrambleText("#wordsText", {
-            text: "six js makes scrambling text easy",
-            duration: 2,
-            ease: "none",
-            delimiter: " ",
-            chars: "lowerCase",
-          });
-        document.getElementById("btnWords").addEventListener("click", runWords);
+      // 4. word-by-word reveal via delimiter: " " - whole words resolve at once, not per letter
+      const runWords = () =>
+        ScrambleText("#wordsText", {
+          text: "six js makes scrambling text easy",
+          duration: 2,
+          ease: "none",
+          delimiter: " ",
+          chars: "lowerCase",
+        });
+      document.getElementById("btnWords").addEventListener("click", runWords);
 
-        // 5. newClass/oldClass - revealed text turns green, still-scrambling text stays dim orange
-        const runClasses = () =>
-          ScrambleText("#classesText", {
-            text: "STYLED REVEAL",
-            duration: 2,
-            ease: "none",
-            newClass: "revealed",
-            oldClass: "scrambling",
-          });
-        runClasses();
-        document.getElementById("btnClasses").addEventListener("click", runClasses);
+      // 5. newClass/oldClass - revealed text turns green, still-scrambling text stays dim orange
+      const runClasses = () =>
+        ScrambleText("#classesText", {
+          text: "STYLED REVEAL",
+          duration: 2,
+          ease: "none",
+          newClass: "revealed",
+          oldClass: "scrambling",
+        });
+      runClasses();
+      document.getElementById("btnClasses").addEventListener("click", runClasses);
 
-        // 6. odometer mode - vertical reels, with a per-character stagger wave landing left-to-right
-        const runOdometer = () => {
-          const score = String(Math.floor(Math.random() * 999999)).padStart(6, "0");
-          ScrambleText("#odometerDigits", {
-            text: score,
-            mode: "odometer",
-            duration: 1.6,
-            ease: "expoOut",
-            chars: "numeric",
-            reelSize: 14,
-            charStagger: 0.06,
-          });
-          ScrambleText("#odometerLetters", {
-            text: ["READY", "SET", "GO!!!", "DONE!"][Math.floor(Math.random() * 4)],
-            mode: "odometer",
-            duration: 1.4,
-            ease: "expoOut",
-            reelSize: 10,
-            charStagger: 0.05,
-          });
-        };
-        runOdometer();
-        document.getElementById("btnOdometer").addEventListener("click", runOdometer);
-      });
+      // 6. odometer mode - vertical reels, with a per-character stagger wave landing left-to-right
+      const runOdometer = () => {
+        const score = String(Math.floor(Math.random() * 999999)).padStart(6, "0");
+        ScrambleText("#odometerDigits", {
+          text: score,
+          mode: "odometer",
+          duration: 1.6,
+          ease: "expoOut",
+          chars: "numeric",
+          reelSize: 14,
+          charStagger: 0.06,
+        });
+        ScrambleText("#odometerLetters", {
+          text: ["READY", "SET", "GO!!!", "DONE!"][Math.floor(Math.random() * 4)],
+          mode: "odometer",
+          duration: 1.4,
+          ease: "expoOut",
+          reelSize: 10,
+          charStagger: 0.05,
+        });
+      };
+      runOdometer();
+      document.getElementById("btnOdometer").addEventListener("click", runOdometer);
     </script>
   </body>
 </html>

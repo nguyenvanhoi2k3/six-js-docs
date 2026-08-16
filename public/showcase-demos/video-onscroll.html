@@ -46,29 +46,27 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        new SmoothScroll();
+      new SmoothScroll();
 
-        const video = six.utils.getById("video");
+      const video = six.utils.getById("video");
 
-        function initScrub() {
-          six.to(video, {
-            currentTime: video.duration,
-            onScroll: {
-              sticky: true,
-              sync: 0.6,
-              start: "top top",
-              end: "+=4000", // càng nhỏ tween chạy càng nhanh
-            },
-          });
-        }
+      function initScrub() {
+        six.to(video, {
+          currentTime: video.duration,
+          onScroll: {
+            sticky: true,
+            sync: 0.6,
+            start: "top top",
+            end: "+=4000", // càng nhỏ tween chạy càng nhanh
+          },
+        });
+      }
 
-        if (video.readyState >= 1) {
-          initScrub();
-        } else {
-          video.addEventListener("loadedmetadata", initScrub, { once: true });
-        }
-      });
+      if (video.readyState >= 1) {
+        initScrub();
+      } else {
+        video.addEventListener("loadedmetadata", initScrub, { once: true });
+      }
     </script>
   </body>
 </html>

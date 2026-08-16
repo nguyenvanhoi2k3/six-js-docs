@@ -64,31 +64,29 @@
       import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
       import { Burst } from "https://unpkg.com/@six-js/core@latest/dist/Burst.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const heroText = document.getElementById("heroText");
+      const heroText = document.getElementById("heroText");
 
-        six.to(heroText, {
-          y: 0,
-          duration: 1.3,
-          ease: "bounceOut",
-          // sau khi đi vào màn hình
-          onComplete: () => {
-            const heroCharSplit = new SplitText(heroText, {
-              type: "chars",
-              charsClass: "hero-char",
-            });
+      six.to(heroText, {
+        y: 0,
+        duration: 1.3,
+        ease: "bounceOut",
+        // sau khi đi vào màn hình
+        onComplete: () => {
+          const heroCharSplit = new SplitText(heroText, {
+            type: "chars",
+            charsClass: "hero-char",
+          });
 
-            Burst(heroText, {
-              targets: heroCharSplit.chars, // các phần tử sẽ bị tách nhỏ và bắn ra
-              spread: [-45, 45], // khoảng góc bắn từ -45deg -> 45deg
-              power: [460, 600], // tốc độ bắn ban đầu
-              gravity: 1200, // gia tốc trọng lực kéo các mảnh rơi xuống
-              duration: [1, 1.8], // khoảng thời gian tồn tại của mỗi mảnh trước khi biến mất, đơn vị giây
-              rotationSpeed: [-100, 100], // khoảng tốc độ xoay khi đang bay, đơn vị độ/s
-              stagger: 0.01, // độ trễ giữa lần bắn của mỗi mảnh, đơn vị giây
-            });
-          },
-        });
+          Burst(heroText, {
+            targets: heroCharSplit.chars, // các phần tử sẽ bị tách nhỏ và bắn ra
+            spread: [-45, 45], // khoảng góc bắn từ -45deg -> 45deg
+            power: [460, 600], // tốc độ bắn ban đầu
+            gravity: 1200, // gia tốc trọng lực kéo các mảnh rơi xuống
+            duration: [1, 1.8], // khoảng thời gian tồn tại của mỗi mảnh trước khi biến mất, đơn vị giây
+            rotationSpeed: [-100, 100], // khoảng tốc độ xoay khi đang bay, đơn vị độ/s
+            stagger: 0.01, // độ trễ giữa lần bắn của mỗi mảnh, đơn vị giây
+          });
+        },
       });
     </script>
   </body>

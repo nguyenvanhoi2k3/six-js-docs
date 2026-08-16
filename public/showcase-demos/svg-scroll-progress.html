@@ -139,29 +139,27 @@
       import { OnScroll } from "https://unpkg.com/@six-js/core@latest/dist/OnScroll.js";
       import { SvgMotion } from "https://unpkg.com/@six-js/core@latest/dist/SvgMotion.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const progressDraw = SvgMotion("#progress-fill", {
-          mode: "draw",
-          ease: "none",
-        });
+      const progressDraw = SvgMotion("#progress-fill", {
+        mode: "draw",
+        ease: "none",
+      });
 
-        const label = document.getElementById("progress-label");
+      const label = document.getElementById("progress-label");
 
-        // vẽ ring svg sync onscroll
-        OnScroll.create({
-          animation: progressDraw,
-          trigger: document.body,
-          start: "top top",
-          end: "bottom bottom",
-          sync: true,
-          onUpdate: (self) => {
-            label.textContent = `${Math.round(self.progress() * 100)}%`;
-          },
-        });
+      // vẽ ring svg sync onscroll
+      OnScroll.create({
+        animation: progressDraw,
+        trigger: document.body,
+        start: "top top",
+        end: "bottom bottom",
+        sync: true,
+        onUpdate: (self) => {
+          label.textContent = `${Math.round(self.progress() * 100)}%`;
+        },
+      });
 
-        document.getElementById("progress-ring").addEventListener("click", () => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
+      document.getElementById("progress-ring").addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
     </script>
   </body>

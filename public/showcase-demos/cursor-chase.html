@@ -76,19 +76,17 @@
     <script type="module">
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const cursor = document.querySelector("svg");
+      const cursor = document.querySelector("svg");
 
-        window.addEventListener("pointermove", (e) => {
-          six.to(cursor, {
-            x: e.clientX,
-            y: e.clientY,
-            duration: 0.2,
-            ease: "quadOut",
-            onStart: () => {
-              six.set(cursor, { opacity: 1 });
-            },
-          });
+      window.addEventListener("pointermove", (e) => {
+        six.to(cursor, {
+          x: e.clientX,
+          y: e.clientY,
+          duration: 0.2,
+          ease: "quadOut",
+          onStart: () => {
+            six.set(cursor, { opacity: 1 });
+          },
         });
       });
     </script>

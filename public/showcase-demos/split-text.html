@@ -281,102 +281,100 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        // 1. hero: chars stagger up, words fade/skew in behind them
-        const heroSplit = new SplitText("#heroTitle", {
-          type: "words, chars, lines",
-          wordsClass: "word",
-          charsClass: "char",
-        });
+      // 1. hero: chars stagger up, words fade/skew in behind them
+      const heroSplit = new SplitText("#heroTitle", {
+        type: "words, chars, lines",
+        wordsClass: "word",
+        charsClass: "char",
+      });
 
-        six.set(heroSplit.chars, { opacity: 0, y: 100, rotate: 10 });
-        six.to(heroSplit.chars, {
-          opacity: 1,
-          y: 0,
-          rotate: 0,
-          duration: 1,
-          stagger: 0.035,
-          ease: "backOut",
-        });
+      six.set(heroSplit.chars, { opacity: 0, y: 100, rotate: 10 });
+      six.to(heroSplit.chars, {
+        opacity: 1,
+        y: 0,
+        rotate: 0,
+        duration: 1,
+        stagger: 0.035,
+        ease: "backOut",
+      });
 
-        // 2. overflow mask reveal, staggered by line
-        const revealSplit = new SplitText("#revealText", {
-          type: "lines",
-          linesClass: "line",
-          overflow: true,
-        });
+      // 2. overflow mask reveal, staggered by line
+      const revealSplit = new SplitText("#revealText", {
+        type: "lines",
+        linesClass: "line",
+        overflow: true,
+      });
 
-        six.from(revealSplit.lines, {
-          y: "120%",
-          duration: 1,
-          stagger: 0.15,
-          ease: "expoOut",
-        });
+      six.from(revealSplit.lines, {
+        y: "120%",
+        duration: 1,
+        stagger: 0.15,
+        ease: "expoOut",
+      });
 
-        // 3. skip - the star rating icon is never shredded into chars/words
-        const skipSplit = new SplitText("#skipText", {
-          type: "words",
-          wordsClass: "word",
-          skip: document.querySelector("#skipText .icon"),
-        });
-        six.from(skipSplit.words, {
-          opacity: 0,
-          y: 20,
-          duration: 0.6,
-          stagger: 0.04,
-        });
+      // 3. skip - the star rating icon is never shredded into chars/words
+      const skipSplit = new SplitText("#skipText", {
+        type: "words",
+        wordsClass: "word",
+        skip: document.querySelector("#skipText .icon"),
+      });
+      six.from(skipSplit.words, {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
+        stagger: 0.04,
+      });
 
-        document.getElementById("ariaReadout").textContent =
-          `container aria-label: "${document.getElementById("skipText").getAttribute("aria-label")}"\n` +
-          `first word aria-hidden: ${skipSplit.words[0].getAttribute("aria-hidden")}`;
+      document.getElementById("ariaReadout").textContent =
+        `container aria-label: "${document.getElementById("skipText").getAttribute("aria-label")}"\n` +
+        `first word aria-hidden: ${skipSplit.words[0].getAttribute("aria-hidden")}`;
 
-        // 4. lifecycle playground
-        let lifecycleSplit = new SplitText("#lifecycleText", {
-          type: "words",
-          wordsClass: "word",
-        });
+      // 4. lifecycle playground
+      let lifecycleSplit = new SplitText("#lifecycleText", {
+        type: "words",
+        wordsClass: "word",
+      });
+      six.from(lifecycleSplit.words, {
+        opacity: 0,
+        y: 15,
+        duration: 0.5,
+        stagger: 0.03,
+      });
+
+      const status = document.getElementById("status");
+      const setStatus = (msg) => (status.textContent = msg);
+      setStatus(`split - ${lifecycleSplit.words.length} words`);
+
+      document.getElementById("btnRevert").addEventListener("click", () => {
+        lifecycleSplit.revert();
+        setStatus("reverted - original HTML restored, still re-splittable");
+      });
+
+      document.getElementById("btnSplit").addEventListener("click", () => {
+        lifecycleSplit.split();
         six.from(lifecycleSplit.words, {
           opacity: 0,
           y: 15,
           duration: 0.5,
           stagger: 0.03,
         });
+        setStatus(`split again - ${lifecycleSplit.words.length} words`);
+      });
 
-        const status = document.getElementById("status");
-        const setStatus = (msg) => (status.textContent = msg);
-        setStatus(`split - ${lifecycleSplit.words.length} words`);
+      document.getElementById("btnKill").addEventListener("click", () => {
+        lifecycleSplit.kill();
+        setStatus("killed - reverted permanently, split() would now throw");
+      });
 
-        document.getElementById("btnRevert").addEventListener("click", () => {
-          lifecycleSplit.revert();
-          setStatus("reverted - original HTML restored, still re-splittable");
-        });
-
-        document.getElementById("btnSplit").addEventListener("click", () => {
-          lifecycleSplit.split();
-          six.from(lifecycleSplit.words, {
-            opacity: 0,
-            y: 15,
-            duration: 0.5,
-            stagger: 0.03,
-          });
-          setStatus(`split again - ${lifecycleSplit.words.length} words`);
-        });
-
-        document.getElementById("btnKill").addEventListener("click", () => {
-          lifecycleSplit.kill();
-          setStatus("killed - reverted permanently, split() would now throw");
-        });
-
-        // 5. autoSplit on resize (hidden, always on for line splits) - onSplit fires on every
-        // re-split, including the internal debounced one triggered by the resize watcher, so this
-        // readout stays in sync without a second, independently-timed observer of its own.
-        const lineCount = document.getElementById("lineCount");
-        const resizeSplit = new SplitText("#resizeText", {
-          type: "lines",
-          linesClass: "line",
-          onSplit: (self) =>
-            (lineCount.textContent = `${self.lines.length} line(s)`),
-        });
+      // 5. autoSplit on resize (hidden, always on for line splits) - onSplit fires on every
+      // re-split, including the internal debounced one triggered by the resize watcher, so this
+      // readout stays in sync without a second, independently-timed observer of its own.
+      const lineCount = document.getElementById("lineCount");
+      const resizeSplit = new SplitText("#resizeText", {
+        type: "lines",
+        linesClass: "line",
+        onSplit: (self) =>
+          (lineCount.textContent = `${self.lines.length} line(s)`),
       });
     </script>
   </body>

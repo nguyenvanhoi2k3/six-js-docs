@@ -109,27 +109,25 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        new SmoothScroll();
-        const list = six.utils.arrayOf(".parallax-container");
-        list.forEach((container) => {
-          const img = container.querySelector("img");
+      new SmoothScroll();
+      const list = six.utils.arrayOf(".parallax-container");
+      list.forEach((container) => {
+        const img = container.querySelector("img");
 
-          six.fromTo(
-            img,
-            { y: "-20%" },
-            {
-              y: "20%",
-              ease: "none",
-              onScroll: {
-                trigger: container,
-                start: "top bottom",
-                end: "bottom top",
-                sync: true,
-              },
+        six.fromTo(
+          img,
+          { y: "-20%" },
+          {
+            y: "20%",
+            ease: "none",
+            onScroll: {
+              trigger: container,
+              start: "top bottom",
+              end: "bottom top",
+              sync: true,
             },
-          );
-        });
+          },
+        );
       });
     </script>
   </body>

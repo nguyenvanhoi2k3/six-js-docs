@@ -285,12 +285,10 @@ body {
     <script type="module">
       import { Parallax } from "https://unpkg.com/@six-js/core@latest/dist/Parallax.js";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        // strength is per-element via sx-parallax-strength above; vars.strength here is only the
-        // fallback for a .layer with no attribute of its own (none in this demo, but shown for
-        // completeness).
-        Parallax(".layer", { strength: 30, lerp: 0.08 });
-      });
+      // strength is per-element via sx-parallax-strength above; vars.strength here is only the
+      // fallback for a .layer with no attribute of its own (none in this demo, but shown for
+      // completeness).
+      Parallax(".layer", { strength: 30, lerp: 0.08 });
     </script>
   </body>
 </html>
