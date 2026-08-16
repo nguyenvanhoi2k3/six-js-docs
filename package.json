@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@six-js/core": "^0.0.40",
     "prismjs": "^1.30.0"
   },
   "devDependencies": {
