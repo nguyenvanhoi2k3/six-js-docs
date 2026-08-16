@@ -157,80 +157,82 @@
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
       import { Watcher } from "https://unpkg.com/@six-js/core@latest/dist/Watcher.js";
       import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
+      document.addEventListener("DOMContentLoaded", () => {
+        new SmoothScroll();
 
-      new SmoothScroll();
+        const img = document.querySelector(".img");
+        const stickyContainer = document.querySelector(".container");
 
-      const img = document.querySelector(".img");
-      const stickyContainer = document.querySelector(".container");
-
-      // image crop
-      six.fromTo(
-        img,
-        { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) " },
-        {
-          clipPath: "polygon(30% 20%, 70% 20%, 70% 80%, 30% 80%)",
-          ease: "none",
-          onScroll: {
-            trigger: stickyContainer,
-            start: "top top",
-            end: () => `+=${window.innerHeight}`,
-            sync: true,
+        // image crop
+        six.fromTo(
+          img,
+          { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) " },
+          {
+            clipPath: "polygon(30% 20%, 70% 20%, 70% 80%, 30% 80%)",
+            ease: "none",
+            onScroll: {
+              trigger: stickyContainer,
+              start: "top top",
+              end: () => `+=${window.innerHeight}`,
+              sync: true,
+            },
           },
-        },
-      );
+        );
 
-      // marquee
-      const track1 = document.querySelector("#marqueeTrack1");
-      const track2 = document.querySelector("#marqueeTrack2");
+        // marquee
+        const track1 = document.querySelector("#marqueeTrack1");
+        const track2 = document.querySelector("#marqueeTrack2");
 
-      const marqueeTween1 = six.to(track1, {
-        x: "-50%",
-        duration: 16,
-        ease: "none",
-        repeat: -1,
-      });
-
-      const marqueeTween2 = six
-        .to(track2, {
+        const marqueeTween1 = six.to(track1, {
           x: "-50%",
           duration: 16,
           ease: "none",
           repeat: -1,
-        })
-        .speed(-1);
+        });
 
-      // change marquee direction|speed on scroll
-      Watcher({
-        type: "wheel,scroll",
-        onDown: (self) => {
-          const speed = 1 + Math.abs(self.velocityY) * 0.002;
-          marqueeTween1.speed(speed);
-          marqueeTween2.speed(-speed);
-        },
-        onUp: (self) => {
-          const speed = 1 + Math.abs(self.velocityY) * 0.002;
-          marqueeTween1.speed(-speed);
-          marqueeTween2.speed(speed);
-        },
-        onStop: () => {
-          marqueeTween1.speed(1);
-          marqueeTween2.speed(-1);
-        },
-      });
+        const marqueeTween2 = six
+          .to(track2, {
+            x: "-50%",
+            duration: 16,
+            ease: "none",
+            repeat: -1,
+          })
+          .speed(-1);
 
-      const split = new SplitText(".text", {
-        type: "lines",
-        overflow: "lines",
-      });
-      six.from(split.lines, {
-        opacity: 0,
-        y: 60,
-        ease: "quadOut",
-        duration: 0.6,
-        stagger: 0.07,
-        onScroll: {
-          start: "top 80%",
-        },
+        // change marquee direction|speed on scroll
+        Watcher({
+          type: "wheel,scroll",
+          onDown: (self) => {
+            const speed = 1 + Math.abs(self.velocityY) * 0.002;
+            marqueeTween1.speed(speed);
+            marqueeTween2.speed(-speed);
+          },
+          onUp: (self) => {
+            const speed = 1 + Math.abs(self.velocityY) * 0.002;
+            marqueeTween1.speed(-speed);
+            marqueeTween2.speed(speed);
+          },
+          onStop: () => {
+            marqueeTween1.speed(1);
+            marqueeTween2.speed(-1);
+          },
+        });
+
+        // split text
+        const split = new SplitText(".text", {
+          type: "lines",
+          overflow: "lines",
+        });
+        six.from(split.lines, {
+          opacity: 0,
+          y: 60,
+          ease: "quadOut",
+          duration: 0.6,
+          stagger: 0.07,
+          onScroll: {
+            start: "top 80%",
+          },
+        });
       });
     </script>
   </body>
