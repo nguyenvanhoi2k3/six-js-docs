@@ -1,4 +1,5 @@
 import { Burst } from "@six-js/core/Burst";
+import { Watcher } from "@six-js/core/Watcher";
 import type { ContentMap } from "../../layout/section-router/content-types";
 import { attrsTable, codeBlock } from "../shared";
 import { h, Fragment } from "../../jsx";
@@ -602,6 +603,113 @@ Parallax(".layer", { strength: 30, lerp: 0.1 });`,
       </>
     ),
     demoUrl: PARALLAX_DEMO_URL,
+  },
+
+  "watcher/overview": {
+    eyebrow: "Plugins",
+    title: "Watcher",
+    lead: "Theo dõi hướng, delta và tốc độ của thao tác lăn chuột (wheel) và cuộn trang (scroll) — dùng làm input để lái animation khác, vd đổi hướng/tốc độ marquee theo tốc độ cuộn.",
+    render: () => (
+      <>
+        <div class="content-pane__panel">
+          <div data-watcher-demo style="height:220px;width:100%;overflow-y:auto;border:1px solid var(--border);border-radius:8px;position:relative;">
+            <div style="height:640px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;padding:0 16px;">
+              Cuộn hoặc lăn chuột bên trong khung này ⬇
+            </div>
+          </div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted);">
+            <span>
+              Hướng: <strong data-watcher-direction style="color:var(--accent)">—</strong>
+            </span>
+            <span>
+              deltaY: <strong data-watcher-deltay style="color:var(--accent)">0</strong>
+            </span>
+            <span>
+              velocityY: <strong data-watcher-velocityy style="color:var(--accent)">0</strong> px/s
+            </span>
+          </div>
+        </div>
+
+        {codeBlock(
+          `import { Watcher } from "@six-js/core/Watcher";
+
+Watcher({
+  target: scrollContainer, // mặc định window
+  onDown: (self) => console.log("cuộn xuống", self.velocityY),
+  onUp: (self) => console.log("cuộn lên", self.velocityY),
+  onStop: () => console.log("đã dừng cuộn"),
+});`,
+          "js",
+        )}
+
+        <p>
+          <span class="c-accent">Watcher(vars)</span> lắng nghe cả <code>wheel</code> lẫn <code>scroll</code> trên cùng một <code>target</code> (mặc định <code>window</code>), gộp lại thành một luồng
+          delta/velocity/hướng duy nhất — không cần tự phân biệt 2 nguồn sự kiện này.
+        </p>
+        <p class="note">
+          Tự <code>enable()</code> ngay khi tạo (giống <code>Parallax</code>/<code>Burst</code>) — gọi <code>.disable()</code>/<code>.kill()</code> để tạm dừng. Trả về{" "}
+          <span class="c-accent">WatcherController</span>; xem toàn bộ callback và property tại trang <a href="#watcher/options">Options</a>.
+        </p>
+      </>
+    ),
+    init: (root) => {
+      const container = root.querySelector<HTMLElement>("[data-watcher-demo]")!;
+      const directionEl = root.querySelector<HTMLElement>("[data-watcher-direction]")!;
+      const deltaYEl = root.querySelector<HTMLElement>("[data-watcher-deltay]")!;
+      const velocityYEl = root.querySelector<HTMLElement>("[data-watcher-velocityy]")!;
+
+      Watcher({
+        target: container,
+        onDown: () => (directionEl.textContent = "↓ xuống"),
+        onUp: () => (directionEl.textContent = "↑ lên"),
+        onChangeY: (self) => {
+          deltaYEl.textContent = self.deltaY.toFixed(1);
+          velocityYEl.textContent = Math.abs(self.velocityY).toFixed(0);
+        },
+        onStop: () => {
+          directionEl.textContent = "—";
+          velocityYEl.textContent = "0";
+        },
+      });
+    },
+  },
+
+  "watcher/options": {
+    eyebrow: "Plugins",
+    title: "Options",
+    lead: "WatcherVars — object truyền vào Watcher(vars).",
+    render: () => (
+      <>
+        {attrsTable([
+          ["target", "Window (mặc định) hoặc một Element/selector cuộn được cần theo dõi", "Window | Element | string", "window"],
+          ["type", 'nguồn input cần theo dõi, phân tách bởi dấu phẩy — v1 chỉ nhận "wheel" và "scroll"', '"wheel" | "scroll" | "wheel,scroll"', '"wheel,scroll"'],
+          ["tolerance", "ngưỡng |delta| tối thiểu trước khi các callback thay đổi được bắn", "—", "1e-9"],
+          ["wheelSpeed / scrollSpeed", "hệ số nhân riêng cho delta đến từ wheel / từ vị trí cuộn", "—", "1"],
+          ["onStopDelay", "số giây im lặng trước khi onStop bắn (và velocity reset về 0)", "—", "0.25"],
+          ["onUp / onDown / onLeft / onRight", "callback(self) theo đúng hướng vừa đổi (trục Y cho lên/xuống, trục X cho trái/phải)", "—", "—"],
+          ["onChange", "callback(self, deltaX, deltaY) mỗi khi có delta mới trên bất kỳ trục nào", "—", "—"],
+          ["onChangeX / onChangeY", "callback(self) khi riêng trục X / trục Y đổi", "—", "—"],
+          ["onWheel", "callback(self) mỗi khi có sự kiện wheel", "—", "—"],
+          ["onStop", "callback(self) bắn một lần sau onStopDelay giây không có input mới", "—", "—"],
+          ["onEnable / onDisable", "callback(self) khi enable()/disable() được gọi", "—", "—"],
+          ["id", "nhãn tuỳ ý, không ảnh hưởng hành vi — tiện phân biệt khi có nhiều Watcher cùng lúc", "—", "—"],
+        ])}
+
+        <h2>Instance</h2>
+        {attrsTable([
+          [".deltaX / .deltaY", "delta đã gộp (wheel + scroll) của lần cập nhật gần nhất", "—"],
+          [".velocityX / .velocityY", "tốc độ hiện tại (px/giây theo mỗi trục)", "—"],
+          [".isEnabled", "boolean — đang lắng nghe hay đã disable()", "—"],
+          [".enable() / .disable()", "bật lại / tạm ngưng lắng nghe (giữ nguyên instance, gọi enable() lại được)", "—"],
+          [".kill()", "alias của disable() — cùng interface Killable với Tween/Timeline/SplitText", "—"],
+        ])}
+
+        <p class="note">
+          Wheel và scroll xảy ra trong cùng một lần cập nhật (vd một sự kiện wheel và scroll event mà chính nó gây ra) không bị cộng dồn đè lên nhau — giá trị delta lớn hơn giữa 2 nguồn được dùng cho
+          lần đó.
+        </p>
+      </>
+    ),
   },
 };
 

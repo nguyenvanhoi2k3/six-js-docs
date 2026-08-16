@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zigzag Gallery Parallax demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      html,
+      body {
+        background-color: #0a0d14;
+        color: #e1dcc9;
+      }
+      .space {
+        height: 100vh;
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .hero {
+        min-height: 40vh;
+      }
+
+      .gallery {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 6vw;
+        display: flex;
+        flex-direction: column;
+        gap: 14vh;
+        margin-bottom: 15vh;
+      }
+
+      .parallax-container {
+        width: 60%;
+        height: 65vh;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+      }
+      .parallax-container:nth-child(odd) {
+        margin-right: auto;
+      }
+      .parallax-container:nth-child(even) {
+        margin-left: auto;
+      }
+
+      .parallax-container img {
+        position: absolute;
+        top: -10%;
+        left: 0;
+        width: 100%;
+        height: 120%;
+        object-fit: cover;
+        display: block;
+      }
+
+      @media (max-width: 760px) {
+        .parallax-container {
+          width: 100%;
+          height: 55vh;
+          margin: 0 !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="hero flex-center">Scroll down</section>
+
+    <div class="gallery">
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image1.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image2.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image3.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image4.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image5.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image6.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image7.jpg" alt="" />
+      </div>
+      <div class="parallax-container">
+        <img src="./zigzag-gallery-parallax/image8.jpg" alt="" />
+      </div>
+    </div>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+
+      new SmoothScroll();
+      const list = six.utils.arrayOf(".parallax-container");
+      list.forEach((container) => {
+        const img = container.querySelector("img");
+
+        six.fromTo(
+          img,
+          { y: "-20%" },
+          {
+            y: "20%",
+            ease: "none",
+            onScroll: {
+              trigger: container,
+              start: "top bottom",
+              end: "bottom top",
+              sync: true,
+            },
+          },
+        );
+      });
+    </script>
+  </body>
+</html>

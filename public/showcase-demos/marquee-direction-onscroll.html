@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marquee Direction Onscroll demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      html,
+      body {
+        background-color: #0a0d14;
+        color: #e1dcc9;
+      }
+      .space {
+        height: 100vh;
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        position: relative;
+        height: 200vh;
+      }
+
+      .img {
+        z-index: 1;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      .marquee-stack {
+        overflow: hidden;
+        padding-block: 5vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .marquee {
+        width: 110vw;
+        margin-left: -5vw;
+        overflow: hidden;
+        background-color: #5e1414;
+        padding: 30px 0;
+        transform: rotate(-3deg);
+        color: #fff1d1;
+      }
+
+      .marquee--reverse {
+        transform: rotate(3deg);
+        margin-top: 4rem;
+        background-color: #9a8687;
+        color: #f8edea;
+      }
+
+      .marquee__track {
+        display: flex;
+        width: max-content;
+        will-change: transform;
+      }
+
+      .marquee__group {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: 60px;
+        padding-right: 60px;
+      }
+
+      .marquee__part {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-size: 100px;
+        font-weight: 800;
+      }
+
+      .text {
+        font-size: 50px;
+        max-width: 70rem;
+        text-align: center;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <img class="img" src="./marquee-direction-onscroll/image9.jpg" alt="" />
+      <div class="marquee-stack">
+        <div class="marquee">
+          <div class="marquee__track" id="marqueeTrack1">
+            <!-- GROUP 1 -->
+            <div class="marquee__group">
+              <div class="marquee__part">SIX.JS</div>
+              <div class="marquee__part">ANIMATION</div>
+              <div class="marquee__part">LIBRARY</div>
+              <div class="marquee__part">SIX.JS</div>
+            </div>
+
+            <!-- GROUP 2 — exact duplicate -->
+            <div class="marquee__group" aria-hidden="true">
+              <div class="marquee__part">SIX.JS</div>
+              <div class="marquee__part">ANIMATION</div>
+              <div class="marquee__part">LIBRARY</div>
+              <div class="marquee__part">SIX.JS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="marquee marquee--reverse">
+          <div class="marquee__track" id="marqueeTrack2">
+            <!-- GROUP 1 -->
+            <div class="marquee__group">
+              <div class="marquee__part">SIX.JS</div>
+              <div class="marquee__part">ANIMATION</div>
+              <div class="marquee__part">LIBRARY</div>
+              <div class="marquee__part">SIX.JS</div>
+            </div>
+
+            <!-- GROUP 2 — exact duplicate -->
+            <div class="marquee__group" aria-hidden="true">
+              <div class="marquee__part">SIX.JS</div>
+              <div class="marquee__part">ANIMATION</div>
+              <div class="marquee__part">LIBRARY</div>
+              <div class="marquee__part">SIX.JS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space flex-center">
+      <div class="text">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod dicta
+        officiis repellendus veritatis asperiores repudiandae aperiam delectus
+        porro quas consequuntur?
+      </div>
+    </div>
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+      import { Watcher } from "https://unpkg.com/@six-js/core@latest/dist/Watcher.js";
+      import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
+
+      new SmoothScroll();
+
+      const img = document.querySelector(".img");
+      const stickyContainer = document.querySelector(".container");
+
+      // image crop
+      six.fromTo(
+        img,
+        { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%) " },
+        {
+          clipPath: "polygon(30% 20%, 70% 20%, 70% 80%, 30% 80%)",
+          ease: "none",
+          onScroll: {
+            trigger: stickyContainer,
+            start: "top top",
+            end: () => `+=${window.innerHeight}`,
+            sync: true,
+          },
+        },
+      );
+
+      // marquee
+      const track1 = document.querySelector("#marqueeTrack1");
+      const track2 = document.querySelector("#marqueeTrack2");
+
+      const marqueeTween1 = six.to(track1, {
+        x: "-50%",
+        duration: 16,
+        ease: "none",
+        repeat: -1,
+      });
+
+      const marqueeTween2 = six
+        .to(track2, {
+          x: "-50%",
+          duration: 16,
+          ease: "none",
+          repeat: -1,
+        })
+        .speed(-1);
+
+      // change marquee direction|speed on scroll
+      Watcher({
+        type: "wheel,scroll",
+        onDown: (self) => {
+          const speed = 1 + Math.abs(self.velocityY) * 0.002;
+          marqueeTween1.speed(speed);
+          marqueeTween2.speed(-speed);
+        },
+        onUp: (self) => {
+          const speed = 1 + Math.abs(self.velocityY) * 0.002;
+          marqueeTween1.speed(-speed);
+          marqueeTween2.speed(speed);
+        },
+        onStop: () => {
+          marqueeTween1.speed(1);
+          marqueeTween2.speed(-1);
+        },
+      });
+
+      const split = new SplitText(".text", {
+        type: "lines",
+        overflow: "lines",
+      });
+      six.from(split.lines, {
+        opacity: 0,
+        y: 60,
+        ease: "quadOut",
+        duration: 0.6,
+        stagger: 0.07,
+        onScroll: {
+          start: "top 80%",
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -119,6 +119,14 @@ export const pluginsNav: NavGroup[] = [
       { slug: "options", label: "Options" },
     ],
   },
+  {
+    slug: "watcher",
+    label: "Watcher",
+    items: [
+      { slug: "overview", label: "Tổng quan" },
+      { slug: "options", label: "Options" },
+    ],
+  },
 ];
 
 export function findFirstLeaf(nav: NavGroup[]): string {
