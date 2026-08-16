@@ -1,3 +1,3 @@
 # @six-js/core
 
-Documents: [https://nguyenvanhoi2k3.github.io/six-js-docs/installation.html](https://nguyenvanhoi2k3.github.io/six-js-docs/installation.html)
+Documents: [https://six-js-docs.vercel.app/showcase.html](https://six-js-docs.vercel.app/showcase.html)
