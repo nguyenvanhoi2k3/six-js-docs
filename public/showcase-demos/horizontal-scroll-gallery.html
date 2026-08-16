@@ -67,44 +67,46 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
 
-      new SmoothScroll();
+      document.addEventListener("DOMContentLoaded", () => {
+        new SmoothScroll();
 
-      const track = document.querySelector(".gallery-track");
-      const images = track.querySelectorAll("img");
+        const track = document.querySelector(".gallery-track");
+        const images = track.querySelectorAll("img");
 
-      let tween,
-        lastProgress = 0,
-        lastTime = performance.now(),
-        resetTimer;
+        let tween,
+          lastProgress = 0,
+          lastTime = performance.now(),
+          resetTimer;
 
-      tween = six.to(track, {
-        x: -(track.scrollWidth - window.innerWidth),
-        ease: "none",
+        tween = six.to(track, {
+          x: -(track.scrollWidth - window.innerWidth),
+          ease: "none",
 
-        onScroll: {
-          trigger: track,
-          start: "center center",
-          end: 1500,
-          sync: 1,
-          sticky: true,
-        },
+          onScroll: {
+            trigger: track,
+            start: "center center",
+            end: 1500,
+            sync: 1,
+            sticky: true,
+          },
 
-        onUpdate: () => {
-          if (!tween) return;
-          const now = performance.now();
-          const progress = tween.totalProgress();
-          const velocity =
-            (progress - lastProgress) / ((now - lastTime) / 1000 || 1);
-          lastProgress = progress;
-          lastTime = now;
+          onUpdate: () => {
+            if (!tween) return;
+            const now = performance.now();
+            const progress = tween.totalProgress();
+            const velocity =
+              (progress - lastProgress) / ((now - lastTime) / 1000 || 1);
+            lastProgress = progress;
+            lastTime = now;
 
-          six.set(images, { skewX: six.utils.clamp(-14, 14, velocity * 5) });
-          clearTimeout(resetTimer);
-          resetTimer = setTimeout(
-            () => six.to(images, { skewX: 0, duration: 0.6, ease: "quintOut" }),
-            120,
-          );
-        },
+            six.set(images, { skewX: six.utils.clamp(-14, 14, velocity * 5) });
+            clearTimeout(resetTimer);
+            resetTimer = setTimeout(
+              () => six.to(images, { skewX: 0, duration: 0.6, ease: "quintOut" }),
+              120,
+            );
+          },
+        });
       });
     </script>
   </body>

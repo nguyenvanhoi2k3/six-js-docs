@@ -12,7 +12,7 @@ const tweenCommonAttrs = attrsTable([
   ["repeatDelay", "khoảng nghỉ giữa các lần lặp (giây)", "number", "0"],
   ["boomerang", "lặp có đảo chiều (yoyo)", "true | false", "false"],
   ["paused", "tạo tween ở trạng thái tạm dừng, tự .play() sau", "true | false", "false"],
-  ["overwrite", 'huỷ (true) hoặc gỡ đúng property đang trùng ("auto") trên tween khác cùng target', 'true | "auto" | false', "false"],
+  ["overwrite", 'true: huỷ toàn bộ tween cùng target. "auto" chỉ gỡ property trùng, các property khác của tween cũ vẫn chạy tiếp. false: không xử lý gì', 'true | "auto" | false', "false"],
   ["stagger", "khi target khớp nhiều phần tử (xem trang stagger)", "number | { each, from }", "—"],
   ["onScroll", "biến tween thành scroll-driven (xem trang onScroll)", "{ trigger?, container?, start, end, sync, sticky, ... }", "—"],
   ["onStart / onUpdate / onComplete / onRepeat / onReverseComplete", "callback vòng đời", "() => void", "—"],
@@ -23,9 +23,23 @@ const animationLifecycleAttrs = attrsTable([
   [".pause()", "tạm dừng, giữ nguyên vị trí", "—"],
   [".resume()", "chạy tiếp sau pause(), giữ nguyên chiều đang chạy", "—"],
   [".reverse()", "đảo chiều chạy", "—"],
-  [".restart()", "chạy lại từ đầu", "—"],
+  [".restart(includeDelay?)", "chạy lại từ đầu; includeDelay=true thì replay lại cả đoạn delay", "—"],
+  [".paused() / .paused(bool)", "đọc/set trạng thái tạm dừng — nền cho .pause()/.resume()", "—"],
+  [".speed() / .speed(n)", "đọc/set hệ số tốc độ playback — số âm sẽ đảo luôn chiều chạy", "—"],
+  [".reversed() / .reversed(bool)", "đọc/set chiều chạy — set thực chất là đổi dấu speed()", "—"],
   [".seek(t)", "nhảy tới thời điểm t (giây)", "—"],
+  [".time() / .time(t)", "đọc/set thời gian đã trôi trong lần lặp hiện tại (giây, chưa tính delay)", "—"],
+  [".totalTime() / .totalTime(t)", "đọc/set thời gian đã trôi tính cả delay và mọi lần repeat (giây)", "—"],
   [".progress() / .totalProgress()", "đọc/set tiến độ 0–1 của một lần lặp / toàn bộ (kể cả repeat)", "—"],
+  [".duration() / .duration(n)", "đọc/set duration của một lần lặp (giây)", "—"],
+  [".totalDuration() / .totalDuration(n)", "đọc tổng thời lượng (delay + mọi lần repeat); set sẽ tự điều chỉnh speed() để khớp giá trị mới", "—"],
+  [".delay() / .delay(n)", "đọc/set delay (giây)", "—"],
+  [".repeat() / .repeat(n)", "đọc/set số lần lặp lại (-1 = vô hạn)", "—"],
+  [".repeatDelay() / .repeatDelay(n)", "đọc/set khoảng nghỉ giữa các lần lặp (giây)", "—"],
+  [".boomerang() / .boomerang(bool)", "đọc/set chế độ lặp có đảo chiều (yoyo)", "—"],
+  [".startTime() / .startTime(n)", "đọc/set thời điểm bắt đầu trên trục thời gian của timeline cha", "—"],
+  [".endTime()", "thời điểm kết thúc trên trục thời gian của timeline cha", "—"],
+  [".isActive()", "true nếu đang chạy: không paused, còn nằm trong timeline, chưa hết duration", "—"],
   [".kill()", "huỷ, gỡ khỏi ticker", "—"],
   [".on(event, cb) / .off(event, cb)", 'event: "start" | "update" | "complete" | "repeat" | "reverseComplete"', "—"],
 ]);
@@ -64,9 +78,6 @@ six.to(".box", {
         <h2>API vòng đời (Tween / Timeline)</h2>
         {animationLifecycleAttrs}
 
-        <p class="note">
-          <code>true</code> huỷ toàn bộ tween cũ trên target; <code>"auto"</code> chỉ gỡ property trùng, các property khác của tween cũ vẫn chạy tiếp.
-        </p>
         <p>
           Xem những thuộc tính nào animate được và toàn bộ bảng easing tại trang <a href="#tween/properties">Thuộc tính &amp; Easing</a>.
         </p>

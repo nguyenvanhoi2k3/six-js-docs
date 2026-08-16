@@ -444,92 +444,94 @@ body {
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SvgMotion } from "https://unpkg.com/@six-js/core@latest/dist/SvgMotion.js";
 
-      // ---------------- 1. draw ----------------
+      document.addEventListener("DOMContentLoaded", () => {
+        // ---------------- 1. draw ----------------
 
-      const signatureAnim = SvgMotion("#signature-path", {
-        mode: "draw",
-        duration: 2,
-        ease: "sineInOut",
-      });
-      document.getElementById("signature-replay").addEventListener("click", () => {
-        signatureAnim.restart(true);
-      });
+        const signatureAnim = SvgMotion("#signature-path", {
+          mode: "draw",
+          duration: 2,
+          ease: "sineInOut",
+        });
+        document.getElementById("signature-replay").addEventListener("click", () => {
+          signatureAnim.restart(true);
+        });
 
-      const lettersAnim = SvgMotion(".letter", {
-        mode: "draw",
-        duration: 1,
-        ease: "cubicOut",
-        stagger: 0.3,
-      });
-      document.getElementById("letters-replay").addEventListener("click", () => {
-        lettersAnim.restart(true);
-      });
+        const lettersAnim = SvgMotion(".letter", {
+          mode: "draw",
+          duration: 1,
+          ease: "cubicOut",
+          stagger: 0.3,
+        });
+        document.getElementById("letters-replay").addEventListener("click", () => {
+          lettersAnim.restart(true);
+        });
 
-      // looping "comet" segment: a short dash chasing itself around the circle forever, with NO
-      // reset jump at each repeat - `from`/`to` are exactly one full lap apart (100%), so the
-      // window overshoots past 100% and wraps seamlessly (dash offset/array are modular over the
-      // path's own length - see draw.ts's own doc comment on this).
-      SvgMotion("#comet-circle", {
-        mode: "draw",
-        duration: 2.5,
-        ease: "none",
-        from: "0% 15%",
-        to: "100% 115%",
-        repeat: -1,
-      });
+        // looping "comet" segment: a short dash chasing itself around the circle forever, with NO
+        // reset jump at each repeat - `from`/`to` are exactly one full lap apart (100%), so the
+        // window overshoots past 100% and wraps seamlessly (dash offset/array are modular over the
+        // path's own length - see draw.ts's own doc comment on this).
+        SvgMotion("#comet-circle", {
+          mode: "draw",
+          duration: 2.5,
+          ease: "none",
+          from: "0% 15%",
+          to: "100% 115%",
+          repeat: -1,
+        });
 
-      // ---------------- 2. morph ----------------
+        // ---------------- 2. morph ----------------
 
-      // Only one morph should ever be live on #morph-target at a time - killing whichever is
-      // still mid-flight before starting the next one avoids two instances racing to write the
-      // same `d` attribute on the same frame if a button is clicked again before the previous
-      // morph finishes (a real cross-browser scenario, not just a fast-click edge case).
-      let currentMorph = null;
-      function morphTo(toShapeId) {
-        currentMorph?.kill();
-        currentMorph = SvgMotion("#morph-target", { mode: "morph", toShape: toShapeId, duration: 0.9, ease: "cubicInOut" });
-      }
-      document.getElementById("morph-star").addEventListener("click", () => morphTo("#shape-star"));
-      document.getElementById("morph-blob").addEventListener("click", () => morphTo("#shape-blob"));
-      document.getElementById("morph-circle").addEventListener("click", () => morphTo("#shape-circle"));
+        // Only one morph should ever be live on #morph-target at a time - killing whichever is
+        // still mid-flight before starting the next one avoids two instances racing to write the
+        // same `d` attribute on the same frame if a button is clicked again before the previous
+        // morph finishes (a real cross-browser scenario, not just a fast-click edge case).
+        let currentMorph = null;
+        function morphTo(toShapeId) {
+          currentMorph?.kill();
+          currentMorph = SvgMotion("#morph-target", { mode: "morph", toShape: toShapeId, duration: 0.9, ease: "cubicInOut" });
+        }
+        document.getElementById("morph-star").addEventListener("click", () => morphTo("#shape-star"));
+        document.getElementById("morph-blob").addEventListener("click", () => morphTo("#shape-blob"));
+        document.getElementById("morph-circle").addEventListener("click", () => morphTo("#shape-circle"));
 
-      // ---------------- 3. motion path ----------------
+        // ---------------- 3. motion path ----------------
 
-      const plane = SvgMotion(".plane", {
-        mode: "path",
-        path: "#wave-path",
-        duration: 4,
-        ease: "none",
-        repeat: -1,
-        autoRotate: true,
-      });
+        const plane = SvgMotion(".plane", {
+          mode: "path",
+          path: "#wave-path",
+          duration: 4,
+          ease: "none",
+          repeat: -1,
+          autoRotate: true,
+        });
 
-      document.getElementById("plane-play").addEventListener("click", () => plane.play());
-      document.getElementById("plane-pause").addEventListener("click", () => plane.pause());
-      document.getElementById("plane-reverse").addEventListener("click", () => plane.reverse());
-      document.getElementById("plane-restart").addEventListener("click", () => plane.restart(true));
+        document.getElementById("plane-play").addEventListener("click", () => plane.play());
+        document.getElementById("plane-pause").addEventListener("click", () => plane.pause());
+        document.getElementById("plane-reverse").addEventListener("click", () => plane.reverse());
+        document.getElementById("plane-restart").addEventListener("click", () => plane.restart(true));
 
-      // swarm: 5 dots on the same path, staggered, looping
-      SvgMotion(".dot", {
-        mode: "path",
-        path: "#wave-path",
-        duration: 3,
-        ease: "none",
-        repeat: -1,
-        stagger: 0.2,
-      });
+        // swarm: 5 dots on the same path, staggered, looping
+        SvgMotion(".dot", {
+          mode: "path",
+          path: "#wave-path",
+          duration: 3,
+          ease: "none",
+          repeat: -1,
+          stagger: 0.2,
+        });
 
-      // sub-range + boomerang: only the middle 50% of the path, back and forth forever
-      SvgMotion(".pinger", {
-        mode: "path",
-        path: "#wave-path",
-        duration: 1.6,
-        ease: "sineInOut",
-        from: 0.25,
-        to: 0.75,
-        repeat: -1,
-        boomerang: true,
-        autoRotate: true,
+        // sub-range + boomerang: only the middle 50% of the path, back and forth forever
+        SvgMotion(".pinger", {
+          mode: "path",
+          path: "#wave-path",
+          duration: 1.6,
+          ease: "sineInOut",
+          from: 0.25,
+          to: 0.75,
+          repeat: -1,
+          boomerang: true,
+          autoRotate: true,
+        });
       });
     </script>
   </body>

@@ -156,62 +156,64 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { Burst } from "https://unpkg.com/@six-js/core@latest/dist/Burst.js";
 
-      const CART_WIDTH = 340;
-      const CART_MARGIN = 20;
-      const CART_OFFSCREEN = CART_WIDTH + CART_MARGIN + 60;
+      document.addEventListener("DOMContentLoaded", () => {
+        const CART_WIDTH = 340;
+        const CART_MARGIN = 20;
+        const CART_OFFSCREEN = CART_WIDTH + CART_MARGIN + 60;
 
-      const cart = document.getElementById("cart");
-      const openBtn = document.getElementById("open-cart");
-      const closeBtn = document.getElementById("cart-close");
-      const statusEl = document.getElementById("status");
+        const cart = document.getElementById("cart");
+        const openBtn = document.getElementById("open-cart");
+        const closeBtn = document.getElementById("cart-close");
+        const statusEl = document.getElementById("status");
 
-      let falling = false;
-      let openTween = null;
+        let falling = false;
+        let openTween = null;
 
-      function setStatus(text) {
-        statusEl.textContent = `Trạng thái: ${text}`;
-      }
+        function setStatus(text) {
+          statusEl.textContent = `Trạng thái: ${text}`;
+        }
 
-      function resetCartStyle() {
-        cart.style.position = "";
-        cart.style.left = "";
-        cart.style.top = "";
-        cart.style.margin = "";
-        cart.style.pointerEvents = "";
-        cart.style.willChange = "";
-        cart.style.transform = "";
-        cart.style.opacity = "";
-      }
+        function resetCartStyle() {
+          cart.style.position = "";
+          cart.style.left = "";
+          cart.style.top = "";
+          cart.style.margin = "";
+          cart.style.pointerEvents = "";
+          cart.style.willChange = "";
+          cart.style.transform = "";
+          cart.style.opacity = "";
+        }
 
-      six.set(cart, { x: CART_OFFSCREEN });
+        six.set(cart, { x: CART_OFFSCREEN });
 
-      openBtn.addEventListener("click", () => {
-        if (falling) return;
-        openTween?.kill();
-        openTween = six.to(cart, { x: 0, duration: 0.5, ease: "backOut" });
-        setStatus("đang mở");
-      });
+        openBtn.addEventListener("click", () => {
+          if (falling) return;
+          openTween?.kill();
+          openTween = six.to(cart, { x: 0, duration: 0.5, ease: "backOut" });
+          setStatus("đang mở");
+        });
 
-      closeBtn.addEventListener("click", () => {
-        if (falling) return;
-        falling = true;
-        openTween?.kill();
-        openBtn.disabled = true;
-        setStatus("giỏ hàng đang rơi…");
+        closeBtn.addEventListener("click", () => {
+          if (falling) return;
+          falling = true;
+          openTween?.kill();
+          openBtn.disabled = true;
+          setStatus("giỏ hàng đang rơi…");
 
-        Burst(cart, {
-          targets: cart,
-          power: 0,
-          gravity: 2000,
-          rotationSpeed: -6,
-          fade: false,
-          onComplete() {
-            resetCartStyle();
-            six.set(cart, { x: CART_OFFSCREEN });
-            falling = false;
-            openBtn.disabled = false;
-            setStatus("sẵn sàng");
-          },
+          Burst(cart, {
+            targets: cart,
+            power: 0,
+            gravity: 2000,
+            rotationSpeed: -6,
+            fade: false,
+            onComplete() {
+              resetCartStyle();
+              six.set(cart, { x: CART_OFFSCREEN });
+              falling = false;
+              openBtn.disabled = false;
+              setStatus("sẵn sàng");
+            },
+          });
         });
       });
     </script>

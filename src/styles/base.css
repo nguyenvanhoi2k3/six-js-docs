@@ -1173,6 +1173,12 @@ a {
   min-height: 240px;
 }
 
+@media (max-width: 640px) {
+  .showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .showcase-card {
   position: relative;
   aspect-ratio: 16 / 9;

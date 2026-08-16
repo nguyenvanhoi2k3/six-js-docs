@@ -190,43 +190,45 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { Burst } from "https://unpkg.com/@six-js/core@latest/dist/Burst.js";
 
-      const gift = document.getElementById("gift");
-      const lid = document.getElementById("box-lid");
-      const originMarker = document.getElementById("origin-marker");
+      document.addEventListener("DOMContentLoaded", () => {
+        const gift = document.getElementById("gift");
+        const lid = document.getElementById("box-lid");
+        const originMarker = document.getElementById("origin-marker");
 
-      let tl = null;
-      let currentBurst = null;
+        let tl = null;
+        let currentBurst = null;
 
-      function playSequence() {
-        currentBurst?.kill();
-        tl?.kill();
+        function playSequence() {
+          currentBurst?.kill();
+          tl?.kill();
 
-        six.set(gift, { y: -340 });
-        six.set(lid, { rotate: 0, x: 0, y: 0 });
+          six.set(gift, { y: -340 });
+          six.set(lid, { rotate: 0, x: 0, y: 0 });
 
-        tl = six.timeline();
+          tl = six.timeline();
 
-        // 1. fall in and land with a bounce
-        tl.to(gift, { y: 0, duration: 0.9, ease: "bounceOut" })
-          .to(gift, { scaleX: 1.12, scaleY: 0.8, duration: 0.09, ease: "quadOut" })
-          .to(gift, { scaleX: 1, scaleY: 1, duration: 0.3, ease: "backOut" })
-          .to(lid, { rotate: -115, x: -18, y: -22, duration: 0.45, ease: "backOut" }, "+=0.05")
-          .call(() => {
-            currentBurst = Burst(originMarker, {
-              targets: ".confetti-tpl",
-              clone: 28,
-              spread: [-20, 20],
-              power: [620, 800],
-              gravity: 950,
-              scale: [0.6, 1.3],
-              rotationSpeed: [-260, 260],
-              stagger: 0.01,
-            });
-          }, "<");
-      }
+          // 1. fall in and land with a bounce
+          tl.to(gift, { y: 0, duration: 0.9, ease: "bounceOut" })
+            .to(gift, { scaleX: 1.12, scaleY: 0.8, duration: 0.09, ease: "quadOut" })
+            .to(gift, { scaleX: 1, scaleY: 1, duration: 0.3, ease: "backOut" })
+            .to(lid, { rotate: -115, x: -18, y: -22, duration: 0.45, ease: "backOut" }, "+=0.05")
+            .call(() => {
+              currentBurst = Burst(originMarker, {
+                targets: ".confetti-tpl",
+                clone: 28,
+                spread: [-20, 20],
+                power: [620, 800],
+                gravity: 950,
+                scale: [0.6, 1.3],
+                rotationSpeed: [-260, 260],
+                stagger: 0.01,
+              });
+            }, "<");
+        }
 
-      playSequence();
-      document.getElementById("replay").addEventListener("click", playSequence);
+        playSequence();
+        document.getElementById("replay").addEventListener("click", playSequence);
+      });
     </script>
   </body>
 </html>

@@ -119,80 +119,82 @@
     <script type="module">
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
 
-      // ---------------- 1. basic----------------
-      function magneticHover(
-        el,
-        { strength = 0.4, duration = 0.5, releaseDuration = 0.6 } = {},
-      ) {
-        el.addEventListener("pointermove", (e) => {
-          const rect = el.getBoundingClientRect();
+      document.addEventListener("DOMContentLoaded", () => {
+        // ---------------- 1. basic----------------
+        function magneticHover(
+          el,
+          { strength = 0.4, duration = 0.5, releaseDuration = 0.6 } = {},
+        ) {
+          el.addEventListener("pointermove", (e) => {
+            const rect = el.getBoundingClientRect();
+            const relX = e.clientX - (rect.left + rect.width / 2);
+            const relY = e.clientY - (rect.top + rect.height / 2);
+            six.to(el, {
+              x: relX * strength,
+              y: relY * strength,
+              duration,
+              ease: "quadOut",
+            });
+          });
+          el.addEventListener("pointerleave", () => {
+            six.to(el, { x: 0, y: 0, duration: releaseDuration, ease: "elasticOut" });
+          });
+        }
+        magneticHover(document.querySelector(".basic"));
+
+        // ---------------- 2. layered ----------------
+
+        const layeredBtn = document.querySelector(".layered");
+        const layeredContent = layeredBtn.querySelector(".magnetic-content");
+
+        layeredBtn.addEventListener("pointermove", (e) => {
+          const rect = layeredBtn.getBoundingClientRect();
           const relX = e.clientX - (rect.left + rect.width / 2);
           const relY = e.clientY - (rect.top + rect.height / 2);
-          six.to(el, {
-            x: relX * strength,
-            y: relY * strength,
-            duration,
+          six.to(layeredBtn, {
+            x: relX * 0.25,
+            y: relY * 0.25,
+            duration: 0.5,
+            ease: "quadOut",
+          });
+          six.to(layeredContent, {
+            x: relX * 0.5,
+            y: relY * 0.5,
+            duration: 0.5,
             ease: "quadOut",
           });
         });
-        el.addEventListener("pointerleave", () => {
-          six.to(el, { x: 0, y: 0, duration: releaseDuration, ease: "elasticOut" });
+        layeredBtn.addEventListener("pointerleave", () => {
+          six.to(layeredBtn, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
+          six.to(layeredContent, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
         });
-      }
-      magneticHover(document.querySelector(".basic"));
 
-      // ---------------- 2. layered ----------------
+        // ---------------- 3. field ----------------
 
-      const layeredBtn = document.querySelector(".layered");
-      const layeredContent = layeredBtn.querySelector(".magnetic-content");
+        const fieldBtn = document.querySelector(".field");
+        const fieldRadius = Number(fieldBtn.dataset.radius) || 140;
+        let wasInField = false;
 
-      layeredBtn.addEventListener("pointermove", (e) => {
-        const rect = layeredBtn.getBoundingClientRect();
-        const relX = e.clientX - (rect.left + rect.width / 2);
-        const relY = e.clientY - (rect.top + rect.height / 2);
-        six.to(layeredBtn, {
-          x: relX * 0.25,
-          y: relY * 0.25,
-          duration: 0.5,
-          ease: "quadOut",
+        window.addEventListener("pointermove", (e) => {
+          const rect = fieldBtn.getBoundingClientRect();
+          const dx = e.clientX - (rect.left + rect.width / 2);
+          const dy = e.clientY - (rect.top + rect.height / 2);
+          const dist = Math.hypot(dx, dy);
+          const inField = dist < fieldRadius;
+
+          if (inField) {
+            const pull = 1 - dist / fieldRadius;
+            six.to(fieldBtn, {
+              x: dx * pull * 0.8,
+              y: dy * pull * 0.8,
+              duration: 0.4,
+              ease: "quadOut",
+            });
+          } else if (wasInField) {
+            six.to(fieldBtn, { x: 0, y: 0, duration: 0.4, ease: "circOut" });
+          }
+          wasInField = inField;
         });
-        six.to(layeredContent, {
-          x: relX * 0.5,
-          y: relY * 0.5,
-          duration: 0.5,
-          ease: "quadOut",
-        });
-      });
-      layeredBtn.addEventListener("pointerleave", () => {
-        six.to(layeredBtn, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
-        six.to(layeredContent, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
-      });
-
-      // ---------------- 3. field ----------------
-
-      const fieldBtn = document.querySelector(".field");
-      const fieldRadius = Number(fieldBtn.dataset.radius) || 140;
-      let wasInField = false;
-
-      window.addEventListener("pointermove", (e) => {
-        const rect = fieldBtn.getBoundingClientRect();
-        const dx = e.clientX - (rect.left + rect.width / 2);
-        const dy = e.clientY - (rect.top + rect.height / 2);
-        const dist = Math.hypot(dx, dy);
-        const inField = dist < fieldRadius;
-
-        if (inField) {
-          const pull = 1 - dist / fieldRadius;
-          six.to(fieldBtn, {
-            x: dx * pull * 0.8,
-            y: dy * pull * 0.8,
-            duration: 0.4,
-            ease: "quadOut",
-          });
-        } else if (wasInField) {
-          six.to(fieldBtn, { x: 0, y: 0, duration: 0.4, ease: "circOut" });
-        }
-        wasInField = inField;
       });
     </script>
   </body>

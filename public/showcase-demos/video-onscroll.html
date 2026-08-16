@@ -45,27 +45,30 @@
     <script type="module">
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
-      new SmoothScroll();
 
-      const video = six.utils.getById("video");
+      document.addEventListener("DOMContentLoaded", () => {
+        new SmoothScroll();
 
-      function initScrub() {
-        six.to(video, {
-          currentTime: video.duration,
-          onScroll: {
-            sticky: true,
-            sync: 0.6,
-            start: "top top",
-            end: "+=4000", // càng nhỏ tween chạy càng nhanh
-          },
-        });
-      }
+        const video = six.utils.getById("video");
 
-      if (video.readyState >= 1) {
-        initScrub();
-      } else {
-        video.addEventListener("loadedmetadata", initScrub, { once: true });
-      }
+        function initScrub() {
+          six.to(video, {
+            currentTime: video.duration,
+            onScroll: {
+              sticky: true,
+              sync: 0.6,
+              start: "top top",
+              end: "+=4000", // càng nhỏ tween chạy càng nhanh
+            },
+          });
+        }
+
+        if (video.readyState >= 1) {
+          initScrub();
+        } else {
+          video.addEventListener("loadedmetadata", initScrub, { once: true });
+        }
+      });
     </script>
   </body>
 </html>

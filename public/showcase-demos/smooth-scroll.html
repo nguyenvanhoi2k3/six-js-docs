@@ -172,51 +172,53 @@
     <script type="module">
       import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
 
-      // container mặc định là window - lerp làm mượt input wheel bằng giảm chấn liên tục,
-      // không phải easing theo thời lượng cố định (đó là việc của scrollTo({ duration, ease }))
-      const smooth = new SmoothScroll({ lerp: 0.1 });
+      document.addEventListener("DOMContentLoaded", () => {
+        // container mặc định là window - lerp làm mượt input wheel bằng giảm chấn liên tục,
+        // không phải easing theo thời lượng cố định (đó là việc của scrollTo({ duration, ease }))
+        const smooth = new SmoothScroll({ lerp: 0.1 });
 
-      document.getElementById("btnGotoA").addEventListener("click", () => {
-        smooth.scrollTo("#target-a", {
-          duration: 0.8,
-          ease: "expoOut",
-          offset: -80,
+        document.getElementById("btnGotoA").addEventListener("click", () => {
+          smooth.scrollTo("#target-a", {
+            duration: 0.8,
+            ease: "expoOut",
+            offset: -80,
+          });
         });
-      });
-      document.getElementById("btnGotoB").addEventListener("click", () => {
-        smooth.scrollTo("#target-b", {
-          duration: 0.8,
-          ease: "expoOut",
-          offset: -80,
+        document.getElementById("btnGotoB").addEventListener("click", () => {
+          smooth.scrollTo("#target-b", {
+            duration: 0.8,
+            ease: "expoOut",
+            offset: -80,
+          });
         });
-      });
-      document.getElementById("btnGotoC").addEventListener("click", () => {
-        smooth.scrollTo("#target-c", {
-          duration: 0.8,
-          ease: "expoOut",
-          offset: -80,
+        document.getElementById("btnGotoC").addEventListener("click", () => {
+          smooth.scrollTo("#target-c", {
+            duration: 0.8,
+            ease: "expoOut",
+            offset: -80,
+          });
         });
-      });
-      document.getElementById("btnGotoTop").addEventListener("click", () => {
-        smooth.scrollTo("top");
-      });
+        document.getElementById("btnGotoTop").addEventListener("click", () => {
+          smooth.scrollTo("top");
+        });
 
-      const lockBtn = document.getElementById("btnLockToggle");
-      const lockStatus = document.getElementById("lockStatus");
-      let locked = false;
-      lockBtn.addEventListener("click", () => {
-        locked = !locked;
-        if (locked) {
-          smooth.stop();
-          lockStatus.textContent = "Trạng thái: đã khoá - thử lăn chuột xem";
-          lockBtn.textContent = "Mở cuộn";
-          lockBtn.classList.add("is-active");
-        } else {
-          smooth.start();
-          lockStatus.textContent = "Trạng thái: đang mở";
-          lockBtn.textContent = "Khoá cuộn";
-          lockBtn.classList.remove("is-active");
-        }
+        const lockBtn = document.getElementById("btnLockToggle");
+        const lockStatus = document.getElementById("lockStatus");
+        let locked = false;
+        lockBtn.addEventListener("click", () => {
+          locked = !locked;
+          if (locked) {
+            smooth.stop();
+            lockStatus.textContent = "Trạng thái: đã khoá - thử lăn chuột xem";
+            lockBtn.textContent = "Mở cuộn";
+            lockBtn.classList.add("is-active");
+          } else {
+            smooth.start();
+            lockStatus.textContent = "Trạng thái: đang mở";
+            lockBtn.textContent = "Khoá cuộn";
+            lockBtn.classList.remove("is-active");
+          }
+        });
       });
     </script>
   </body>

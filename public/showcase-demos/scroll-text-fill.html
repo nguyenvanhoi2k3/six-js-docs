@@ -61,31 +61,33 @@
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
       import { SplitText } from "https://unpkg.com/@six-js/core@latest/dist/SplitText.js";
 
-      const split = new SplitText("#text", {
-        type: "chars, lines",
-        charsClass: "char",
-        linesClass: "line",
-      });
+      document.addEventListener("DOMContentLoaded", () => {
+        const split = new SplitText("#text", {
+          type: "chars, lines",
+          charsClass: "char",
+          linesClass: "line",
+        });
 
-      six.set(split.chars, { opacity: 0.15 }); // dim by default
+        six.set(split.chars, { opacity: 0.15 }); // dim by default
 
-      const master = six.timeline({
-        onScroll: {
-          trigger: document.getElementById("text"),
-          start: "top 95%",
-          end: "bottom 40%",
-          sync: 0.3,
-        },
-      });
+        const master = six.timeline({
+          onScroll: {
+            trigger: document.getElementById("text"),
+            start: "top 95%",
+            end: "bottom 40%",
+            sync: 0.3,
+          },
+        });
 
-      split.lines.forEach((line) => {
-        const chars = six.utils.arrayOf(line.querySelectorAll(".char"));
-        if (!chars.length) return;
+        split.lines.forEach((line) => {
+          const chars = six.utils.arrayOf(line.querySelectorAll(".char"));
+          if (!chars.length) return;
 
-        master.to(chars, {
-          opacity: 1,
-          ease: "none",
-          stagger: 0.5,
+          master.to(chars, {
+            opacity: 1,
+            ease: "none",
+            stagger: 0.5,
+          });
         });
       });
     </script>
