@@ -137,8 +137,8 @@ export const imageCompare: ComponentDoc = {
         Trên  <span class="c-accent">sx-image-compare</span>, kèm <code>detail.value</code>.
       </p>
       {eventsTable([
-        ["sx-input", "bắn liên tục trong lúc kéo/hover-di chuyển/bấm phím mũi tên — value đang thay đổi"],
-        ["sx-change", "bắn khi thao tác kết thúc (nhả chuột, rời hover, hoặc ngay sau mỗi lần bấm phím) — value đã chốt"],
+        ["sx-input", "được gọi liên tục trong lúc kéo/hover-di chuyển/bấm phím mũi tên — value đang thay đổi"],
+        ["sx-change", "được gọi khi thao tác kết thúc (nhả chuột, rời hover, hoặc ngay sau mỗi lần bấm phím) — value đã chốt"],
       ])}
       <p></p>
       {codeBlock(

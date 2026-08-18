@@ -101,8 +101,8 @@ OnScroll.create({
           ],
           ["debug / id", "debug: vẽ vạch start/end để canh chỉnh. id: gắn nhãn khi có nhiều trigger trên màn hình", "boolean / string", "false / —"],
           ["onEnter / onLeave / onEnterBack / onLeaveBack", "callback theo từng hướng cuộn qua start/end", "(self) => void", "—"],
-          ["onUpdate", "chỉ bắn khi đang ở trong [start, end] (và đúng frame vào/ra)", "(self) => void", "—"],
-          ["onRefresh", "bắn mỗi khi refresh() đo lại vị trí", "(self) => void", "—"],
+          ["onUpdate", "chỉ được gọi khi đang ở trong [start, end] (và đúng frame vào/ra)", "(self) => void", "—"],
+          ["onRefresh", "được gọi mỗi khi refresh() đo lại vị trí", "(self) => void", "—"],
         ])}
 
         <h2>Cú pháp start / end</h2>

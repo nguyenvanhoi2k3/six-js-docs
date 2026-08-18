@@ -125,6 +125,8 @@ export const pluginsNav: NavGroup[] = [
     items: [
       { slug: "overview", label: "Tổng quan" },
       { slug: "options", label: "Options" },
+      { slug: "gestures", label: "Gestures" },
+      { slug: "instance", label: "Instance" },
     ],
   },
 ];

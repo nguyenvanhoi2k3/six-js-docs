@@ -136,19 +136,19 @@ popoverEl.updatePosition();`,
       <h2>sx-popover-trigger</h2>
       {attrsTable([
         ["name", "string — khớp với sx-popover name", "—"],
-        ["trigger", "click | hover | focus | manual (manual: tự mở/đóng bằng JS, trigger chỉ lo aria-*, không tự bắn sự kiện mở/đóng)", "click"],
+        ["trigger", "click | hover | focus | manual (manual: tự mở/đóng bằng JS, trigger chỉ lo aria-*, không tự gọi sự kiện mở/đóng)", "click"],
         ["open-delay", "độ trễ (ms) trước khi mở — chỉ áp dụng trigger=&quot;hover&quot;", "100"],
         ["close-delay", "độ trễ (ms) trước khi đóng — chỉ áp dụng trigger=&quot;hover&quot;, đủ để rê chuột từ trigger qua content không bị đóng giữa chừng", "100"],
       ])}
       <p class="note">Enter/Space luôn toggle được bất kể trigger mode nào — đảm bảo thao tác bàn phím dùng được cả khi trigger đang set hover/focus.</p>
 
       <h2>Event</h2>
-      <p>4 event dưới đây bắn trên chính <span class="c-accent">sx-popover</span></p>
+      <p>4 event dưới đây được gọi trên chính <span class="c-accent">sx-popover</span></p>
       {eventsTable([
-        ["sx-popover-before-open", "bắn NGAY TRƯỚC khi mở (chưa mở) — cancelable, gọi preventDefault() để chặn"],
-        ["sx-popover-after-open", "bắn NGAY SAU khi đã mở xong hẳn"],
-        ["sx-popover-before-close", "bắn NGAY TRƯỚC khi đóng (chưa đóng) — cancelable, gọi preventDefault() để chặn"],
-        ["sx-popover-after-close", "bắn NGAY SAU khi đã đóng xong hẳn"],
+        ["sx-popover-before-open", "được gọi NGAY TRƯỚC khi mở (chưa mở) — cancelable, gọi preventDefault() để chặn"],
+        ["sx-popover-after-open", "được gọi NGAY SAU khi đã mở xong hẳn"],
+        ["sx-popover-before-close", "được gọi NGAY TRƯỚC khi đóng (chưa đóng) — cancelable, gọi preventDefault() để chặn"],
+        ["sx-popover-after-close", "được gọi NGAY SAU khi đã đóng xong hẳn"],
       ])}
       <p></p>
       {codeBlock(
@@ -173,15 +173,15 @@ popoverEl.addEventListener('sx-popover-after-close', () => {
       )}
 
       <p>
-        3 event khác dưới đây <strong>không phải</strong> thông báo trạng thái — mà là <strong>yêu cầu</strong> mở/đóng, bắn trên <span class="c-accent">window</span> (không phải trên popover), mọi{" "}
+        3 event khác dưới đây <strong>không phải</strong> thông báo trạng thái — mà là <strong>yêu cầu</strong> mở/đóng, được gọi trên <span class="c-accent">window</span> (không phải trên popover), mọi{" "}
         <span class="c-accent">sx-popover</span> có <code>name</code> khớp sẽ tự nghe thấy:
       </p>
       {eventsTable([
-        ["sx-popover-toggle", "yêu cầu đảo trạng thái đang có — trigger tự bắn khi trigger=&quot;click&quot; được click"],
-        ["sx-popover-show", "yêu cầu mở — trigger tự bắn khi hover/focus vào"],
-        ["sx-popover-hide", "yêu cầu đóng — trigger tự bắn khi hover/focus rời đi"],
+        ["sx-popover-toggle", "yêu cầu đảo trạng thái đang có — trigger tự gọi khi trigger=&quot;click&quot; được click"],
+        ["sx-popover-show", "yêu cầu mở — trigger tự gọi khi hover/focus vào"],
+        ["sx-popover-hide", "yêu cầu đóng — trigger tự gọi khi hover/focus rời đi"],
       ])}
-      <p>Muốn mở bằng JS không qua trigger thì tự bắn lại đúng event này, kèm theo <code>triggerEl</code> để popover biết định vị theo đâu:</p>
+      <p>Muốn mở bằng JS không qua trigger thì tự gọi lại đúng event này, kèm theo <code>triggerEl</code> để popover biết định vị theo đâu:</p>
       {codeBlock(
         `window.dispatchEvent(new CustomEvent('sx-popover-show', {
   detail: { name: 'menu1', triggerEl: someTriggerElement },
@@ -286,7 +286,7 @@ ${TRIGGER_INPUT_CSS}`,
       js: `const anchor = document.querySelector('sx-popover-trigger[name="manual-popover"]');
 const popoverEl = document.querySelector('sx-popover[name="manual-popover"]');
 
-// Mở: bắn CustomEvent kèm triggerEl để popover biết định vị theo đâu
+// Mở: gọi CustomEvent kèm triggerEl để popover biết định vị theo đâu
 window.dispatchEvent(new CustomEvent('sx-popover-show', {
   detail: { name: 'manual-popover', triggerEl: anchor },
 }));
@@ -316,7 +316,7 @@ popoverEl.toggle();`,
 ${LOG_CSS}`,
       js: `const popoverEl = document.querySelector('sx-popover[name="events-popover"]');
 
-// bắn trên CHÍNH popover (không phải window) — sau khi trạng thái đã thực sự đổi
+// được gọi trên CHÍNH popover (không phải window) — sau khi trạng thái đã thực sự đổi
 popoverEl.addEventListener('sx-popover-before-open', () => console.log('sắp mở'));
 popoverEl.addEventListener('sx-popover-after-open', () => console.log('đã mở xong'));
 popoverEl.addEventListener('sx-popover-before-close', () => console.log('sắp đóng'));

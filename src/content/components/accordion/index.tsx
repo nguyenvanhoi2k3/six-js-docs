@@ -115,13 +115,13 @@ console.log('vừa thao tác mục:', item.value);`,
 
       <h2>Event</h2>
       {eventsTable([
-        ["sx-accordion-before-open", "bắn NGAY TRƯỚC khi mở (chưa mở) — cancelable, gọi preventDefault() để chặn"],
-        ["sx-accordion-after-open", "bắn NGAY SAU khi đã mở xong hẳn"],
-        ["sx-accordion-before-close", "bắn NGAY TRƯỚC khi đóng (chưa đóng) — cancelable, gọi preventDefault() để chặn"],
-        ["sx-accordion-after-close", "bắn NGAY SAU khi đã đóng xong hẳn"],
+        ["sx-accordion-before-open", "được gọi NGAY TRƯỚC khi mở (chưa mở) — cancelable, gọi preventDefault() để chặn"],
+        ["sx-accordion-after-open", "được gọi NGAY SAU khi đã mở xong hẳn"],
+        ["sx-accordion-before-close", "được gọi NGAY TRƯỚC khi đóng (chưa đóng) — cancelable, gọi preventDefault() để chặn"],
+        ["sx-accordion-after-close", "được gọi NGAY SAU khi đã đóng xong hẳn"],
       ])}
       <p>
-        Bắn trên chính <span class="c-accent">sx-accordion-item</span> vừa toggle. Vì có <code>bubbles: true</code> nên chỉ cần gắn listener một lần ở <span class="c-accent">sx-accordion</span> cha (hoặc cả{" "}
+        Được gọi trên chính <span class="c-accent">sx-accordion-item</span> vừa toggle. Vì có <code>bubbles: true</code> nên chỉ cần gắn listener một lần ở <span class="c-accent">sx-accordion</span> cha (hoặc cả{" "}
         <code>document</code>) là bắt được sự kiện từ mọi item bên trong, không cần lặp qua từng item:
       </p>
       {codeBlock(

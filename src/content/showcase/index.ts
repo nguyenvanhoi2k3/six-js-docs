@@ -72,7 +72,7 @@ export const showcaseItems: ShowcaseItem[] = [
     title: "Magnetic Buttons",
     gradient: "linear-gradient(135deg,#a78bfa,#1c1a2b)",
     demoUrl: "showcase-demos/magnetic-button.html",
-    plugins: [],
+    plugins: ["Watcher"],
     thumb: "showcase-thumbs/magnetic-button.jpg",
     thumbVideo: "showcase-thumbs/magnetic-button.mp4",
   },

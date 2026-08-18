@@ -78,7 +78,7 @@ dialogEl.close();  // -> true, hoặc false nếu bị chặn bởi sx-dialog-be
       )}
       <p class="note">
         {" "}
-        Ngoài gọi method trực tiếp, có thể toggle bằng cách bắn <code>window</code> event <span class="c-accent">sx-dialog-toggle</span> với <code>detail: {"{ name }"}</code> — tự mở nếu đang đóng, tự đóng
+        Ngoài gọi method trực tiếp, có thể toggle bằng cách gọi <code>window</code> event <span class="c-accent">sx-dialog-toggle</span> với <code>detail: {"{ name }"}</code> — tự mở nếu đang đóng, tự đóng
         nếu đang mở, giống hệt cơ chế bên trong <span class="c-accent">sx-dialog-trigger</span>.
       </p>
 
@@ -102,13 +102,13 @@ dialogEl.close();  // -> true, hoặc false nếu bị chặn bởi sx-dialog-be
 
       <h2>Event</h2>
       <p>
-        Bắn trên chính thẻ <span class="c-accent">sx-dialog</span> — lắng nghe bằng <code>addEventListener</code> như event DOM thường.
+        Được gọi trên chính thẻ <span class="c-accent">sx-dialog</span> — lắng nghe bằng <code>addEventListener</code> như event DOM thường.
       </p>
       {eventsTable([
         ["sx-dialog-before-open", "cancelable — gọi preventDefault() trong listener để chặn không cho mở"],
-        ["sx-dialog-after-open", "bắn sau khi đã mở và focus phần tử đầu tiên xong"],
+        ["sx-dialog-after-open", "được gọi sau khi đã mở và focus phần tử đầu tiên xong"],
         ["sx-dialog-before-close", "cancelable — gọi preventDefault() để chặn không cho đóng (vd chờ xác nhận)"],
-        ["sx-dialog-after-close", "bắn sau khi hiệu ứng đóng (duration) hoàn tất"],
+        ["sx-dialog-after-close", "được gọi sau khi hiệu ứng đóng (duration) hoàn tất"],
       ])}
       <h2></h2>
       {codeBlock(

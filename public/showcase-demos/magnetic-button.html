@@ -19,74 +19,80 @@
         color: #e1dcc9;
         font-family: sans-serif;
       }
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
       .hero {
-        min-height: 40vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 10px;
         text-align: center;
-        padding: 0 24px;
+        padding: 40px 24px;
       }
       .demo-grid {
-        min-height: 46vh;
+        width: 100%;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 0 24px 56px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        align-items: start;
-        justify-items: center;
-        column-gap: 48px;
-        row-gap: 28px;
-        padding: 40px 24px;
-        border-top: 1px solid #201d3d;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
       }
-      .demo-row {
+
+      .magnet-card {
+        background: #12151f;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-start;
-        gap: 16px;
-      }
-      .demo-row h2 {
-        font-size: 16px;
-        color: #ffd166;
+        gap: 12px;
         text-align: center;
       }
-      .demo-row p.hint {
-        max-width: 480px;
-        text-align: center;
-        opacity: 0.6;
-        font-size: 13px;
-        margin-top: -16px;
-      }
-
-      button.magnetic {
-        appearance: none;
-        border: none;
-        cursor: pointer;
-        padding: 22px 46px;
-        border-radius: 999px;
+      .magnet-card h2 {
+        margin: 0;
         font-size: 15px;
         font-weight: 600;
-        letter-spacing: 0.02em;
-        font-family: inherit;
+        color: #ffd166;
+      }
+
+      .magnet-zone {
+        width: 100%;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .magnet-btn {
+        font: inherit;
+        font-size: 14px;
+        padding: 14px 28px;
+        border-radius: 999px;
+        border: 1px solid rgba(120, 165, 238, 0.4);
+        background: rgba(120, 165, 238, 0.12);
+        color: #b4d4ff;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         will-change: transform;
       }
-      button.basic {
-        background: #78a5ee;
-        color: #0a0d14;
-      }
-      button.layered {
-        background: transparent;
-        color: #e1dcc9;
-        border: 1.5px solid #78a5ee;
-      }
-      .magnetic-content {
+
+      .magnet-btn__label {
         display: inline-block;
         will-change: transform;
       }
-      button.field {
+
+      .magnet-btn--field {
         background: #ffd166;
+        border-color: transparent;
         color: #0a0d14;
       }
     </style>
@@ -98,101 +104,103 @@
     </div>
 
     <div class="demo-grid">
-      <section class="demo-row">
-        <h2>1. Basic</h2>
-        <button class="magnetic basic">Hover me</button>
-      </section>
+      <div class="magnet-card">
+        <h2>Layered</h2>
+        <div class="magnet-zone">
+          <button class="magnet-btn" id="btnLayered">
+            <span class="magnet-btn__label">Hover me</span>
+          </button>
+        </div>
+      </div>
 
-      <section class="demo-row">
-        <h2>2. Layered</h2>
-        <button class="magnetic layered">
-          <span class="magnetic-content">Hover me</span>
-        </button>
-      </section>
+      <div class="magnet-card">
+        <h2>Field</h2>
+        <div class="magnet-zone">
+          <button class="magnet-btn magnet-btn--field" id="btnField" data-radius="140">Lại gần xem</button>
+        </div>
+      </div>
 
-      <section class="demo-row">
-        <h2>3. Field</h2>
-        <button class="magnetic field" data-radius="240">Get close</button>
-      </section>
+      <div class="magnet-card">
+        <h2>Rotate</h2>
+        <div class="magnet-zone">
+          <button class="magnet-btn" id="btnRotate">Nghiêng theo tay</button>
+        </div>
+      </div>
     </div>
 
     <script type="module">
       import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { Watcher } from "https://unpkg.com/@six-js/core@latest/dist/Watcher.js";
 
-      // ---------------- 1. basic----------------
-      function magneticHover(
-        el,
-        { strength = 0.4, duration = 0.5, releaseDuration = 0.6 } = {},
-      ) {
-        el.addEventListener("pointermove", (e) => {
-          const rect = el.getBoundingClientRect();
-          const relX = e.clientX - (rect.left + rect.width / 2);
-          const relY = e.clientY - (rect.top + rect.height / 2);
-          six.to(el, {
-            x: relX * strength,
-            y: relY * strength,
-            duration,
-            ease: "quadOut",
-          });
-        });
-        el.addEventListener("pointerleave", () => {
-          six.to(el, { x: 0, y: 0, duration: releaseDuration, ease: "elasticOut" });
-        });
-      }
-      magneticHover(document.querySelector(".basic"));
+      const $ = (sel) => document.querySelector(sel);
 
-      // ---------------- 2. layered ----------------
+      // ---------------- Layered ----------------
+      const btnLayered = $("#btnLayered");
+      const labelLayered = btnLayered.querySelector(".magnet-btn__label");
 
-      const layeredBtn = document.querySelector(".layered");
-      const layeredContent = layeredBtn.querySelector(".magnetic-content");
-
-      layeredBtn.addEventListener("pointermove", (e) => {
-        const rect = layeredBtn.getBoundingClientRect();
-        const relX = e.clientX - (rect.left + rect.width / 2);
-        const relY = e.clientY - (rect.top + rect.height / 2);
-        six.to(layeredBtn, {
-          x: relX * 0.25,
-          y: relY * 0.25,
-          duration: 0.5,
-          ease: "quadOut",
-        });
-        six.to(layeredContent, {
-          x: relX * 0.5,
-          y: relY * 0.5,
-          duration: 0.5,
-          ease: "quadOut",
-        });
-      });
-      layeredBtn.addEventListener("pointerleave", () => {
-        six.to(layeredBtn, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
-        six.to(layeredContent, { x: 0, y: 0, duration: 0.6, ease: "elasticOut" });
+      Watcher({
+        target: btnLayered,
+        type: "pointer",
+        onMove: (self) => {
+          const rect = btnLayered.getBoundingClientRect();
+          const relX = self.x - (rect.left + rect.width / 2);
+          const relY = self.y - (rect.top + rect.height / 2);
+          six.to(btnLayered, { x: relX * 0.25, y: relY * 0.25, duration: 0.3, ease: "quadOut", overwrite: "auto" });
+          six.to(labelLayered, { x: relX * 0.5, y: relY * 0.5, duration: 0.3, ease: "quadOut", overwrite: "auto" });
+        },
+        onHoverEnd: () => {
+          six.to(btnLayered, { x: 0, y: 0, duration: 0.7, ease: "elasticOut", overwrite: "auto" });
+          six.to(labelLayered, { x: 0, y: 0, duration: 0.7, ease: "elasticOut", overwrite: "auto" });
+        },
       });
 
-      // ---------------- 3. field ----------------
-
-      const fieldBtn = document.querySelector(".field");
-      const fieldRadius = Number(fieldBtn.dataset.radius) || 140;
+      // ---------------- Field ----------------
+      const btnField = $("#btnField");
+      const fieldRadius = Number(btnField.dataset.radius) || 140;
       let wasInField = false;
 
-      window.addEventListener("pointermove", (e) => {
-        const rect = fieldBtn.getBoundingClientRect();
-        const dx = e.clientX - (rect.left + rect.width / 2);
-        const dy = e.clientY - (rect.top + rect.height / 2);
-        const dist = Math.hypot(dx, dy);
-        const inField = dist < fieldRadius;
+      Watcher({
+        target: window,
+        type: "pointer",
+        onMove: (self) => {
+          const rect = btnField.getBoundingClientRect();
+          const dx = self.x - (rect.left + rect.width / 2);
+          const dy = self.y - (rect.top + rect.height / 2);
+          const dist = Math.hypot(dx, dy);
+          const inField = dist < fieldRadius;
 
-        if (inField) {
-          const pull = 1 - dist / fieldRadius;
-          six.to(fieldBtn, {
-            x: dx * pull * 0.8,
-            y: dy * pull * 0.8,
-            duration: 0.4,
+          if (inField) {
+            const pull = 1 - dist / fieldRadius; // càng gần tâm nút càng hút mạnh
+            six.to(btnField, { x: dx * pull * 0.8, y: dy * pull * 0.8, duration: 0.4, ease: "quadOut", overwrite: "auto" });
+          } else if (wasInField) {
+            six.to(btnField, { x: 0, y: 0, duration: 0.7, ease: "elasticOut", overwrite: "auto" });
+          }
+          wasInField = inField;
+        },
+      });
+
+      // ---------------- Rotate ----------------
+      const btnRotate = $("#btnRotate");
+
+      Watcher({
+        target: btnRotate,
+        type: "pointer",
+        onMove: (self) => {
+          const rect = btnRotate.getBoundingClientRect();
+          const relX = self.x - (rect.left + rect.width / 2);
+          const relY = self.y - (rect.top + rect.height / 2);
+          six.to(btnRotate, {
+            x: relX * 0.5,
+            y: relY * 0.5,
+            rotate: relX * 0.08,
+            duration: 0.3,
             ease: "quadOut",
+            overwrite: "auto",
           });
-        } else if (wasInField) {
-          six.to(fieldBtn, { x: 0, y: 0, duration: 0.4, ease: "circOut" });
-        }
-        wasInField = inField;
+        },
+        onHoverEnd: () => {
+          six.to(btnRotate, { x: 0, y: 0, rotate: 0, duration: 0.7, ease: "elasticOut", overwrite: "auto" });
+        },
       });
     </script>
   </body>

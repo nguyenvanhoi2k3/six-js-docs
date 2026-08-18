@@ -211,7 +211,7 @@ six.to(".box", {
 
         <p class="note">Giá trị cuối mỗi chặng tự thành điểm bắt đầu của chặng kế tiếp.</p>
         <p class="note">
-          <code>keyframes</code> không dùng được với <code>overwrite</code>, và chỉ bắn onStart/onComplete một lần cho cả tween — không tách riêng theo từng chặng.
+          <code>keyframes</code> không dùng được với <code>overwrite</code>, và chỉ gọi onStart/onComplete một lần cho cả tween — không tách riêng theo từng chặng.
         </p>
       </>
     ),

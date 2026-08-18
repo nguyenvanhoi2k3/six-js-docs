@@ -243,7 +243,7 @@ smooth.kill();`,
         ])}
 
         <p class="note">
-          Mỗi lần ghi vị trí, six-js tự bắn kèm một sự kiện <code>"scroll"</code> đồng bộ (cùng frame) lên chính container — nhờ vậy <code>OnScroll</code> luôn cập nhật đúng khung hình, không bị trễ 1 frame
+          Mỗi lần ghi vị trí, six-js tự gọi kèm một sự kiện <code>"scroll"</code> đồng bộ (cùng frame) lên chính container — nhờ vậy <code>OnScroll</code> luôn cập nhật đúng khung hình, không bị trễ 1 frame
           chờ sự kiện scroll thật (bất đồng bộ) của trình duyệt.
         </p>
         <p class="note">
@@ -608,7 +608,8 @@ Parallax(".layer", { strength: 30, lerp: 0.1 });`,
   "watcher/overview": {
     eyebrow: "Plugins",
     title: "Watcher",
-    lead: "Theo dõi hướng, delta và tốc độ của thao tác lăn chuột (wheel) và cuộn trang (scroll) — dùng làm input để lái animation khác, vd đổi hướng/tốc độ marquee theo tốc độ cuộn.",
+    lead:
+      "Theo dõi hướng, delta và tốc độ của thao tác lăn chuột (wheel), cuộn trang (scroll), và cử chỉ chạm/con trỏ (nhấn, kéo, hover, click) — dùng làm input để lái animation khác, vd đổi hướng/tốc độ marquee theo tốc độ cuộn, hoặc kéo-thả một phần tử.",
     render: () => (
       <>
         <div class="content-pane__panel">
@@ -643,12 +644,13 @@ Watcher({
         )}
 
         <p>
-          <span class="c-accent">Watcher(vars)</span> lắng nghe cả <code>wheel</code> lẫn <code>scroll</code> trên cùng một <code>target</code> (mặc định <code>window</code>), gộp lại thành một luồng
-          delta/velocity/hướng duy nhất — không cần tự phân biệt 2 nguồn sự kiện này.
+          <span class="c-accent">Watcher(vars)</span> lắng nghe wheel, scroll, và cử chỉ chạm/con trỏ (nhấn, kéo, hover, click) trên cùng một <code>target</code> (mặc định <code>window</code>), gộp
+          lại thành một luồng delta/velocity/hướng duy nhất — không cần tự phân biệt các nguồn sự kiện này.
         </p>
         <p class="note">
           Tự <code>enable()</code> ngay khi tạo (giống <code>Parallax</code>/<code>Burst</code>) — gọi <code>.disable()</code>/<code>.kill()</code> để tạm dừng. Trả về{" "}
-          <span class="c-accent">WatcherController</span>; xem toàn bộ callback và property tại trang <a href="#watcher/options">Options</a>.
+          <span class="c-accent">WatcherController</span>; xem cấu hình wheel/scroll tại trang <a href="#watcher/options">Options</a>, cấu hình nhấn/kéo/click tại trang{" "}
+          <a href="#watcher/gestures">Gestures</a>, và toàn bộ property/method của instance tại trang <a href="#watcher/instance">Instance</a>.
         </p>
       </>
     ),
@@ -677,37 +679,190 @@ Watcher({
   "watcher/options": {
     eyebrow: "Plugins",
     title: "Options",
-    lead: "WatcherVars — object truyền vào Watcher(vars).",
+    lead: "WatcherVars — cấu hình chung và phần wheel/scroll/velocity của Watcher(vars). Xem cấu hình riêng cho nhấn/kéo/click tại trang Gestures.",
     render: () => (
       <>
+        {codeBlock(
+          `import { Watcher } from "@six-js/core/Watcher";
+
+Watcher({
+  target: scrollContainer, // mặc định window
+  type: "wheel,scroll",    // chỉ theo dõi wheel + scroll, bỏ qua touch/pointer
+  onStopDelay: 0.4,
+  onUp: (self) => console.log("cuộn lên", self.velocityY),
+  onDown: (self) => console.log("cuộn xuống", self.velocityY),
+  onStop: () => console.log("đã dừng cuộn"),
+});`,
+          "js",
+        )}
+
         {attrsTable([
           ["target", "Window (mặc định) hoặc một Element/selector cuộn được cần theo dõi", "Window | Element | string", "window"],
-          ["type", 'nguồn input cần theo dõi, phân tách bởi dấu phẩy — v1 chỉ nhận "wheel" và "scroll"', '"wheel" | "scroll" | "wheel,scroll"', '"wheel,scroll"'],
-          ["tolerance", "ngưỡng |delta| tối thiểu trước khi các callback thay đổi được bắn", "—", "1e-9"],
+          [
+            "type",
+            'nguồn input cần theo dõi, phân tách bởi dấu phẩy — "touch" và "pointer" cùng bật theo dõi cử chỉ (nhấn/kéo/hover/click, xem trang Gestures); "scroll" là tuỳ chọn thêm, không tự bật kèm wheel',
+            '"wheel" | "touch" | "pointer" | "scroll"',
+            '"wheel,touch,pointer"',
+          ],
+          ["tolerance", "ngưỡng |delta| tối thiểu trước khi các callback thay đổi được gọi", "—", "1e-9"],
           ["wheelSpeed / scrollSpeed", "hệ số nhân riêng cho delta đến từ wheel / từ vị trí cuộn", "—", "1"],
-          ["onStopDelay", "số giây im lặng trước khi onStop bắn (và velocity reset về 0)", "—", "0.25"],
-          ["onUp / onDown / onLeft / onRight", "callback(self) theo đúng hướng vừa đổi (trục Y cho lên/xuống, trục X cho trái/phải)", "—", "—"],
-          ["onChange", "callback(self, deltaX, deltaY) mỗi khi có delta mới trên bất kỳ trục nào", "—", "—"],
-          ["onChangeX / onChangeY", "callback(self) khi riêng trục X / trục Y đổi", "—", "—"],
-          ["onWheel", "callback(self) mỗi khi có sự kiện wheel", "—", "—"],
-          ["onStop", "callback(self) bắn một lần sau onStopDelay giây không có input mới", "—", "—"],
-          ["onEnable / onDisable", "callback(self) khi enable()/disable() được gọi", "—", "—"],
+          ["cooldown", "true (mặc định) gộp mọi delta trong một khung hình rồi gọi callback một lần/frame; false gọi callback ngay theo từng sự kiện thô, không gộp khung hình", "boolean", "true"],
+          ["preventDefault", "gọi preventDefault() trên sự kiện wheel/pointerdown/pointermove đã xử lý", "boolean", "false"],
+          ["capture", "đăng ký listener wheel/pointer ở capture phase thay vì bubble", "boolean", "false"],
+          ["onStopDelay", "số giây im lặng trước khi onStop được gọi (và velocity reset về 0)", "—", "0.25"],
           ["id", "nhãn tuỳ ý, không ảnh hưởng hành vi — tiện phân biệt khi có nhiều Watcher cùng lúc", "—", "—"],
         ])}
 
-        <h2>Instance</h2>
+        <h2>Callbacks</h2>
         {attrsTable([
-          [".deltaX / .deltaY", "delta đã gộp (wheel + scroll) của lần cập nhật gần nhất", "—"],
-          [".velocityX / .velocityY", "tốc độ hiện tại (px/giây theo mỗi trục)", "—"],
-          [".isEnabled", "boolean — đang lắng nghe hay đã disable()", "—"],
-          [".enable() / .disable()", "bật lại / tạm ngưng lắng nghe (giữ nguyên instance, gọi enable() lại được)", "—"],
-          [".kill()", "alias của disable() — cùng interface Killable với Tween/Timeline/SplitText", "—"],
+          ["onChange", "callback(self, deltaX, deltaY) mỗi khi có delta mới trên bất kỳ trục nào (wheel, scroll, hoặc kéo)", "—"],
+          ["onChangeX / onChangeY", "callback(self) khi riêng trục X / trục Y đổi", "—"],
+          ["onUp / onDown / onLeft / onRight", "callback(self) theo đúng hướng vừa đổi (trục Y cho lên/xuống, trục X cho trái/phải)", "—"],
+          ["onReverseX / onReverseY", "callback(self) khi trục X / trục Y vừa đổi CHIỀU so với lần đổi gần nhất (không được gọi ở lần đổi đầu tiên)", "—"],
+          ["onWheel", "callback(self) mỗi khi có sự kiện wheel", "—"],
+          ["onStop", "callback(self) được gọi một lần sau onStopDelay giây không có input mới (wheel/scroll/kéo)", "—"],
+          ["onEnable / onDisable", "callback(self) khi enable()/disable() được gọi", "—"],
         ])}
 
         <p class="note">
-          Wheel và scroll xảy ra trong cùng một lần cập nhật (vd một sự kiện wheel và scroll event mà chính nó gây ra) không bị cộng dồn đè lên nhau — giá trị delta lớn hơn giữa 2 nguồn được dùng cho
-          lần đó.
+          Nhiều nguồn delta xảy ra trong cùng một khung hình (vd một sự kiện wheel và scroll event mà chính nó gây ra, hoặc wheel cùng lúc với kéo) không bị cộng dồn đè lên nhau — giá trị delta lớn
+          hơn giữa các nguồn (wheel/scroll/kéo) được dùng cho lần đó.
         </p>
+      </>
+    ),
+  },
+
+  "watcher/gestures": {
+    eyebrow: "Plugins",
+    title: "Gestures",
+    lead: "WatcherVars phần nhấn/kéo/click — chỉ hoạt động khi type có \"touch\" hoặc \"pointer\" (mặc định đã bật).",
+    render: () => (
+      <>
+        {codeBlock(
+          `import { Watcher } from "@six-js/core/Watcher";
+
+Watcher({
+  target: ".drag-card",
+  type: "pointer",
+  dragThreshold: 6,
+  singleAxis: true,
+  ignore: ".drag-card__close",
+  onDragStart: (self) => console.log("bắt đầu kéo, trục:", self.axis),
+  onDrag: (self) => moveCard(self.deltaX, self.deltaY),
+  onDragEnd: () => console.log("thả tay"),
+  onClick: () => console.log("click (không kéo)"),
+});`,
+          "js",
+        )}
+
+        {attrsTable([
+          ["dragThreshold", "số px di chuyển kể từ điểm nhấn trước khi tính là đang kéo (isDragging)", "—", "0"],
+          [
+            "singleAxis",
+            "khi press vượt dragThreshold, khoá cả cử chỉ vào trục X hoặc Y (trục nào lệch nhiều hơn ở lần di chuyển đầu) — trục còn lại luôn nhận delta 0 cho tới khi thả tay",
+            "boolean",
+            "false",
+          ],
+          ["ignore", "selector/Element(s) mà nhấn/click bên trong đó bị bỏ qua hoàn toàn (vd một nút lồng bên trong khu vực đang kéo)", "string | Element | Element[]", "—"],
+          ["ignoreCheck", "thay hẳn cho cách kiểm tra ignore mặc định — nhận (event, isGesture), tự quyết định event có bị bỏ qua hay không", "(event, isGesture) => boolean", "—"],
+          ["enableClick", "false chặn sự kiện click gốc theo sau một lần nhấn đã biến thành kéo (vượt dragThreshold)", "boolean", "true"],
+        ])}
+
+        <h2>Callbacks</h2>
+        {attrsTable([
+          ["onPress", "callback(self) khi pointerdown (đã lọc qua ignore)", "—"],
+          ["onRelease", "callback(self) khi pointerup/pointercancel — luôn được gọi sau onDragEnd nếu press đó có kéo", "—"],
+          ["onMove", "callback(self) mỗi lần pointermove trên target, kể cả khi không nhấn", "—"],
+          ["onHover / onHoverEnd", "callback(self) khi pointerenter / pointerleave", "—"],
+          ["onClick", "callback(self) khi có click thật (bị chặn nếu enableClick: false và press đó đã kéo)", "—"],
+          ["onDrag", "callback(self) mỗi lần pointermove trong lúc isDragging là true", "—"],
+          ["onDragStart", "callback(self) một lần, ngay khi di chuyển vượt dragThreshold cho press hiện tại", "—"],
+          ["onDragEnd", "callback(self) một lần khi thả tay, chỉ nếu press đó đã thành kéo", "—"],
+          ["onAxisLock", "callback(self) một lần mỗi press, ngay khi axis được khoá (cần singleAxis: true)", "—"],
+        ])}
+
+        <div class="content-pane__panel">
+          <div data-watcher-drag-area style="height:220px;width:100%;border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+            <div
+              data-watcher-drag-box
+              style="width:72px;height:72px;border-radius:12px;background:var(--accent);cursor:grab;touch-action:none;"
+            ></div>
+          </div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--muted);">
+            <span>
+              Trạng thái: <strong data-watcher-gesture-state style="color:var(--accent)">—</strong>
+            </span>
+            <span>
+              axis: <strong data-watcher-gesture-axis style="color:var(--accent)">—</strong>
+            </span>
+          </div>
+        </div>
+
+        <p class="note">
+          "touch" và "pointer" trong <code>type</code> bật cùng một bộ theo dõi cử chỉ — dùng giá trị nào cũng cho kết quả như nhau, không cần chọn theo loại thiết bị.
+        </p>
+      </>
+    ),
+    init: (root) => {
+      const box = root.querySelector<HTMLElement>("[data-watcher-drag-box]")!;
+      const stateEl = root.querySelector<HTMLElement>("[data-watcher-gesture-state]")!;
+      const axisEl = root.querySelector<HTMLElement>("[data-watcher-gesture-axis]")!;
+
+      let x = 0;
+      let y = 0;
+      let hadDragged = false;
+
+      Watcher({
+        target: box,
+        type: "touch,pointer",
+        dragThreshold: 4,
+        singleAxis: true,
+        onPress: () => {
+          hadDragged = false;
+          box.style.cursor = "grabbing";
+          stateEl.textContent = "đang nhấn";
+        },
+        onDragStart: () => {
+          hadDragged = true;
+          stateEl.textContent = "đang kéo";
+        },
+        onAxisLock: (self) => {
+          axisEl.textContent = self.axis ?? "—";
+        },
+        onDrag: (self) => {
+          x += self.deltaX;
+          y += self.deltaY;
+          box.style.transform = `translate(${x}px, ${y}px)`;
+        },
+        onRelease: () => {
+          box.style.cursor = "grab";
+          axisEl.textContent = "—";
+          stateEl.textContent = hadDragged ? "đã thả sau khi kéo" : "đã bấm (click)";
+        },
+      });
+    },
+  },
+
+  "watcher/instance": {
+    eyebrow: "Plugins",
+    title: "Instance",
+    lead: "WatcherController — instance trả về từ Watcher(vars).",
+    render: () => (
+      <>
+        {attrsTable([
+          [".deltaX / .deltaY", "delta đã gộp (wheel/scroll/kéo) của lần cập nhật gần nhất", "—"],
+          [".velocityX / .velocityY", "tốc độ hiện tại (px/giây theo mỗi trục)", "—"],
+          [".x / .y", "clientX/clientY của sự kiện pointer/touch gần nhất — 0 nếu chưa có cử chỉ nào", "—"],
+          [".startX / .startY", "clientX/clientY tại thời điểm onPress gần nhất — giữ nguyên sau khi thả tay", "—"],
+          [".isPressed", "true trong suốt khoảng từ onPress tới onRelease, bất kể có vượt dragThreshold hay không", "—"],
+          [".isDragging", "true kể từ khi một press vượt dragThreshold cho tới khi thả tay", "—"],
+          [".axis", '"x" | "y" | null — trục đã khoá khi singleAxis: true, reset về null mỗi press mới', "—"],
+          [".event", "Event gốc (wheel/pointer/click) gần nhất mà instance này đã xử lý", "—"],
+          [".isEnabled", "boolean — đang lắng nghe hay đã disable()", "—"],
+          [".vars", "tham chiếu tới object vars ban đầu truyền vào Watcher()", "—"],
+          [".enable() / .disable()", "bật lại / tạm ngưng lắng nghe (giữ nguyên instance, gọi enable() lại được)", "—"],
+          [".kill()", "alias của disable() — cùng interface Killable với Tween/Timeline/SplitText", "—"],
+        ])}
       </>
     ),
   },
