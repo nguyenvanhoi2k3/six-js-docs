@@ -310,7 +310,7 @@ export const slider: ComponentDoc = {
         ["left-padding", "khoảng đệm bên trái track (px hoặc đơn vị CSS)", "0"],
         ["edge-resistance", 'độ "đàn hồi" (px) khi kéo quá biên lúc không loop', "100"],
         ["vertical-scroll", 'true | false — cho cuộn bằng wheel khi direction="vertical"', "false"],
-        ["lock-active", "true | false — drag slider những giữ nguyên slide đang activ. Phục vụ trong việc xem thumbnail", "false"],
+        ["lock-active", "true | false — cho phép trượt slide nhưng khi thả chuột ra sự kiện click sẽ không nhận. Phục vụ trong việc xem thumbnail", "false"],
         ["sync", "name của (các) slider khác cần đồng bộ theo, cách nhau bởi dấu phẩy", "—"],
         ["breakpoints", "JSON theo container width, override các attribute trên", "—"],
       ])}
