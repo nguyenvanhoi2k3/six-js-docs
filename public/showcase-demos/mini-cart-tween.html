@@ -59,6 +59,7 @@
         flex-direction: column;
         overflow: hidden;
         z-index: 10;
+        transform: translateX(110%);
       }
       .cart-header {
         display: flex;
@@ -182,8 +183,6 @@
         cart.style.transform = "";
         cart.style.opacity = "";
       }
-
-      six.set(cart, { x: CART_OFFSCREEN });
 
       openBtn.addEventListener("click", () => {
         if (falling) return;
