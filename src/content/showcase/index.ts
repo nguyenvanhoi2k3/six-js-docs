@@ -108,4 +108,12 @@ export const showcaseItems: ShowcaseItem[] = [
     thumb: "showcase-thumbs/zigzag-gallery-parallax.jpg",
     thumbVideo: "showcase-thumbs/zigzag-gallery-parallax.mp4",
   },
+  {
+    title: "Scroll Stack",
+    gradient: "linear-gradient(135deg,#c9a94f,#41473b)",
+    demoUrl: "showcase-demos/scroll-stack.html",
+    plugins: ["OnScroll", "SmoothScroll"],
+    thumb: "showcase-thumbs/scroll-stack.jpg",
+    thumbVideo: "showcase-thumbs/scroll-stack.mp4",
+  },
 ];

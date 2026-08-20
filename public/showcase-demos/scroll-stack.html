@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroll Stack demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      html,
+      body {
+        background-color: #ecefe1;
+        color: #41473b;
+      }
+      .space {
+        height: 100vh;
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        position: relative;
+        height: 300vh;
+        background: #41473b;
+      }
+      .stack {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        background-color: #ecefe1;
+      }
+      .stack__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: 80%;
+        height: 100%;
+        padding-block: 2rem;
+      }
+      .stack__image {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .stack__image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .stack2__overlay {
+        position: absolute;
+        inset: 0;
+        background-color: #000;
+        opacity: 0;
+        pointer-events: none;
+      }
+      h1 {
+        text-transform: uppercase;
+        font-size: 4rem;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .end {
+        background-color: #41473b;
+        color: #ecefe1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2 class="space flex-center">Scroll down</h2>
+    <div class="container">
+      <div class="stack stack1">
+        <div class="stack__content">
+          <h1>
+            Redefining Canvas Exploring the Boundless Boundaries of Contemporary
+            Art.
+          </h1>
+          <div>
+            Contemporary art serves as a dynamic mirror to our rapidly evolving
+            world, challenging traditional aesthetics and encouraging deep
+            intellectual engagement. Rather than remaining confined to classic
+            mediums, modern creators boldly blend digital media, found objects,
+            and immersive installations to question societal norms, identity,
+            and global narratives. By prioritizing conceptual depth over rigid
+            technique, contemporary artistic expressions invite viewers to
+            become active participants, transforming passive observation into a
+            vibrant, open-ended conversation about the human experience today.
+          </div>
+        </div>
+        <div class="stack__image">
+          <img src="./scroll-stack/image2.jpg" alt="" />
+        </div>
+      </div>
+
+      <div class="stack stack2">
+        <div class="stack__image">
+          <img src="./scroll-stack/image3.jpg" alt="" />
+        </div>
+        <div class="stack__content">
+          <h1>
+            Echoes of Expression Unveiling the Fluid Narrative of Modern
+            Aesthetics.
+          </h1>
+          <div>
+            Contemporary art pushes beyond physical form, shifting the focus
+            from static representation to living, breathing experiences. Through
+            provocative performance, interactive sculpture, and multisensory
+            environments, artists tear down the invisible barrier between the
+            artwork and the observer. This fluid approach transforms traditional
+            galleries into spaces of active reflection, where diverse cultural
+            perspectives collide, provoke thought, and inspire new ways of
+            understanding our shared reality.
+          </div>
+        </div>
+        <div class="stack2__overlay"></div>
+      </div>
+
+      <div class="stack stack3">
+        <div class="stack__content">
+          <h1>
+            Beyond the Frame Reimagining Visual Language in Contemporary Art.
+          </h1>
+          <div>
+            Contemporary art redefines how we interpret reality by breaking free
+            from traditional rules and conventional mediums. Artists blend
+            digital innovation, raw textures, and spatial design to build
+            immersive visual experiences that resonate on an emotional and
+            intellectual level. Each piece acts as an open dialogue, inviting
+            observers to look beneath the surface, question established ideas,
+            and discover personal meaning within a constantly shifting artistic
+            landscape.
+          </div>
+        </div>
+        <div class="stack__image">
+          <img src="./scroll-stack/image6.jpg" alt="" />
+        </div>
+      </div>
+    </div>
+    <h2 class="space flex-center end">End</h2>
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+
+      new SmoothScroll();
+
+      const stack1 = document.querySelector(".stack1");
+      const stack2 = document.querySelector(".stack2");
+      const stack3 = document.querySelector(".stack3");
+
+      six
+        .timeline({
+          onScroll: {
+            trigger: stack2,
+            start: "top 80%",
+            end: "top top",
+            sync: true,
+          },
+        })
+        .to(stack1, { scale: 0.8, rotate: 5, opacity: 0.4 })
+        .to(stack2, { scale: 0.8, rotate: -5 }, 0);
+
+      six
+        .timeline({
+          onScroll: {
+            trigger: stack3,
+            start: "top 80%",
+            end: "top top",
+            sync: true,
+          },
+        })
+        .to(".stack2__overlay", { opacity: 0.4 })
+        .to(stack3, { scale: 0.8, rotate: 3 }, 0);
+    </script>
+  </body>
+</html>
