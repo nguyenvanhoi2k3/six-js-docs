@@ -42,9 +42,6 @@ sx-popover .menu sx-popover-trigger:hover {
   background: #1a1c20;
 }
 
-/* nút site-wide (.btn--ghost) đặt cứng color: var(--text) — trên demo.html biến này bị ghim
-   gần-đen, chìm mất trên nền tối cứng của sx-popover ở trên; ghi đè để ăn theo màu chữ sáng
-   #e1dcc9 đã khai báo cho sx-popover. */
 sx-popover .btn--ghost {
   color: inherit;
 }`;
