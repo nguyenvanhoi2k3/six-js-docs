@@ -116,4 +116,12 @@ export const showcaseItems: ShowcaseItem[] = [
     thumb: "showcase-thumbs/scroll-stack.jpg",
     thumbVideo: "showcase-thumbs/scroll-stack.mp4",
   },
+  {
+    title: "Split Gallery",
+    gradient: "linear-gradient(135deg,#e1dcc9,#0a0d14)",
+    demoUrl: "showcase-demos/split-gallery.html",
+    plugins: ["OnScroll", "SmoothScroll"],
+    thumb: "showcase-thumbs/split-gallery.jpg",
+    thumbVideo: "showcase-thumbs/split-gallery.mp4",
+  },
 ];

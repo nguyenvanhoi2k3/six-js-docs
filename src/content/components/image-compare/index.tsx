@@ -82,6 +82,45 @@ const RESIZABLE_CSS = `.resizable {
   padding: 8px;
 }`;
 
+const IN_SLIDER_CSS = `.slider-box {
+  width: min(100%, 640px);
+}
+
+sx-slider-slide .compare-box {
+  width: 100%;
+}
+
+.slide {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e4e4e4;
+  user-select: none;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.prev {
+  left: 8px;
+}
+
+.next {
+  right: 8px;
+}
+
+.nav[sx-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}`;
+
 const LOG_CSS = `.log {
   margin-top: 12px;
   width: min(100%, 420px);
@@ -344,6 +383,48 @@ document.querySelector('[data-set-50]').addEventListener('click', () => compareE
         root.querySelector("[data-to-100]")!.addEventListener("click", () => compareEl.animateTo(100));
         root.querySelector("[data-set-50]")!.addEventListener("click", () => compareEl.setValue(50));
       },
+    },
+    {
+      label: "Trong sx-slider",
+      html: `<div class="slider-box">
+  <sx-slider gap="16" grab-cursor>
+    <sx-slider-track>
+      <sx-slider-slide>
+        <div class="compare-box">
+          <sx-image-compare>
+            <sx-image-compare-before>
+              <img src="${BEFORE_SRC}" alt="Trước" />
+            </sx-image-compare-before>
+            <sx-image-compare-after>
+              <img src="${AFTER_SRC}" alt="Sau" />
+            </sx-image-compare-after>
+            <sx-image-compare-handle>
+              <span class="icon-badge">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 8l-4 4 4 4M17 8l4 4-4 4" />
+                </svg>
+              </span>
+            </sx-image-compare-handle>
+          </sx-image-compare>
+        </div>
+      </sx-slider-slide>
+      <sx-slider-slide>
+        <div class="slide">Slide 2</div>
+      </sx-slider-slide>
+      <sx-slider-slide>
+        <div class="slide">Slide 3</div>
+      </sx-slider-slide>
+    </sx-slider-track>
+    <sx-slider-prev class="nav prev">Prev</sx-slider-prev>
+    <sx-slider-next class="nav next">Next</sx-slider-next>
+  </sx-slider>
+</div>
+<p class="note">
+  Tự động nhận diện nằm trong slider và chỉ kích hoạt sự kiện compare khi thả tay.
+</p>`,
+      css: `${COMPARE_CSS}
+
+${IN_SLIDER_CSS}`,
     },
   ],
 };

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Split Gallery demo</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      html,
+      body {
+        background-color: #0a0d14;
+        color: #e1dcc9;
+        overflow-x: hidden;
+      }
+      img {
+        object-fit: cover;
+      }
+      h1 {
+        text-transform: uppercase;
+        font-size: 3rem;
+        font-weight: 900;
+        line-height: 1;
+        padding-bottom: 2rem;
+      }
+
+      .space {
+        height: 100vh;
+      }
+      .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .content {
+        text-align: center;
+        max-width: 50rem;
+      }
+
+      .text {
+        max-width: 30rem;
+        margin: auto;
+        margin-bottom: 4rem;
+      }
+
+      .button {
+        position: relative;
+        background-color: #e1dcc9;
+        width: fit-content;
+        margin: auto;
+        padding: 1rem 2.5rem;
+        color: #000;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 2;
+      }
+
+      .gallery {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+      }
+
+      .imgs-col {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+      }
+
+      .img {
+        width: 30vw;
+        height: 40vh;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2 class="space flex-center">Scroll down</h2>
+
+    <div class="container">
+      <div class="content">
+        <div>
+          <h1>Redefining Canvas Exploring the Boundless Boundaries</h1>
+          <div class="text">
+            Contemporary art serves as a dynamic mirror to our rapidly evolving
+            world, challenging traditional aesthetics and encouraging deep
+            intellectual engagement. Rather than remaining confined to classic
+            mediums, modern creators boldly blend digital media, found objects,
+            and immersive installations to question societal norms, identity,
+            and global narratives.
+          </div>
+          <div class="button">Show more</div>
+        </div>
+      </div>
+      <div class="gallery">
+        <div class="imgs-col">
+          <img class="img img-left" src="./split-gallery/image1.jpg" alt="" />
+          <img class="img img-left" src="./split-gallery/image2.jpg" alt="" />
+          <img class="img img-left" src="./split-gallery/image3.jpg" alt="" />
+        </div>
+        <div class="imgs-col">
+          <img class="img img-right" src="./split-gallery/image4.jpg" alt="" />
+          <img class="img img-right" src="./split-gallery/image7.jpg" alt="" />
+          <img class="img img-right" src="./split-gallery/image6.jpg" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <h2 class="space flex-center">End</h2>
+
+    <script type="module">
+      import { six } from "https://unpkg.com/@six-js/core@latest/dist/index.js";
+      import { SmoothScroll } from "https://unpkg.com/@six-js/core@latest/dist/SmoothScroll.js";
+
+      new SmoothScroll();
+
+      const leftXValues = [-800, -900, -400];
+      const rightXValues = [800, 900, 400];
+      const leftRotationValues = [-30, -20, -35];
+      const rightRotationValues = [30, 20, 35];
+      const yValues = [100, -150, -400];
+
+      six.utils.arrayOf(".img-left").forEach((img, index) => {
+        six.to(img, {
+          x: leftXValues[index],
+          y: yValues[index],
+          rotate: leftRotationValues[index],
+          ease: "none",
+          onScroll: {
+            trigger: ".container",
+            start: "top 80%",
+            end: "150% bottom",
+            sync: true,
+          },
+        });
+      });
+
+      six.utils.arrayOf(".img-right").forEach((img, index) => {
+        six.to(img, {
+          x: rightXValues[index],
+          y: yValues[index],
+          rotate: rightRotationValues[index],
+          ease: "none",
+          onScroll: {
+            trigger: ".container",
+            start: "top 80%",
+            end: "bottom top",
+            sync: true,
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
