@@ -821,8 +821,7 @@ ${mkSlides(8)}
 ${navMarkup}
   </sx-slider>
 </div>
-<p class="note">Breakpoint tính theo chiều rộng của chính <span class="c-accent">sx-slider</span> (qua ResizeObserver), không phải viewport — kéo góc dưới-phải khung bên dưới để đổi kích thước và xem breakpoint đổi theo. Responsive mọi thuộc tính, trừ <span class="c-accent">direction</span>.</p>
-<p class="note">Dưới 360px: dùng <span class="c-accent">effect="fade"</span> khai báo trên chính sx-slider (không có breakpoint nào khớp). Từ 360px trở lên, breakpoint đầu tiên set lại <span class="c-accent">effect: 'slide'</span> — các breakpoint gộp dồn từ nhỏ đến lớn nên nếu không set lại tường minh, giá trị cũ (fade) sẽ tiếp tục áp dụng lên các breakpoint lớn hơn.</p>`,
+<p class="note">Breakpoint tính theo chiều rộng của chính <span class="c-accent">sx-slider</span> (qua ResizeObserver), không phải viewport — kéo góc dưới-phải khung bên dưới để đổi kích thước và xem breakpoint đổi theo. Responsive mọi thuộc tính, trừ <span class="c-accent">direction</span>.</p>`,
       css: `.resize-frame {
   resize: horizontal;
   overflow: hidden;
