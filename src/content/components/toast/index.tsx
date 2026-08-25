@@ -45,7 +45,7 @@ export const toast: ComponentDoc = {
       {attrsTable([
         ["message", "text hiển thị — bỏ qua nếu có &lt;template&gt; con", "—"],
         ["variant", "success | error | info", "info"],
-        ["duration", "số giây trước khi tự đóng — cùng đơn vị với mọi duration khác trong thư viện", "3"],
+        ["duration", "số giây trước khi tự đóng", "3"],
         ["toast-id", "id để nhóm — bắn lại cùng id sẽ thay thế toast cũ (đang hiện hoặc đang xếp hàng) thay vì cộng dồn, hợp cho toast kiểu tiến trình", "—"],
         ["toast-class", "thêm class riêng vào phần tử toast được tạo ra — dùng kèm CSS variable để style riêng 1 toast (xem phần Style)", "—"],
       ])}
