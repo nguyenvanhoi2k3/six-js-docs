@@ -1,0 +1,13 @@
+// .sx-toast elements are appended as real children of <sx-toast-viewport> (no portal - unlike
+// sx-popover/sx-tooltip) - since this doc's single shared viewport lives inside the #sx-toast
+// wrapper demo.tsx renders around every section, scoping these under it is safe here.
+#sx-toast .sx-toast.demo-purple {
+  --sx-toast-bg: #241b3d;
+  --sx-toast-color: #e4d6ff;
+  --sx-toast-accent: #a970ff;
+  --sx-toast-radius: 1.25em;
+}
+#sx-toast .sx-toast.demo-square {
+  --sx-toast-radius: 0.125em;
+  --sx-toast-accent-width: 6px;
+}

@@ -1,0 +1,15 @@
+// sx-tooltip's bubble portals to document.body on mount (see tooltip.ts), so it always ends up
+// OUTSIDE any #sx-tooltip wrapper demo.tsx puts around this page's sections — these rules must stay
+// bare/global (no id-scoped ancestor) to actually reach it. Mirrors popover/index.scss's own note.
+.sx-tooltip-bubble[data-variant="danger"] {
+  --sx-tooltip-bg: #4a1414;
+  --sx-tooltip-color: #ffd7d7;
+}
+.sx-tooltip-bubble[data-variant="brand"] {
+  --sx-tooltip-bg: #78a5ee;
+  --sx-tooltip-color: #061021;
+}
+
+.sx-tooltip-content a {
+  color: #78a5ee;
+}
