@@ -94,7 +94,7 @@ export const tooltip: ComponentDoc = {
         ["content", "text hiển thị — bỏ qua nếu có &lt;template&gt; con", "—"],
         ["for", "id của phần tử trigger đặt tách biệt (giống &lt;label for&gt;) — bỏ trống thì lấy luôn phần tử con đầu tiên (trừ template) làm trigger", "—"],
         ["position", "top | top-start | top-end | right | right-start | right-end | bottom | bottom-start | bottom-end | left | left-start | left-end", "top"],
-        ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "zoom"],
+        ["effect", "fade | zoom | zoom-in | slide-up | slide-down | slide-left | slide-right | flip-x | flip-y", "fade"],
         ["ease", 'tên easing cho component (xem trang <a href="ease.html#component">Ease</a>), hoặc chuỗi CSS transition-timing-function bất kỳ (vd: ease-in-out, cubic-bezier(...))', "cubic-bezier(0.4, 0, 0.2, 1)"],
         ["duration", "số giây (vd: 0.15)", "0.15"],
         ["offset", "khoảng cách (px) giữa trigger và tooltip", "8"],
@@ -111,6 +111,10 @@ export const tooltip: ComponentDoc = {
       ])}
       <p class="note">
         Focus bằng bàn phím (Tab) luôn mở ngay lập tức, không chờ <code>open-delay</code> — delay chỉ áp dụng cho hover chuột. Phím Esc đóng tooltip đang mở gần nhất.
+      </p>
+      <p class="note">
+        Mặc định <span class="c-accent">fade</span> (chỉ opacity) chứ không phải <span class="c-accent">zoom</span> như sx-popover — mọi hiệu ứng scale đều làm cạnh xa của bubble phình ra một chút lúc vào,
+        dễ thấy trên một khối nhỏ có mũi tên như tooltip hơn là trên popover. Muốn hiệu ứng zoom/slide/flip thì set <code>effect</code> tường minh.
       </p>
 
       <p>Lấy element bằng querySelector rồi điều khiển trực tiếp:</p>
@@ -240,8 +244,8 @@ tooltipEl.addEventListener('sx-tooltip-hide', () => console.log('đã đóng xon
     {
       label: "Hiệu ứng (effect)",
       html: `<div class="content-pane__panel">
-  <sx-tooltip content="fade" effect="fade"><button class="btn btn--ghost btn--sm">fade</button></sx-tooltip>
-  <sx-tooltip content="zoom (mặc định)" effect="zoom"><button class="btn btn--ghost btn--sm">zoom</button></sx-tooltip>
+  <sx-tooltip content="fade (mặc định)" effect="fade"><button class="btn btn--ghost btn--sm">fade</button></sx-tooltip>
+  <sx-tooltip content="zoom" effect="zoom"><button class="btn btn--ghost btn--sm">zoom</button></sx-tooltip>
   <sx-tooltip content="zoom-in" effect="zoom-in"><button class="btn btn--ghost btn--sm">zoom-in</button></sx-tooltip>
   <sx-tooltip content="slide-up" effect="slide-up"><button class="btn btn--ghost btn--sm">slide-up</button></sx-tooltip>
   <sx-tooltip content="slide-down" effect="slide-down"><button class="btn btn--ghost btn--sm">slide-down</button></sx-tooltip>
