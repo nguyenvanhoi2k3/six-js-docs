@@ -609,6 +609,7 @@ a {
   font-weight: 600;
   color: var(--text);
   text-decoration: none;
+  gap: 0.3rem;
 }
 
 .nav-tree__flat a:hover {

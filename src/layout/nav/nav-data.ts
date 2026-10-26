@@ -21,6 +21,15 @@ export const componentsList: NavLeaf[] = [
   { slug: "grid", label: "Grid" },
   { slug: "toast", label: "Toast" },
   { slug: "tooltip", label: "Tooltip" },
+  { slug: "fade", label: "Fade" },
+  { slug: "gallery", label: "Gallery" },
+  { slug: "range-slider", label: "Range Slider" },
+  { slug: "video", label: "Video" },
+  { slug: "add-cart", label: "Add Cart", badge: "Shopify" },
+  { slug: "cart-size", label: "Cart Size", badge: "Shopify" },
+  { slug: "media-picker", label: "Media Picker", badge: "Shopify" },
+  { slug: "product", label: "Product", badge: "Shopify" },
+  { slug: "variant-links", label: "Variant Links", badge: "Shopify" },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export const coreNav: NavGroup[] = [
@@ -64,6 +73,11 @@ export const coreNav: NavGroup[] = [
       { slug: "config", label: "six.config()" },
       { slug: "helpers", label: "six.utils" },
     ],
+  },
+  {
+    slug: "shopify",
+    label: "Shopify",
+    items: [{ slug: "cart", label: "Cart API" }],
   },
 ];
 

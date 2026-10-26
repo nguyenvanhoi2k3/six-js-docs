@@ -4,6 +4,7 @@ import { sequenceContent } from "./sequence";
 import { scrollContent } from "./scroll";
 import { scopeContent } from "./scope";
 import { utilsContent } from "./utils";
+import { shopifyContent } from "./shopify";
 
 const coreContent: ContentMap = {
   ...tweenContent,
@@ -11,6 +12,7 @@ const coreContent: ContentMap = {
   ...scrollContent,
   ...scopeContent,
   ...utilsContent,
+  ...shopifyContent,
 };
 
 export { coreContent };

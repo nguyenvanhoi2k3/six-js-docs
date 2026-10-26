@@ -6,6 +6,7 @@ export function renderFlatSidebar(items: NavLeaf[], heading: string): string {
     <li>
       <a href={`#${item.slug}`} data-slug={item.slug}>
         {item.label}
+        {item.badge ? <span class="badge"> {item.badge}</span> : ""}
       </a>
     </li>
   ));

@@ -312,8 +312,17 @@ export const slider: ComponentDoc = {
         ["vertical-scroll", 'true | false — cho cuộn bằng wheel khi direction="vertical"', "false"],
         ["lock-active", "true | false — cho phép trượt slide nhưng khi thả chuột ra sự kiện click sẽ không nhận. Phục vụ trong việc xem thumbnail", "false"],
         ["sync", "name của (các) slider khác cần đồng bộ theo, cách nhau bởi dấu phẩy", "—"],
+        [
+          "media-sync",
+          'tên — lắng nghe sự kiện "sx-media-select" (bắn bởi sx-media-picker/sx-variant-links/sx-product cùng tên) và tự nhảy tới sx-slider-slide[data-media-id] khớp mediaId, dùng cho gallery ảnh đổi theo swatch/variant đang chọn',
+          "—",
+        ],
         ["breakpoints", "JSON theo container width, override các attribute trên", "—"],
       ])}
+      <p class="note">
+        <code>media-sync</code> khớp với <code>data-media-id</code> trên từng <span class="c-accent">sx-slider-slide</span> — xem các trang <a href="components.html#media-picker">Media Picker</a>,{" "}
+        <a href="components.html#product">Product</a> và <a href="components.html#variant-links">Variant Links</a> để biết bên phát (ai bắn "sx-media-select").
+      </p>
 
       <h2>sx-slider-prev / sx-slider-next</h2>
       <p class="note">
