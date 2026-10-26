@@ -1,5 +1,5 @@
 import "./index.scss";
-import { attrsTable, codeBlock } from "../../shared";
+import { codeBlock } from "../../shared";
 import type { ComponentDoc } from "../types";
 import { h, Fragment } from "../../../jsx";
 
