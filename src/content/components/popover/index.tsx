@@ -1,4 +1,5 @@
-import "./index.scss";
+import "./popover.css";
+import POPOVER_CSS_RAW from "./popover.css?raw";
 import { attrsTable, codeBlock, eventsTable } from "../../shared";
 import type { ComponentDoc } from "../types";
 import { h, Fragment } from "../../../jsx";
@@ -7,44 +8,11 @@ import { h, Fragment } from "../../../jsx";
 //
 // sx-popover portals to document.body on mount (see popover.ts), so a demo section's own scoped
 // <style> (demo.tsx wraps every demos[].css in a `#section-id ...` prefix) can never reach it or
-// its content — that ancestor relationship no longer exists once it's open. POPOVER_CSS below is
-// shown/copied as-is in each demo's CSS tab (genuinely correct, unscoped, real-world CSS — exactly
-// what a consumer would write in their own project), while index.scss carries the same rules
-// globally/unscoped so the LIVE PREVIEW on this page still renders correctly despite that scoping.
-
-const POPOVER_CSS = `sx-popover {
-  font-size: 14px;
-  color: #e1dcc9;
-  background: #14161b;
-  border-color: #2a2d33;
-  padding-block: 20px;
-}
-
-sx-popover .menu {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 140px;
-}
-sx-popover .menu button,
-sx-popover .menu sx-popover-trigger {
-  text-align: left;
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  background: none;
-  color: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-sx-popover .menu button:hover,
-sx-popover .menu sx-popover-trigger:hover {
-  background: #1a1c20;
-}
-
-sx-popover .btn--ghost {
-  color: inherit;
-}`;
+// its content — that ancestor relationship no longer exists once it's open. popover.css is
+// therefore imported globally (so the LIVE PREVIEW renders correctly) AND read as raw text for
+// each demo's CSS tab — one source of truth, so the two can never drift apart. six-js itself
+// ships no look for sx-popover (background/border/padding...), only positioning + effects.
+const POPOVER_CSS = POPOVER_CSS_RAW.trim();
 
 // sx-popover-trigger itself never portals, so this one is genuinely safe scoped per-demo.
 const TRIGGER_INPUT_CSS = `sx-popover-trigger input {
@@ -197,9 +165,7 @@ popoverEl.addEventListener('sx-popover-after-close', () => {
       html: `<div class="content-pane__panel">
   <sx-popover-trigger class="btn btn--primary" name="basic-popover">Mở popover</sx-popover-trigger>
   <sx-popover name="basic-popover" position="bottom">
-    <div style="min-width:200px">
-      <p style="margin:0 0 8px">Click ra ngoài hoặc nhấn Esc để đóng.</p>
-    </div>
+    <p style="margin:0">Click ra ngoài hoặc nhấn Esc để đóng.</p>
   </sx-popover>
 </div>`,
       css: POPOVER_CSS,

@@ -1,27 +1,67 @@
 import "./index.scss";
+import "./lightbox.css";
+import LIGHTBOX_CSS from "./lightbox.css?raw";
 import { attrsTable, codeBlock, eventsTable } from "../../shared";
 import type { ComponentDoc } from "../types";
 import { h, Fragment } from "../../../jsx";
 
-const COLORS = ["%23ff7a45", "%234a7dff", "%2347c98a", "%23c957ff", "%23ffd166"];
+const COLORS = ["%23ff7a45", "%234a7dff", "%2347c98a", "%23c957ff", "%23ffb020", "%23ff5c8a"];
 
+// width/height 1200 cho SVG có kích thước gốc lớn - lightbox chỉ thu nhỏ ảnh cho vừa (max-width/
+// max-height), không phóng to, nên kích thước gốc nhỏ sẽ khiến ảnh trong lightbox bé tí.
 const thumb = (i: number): string =>
-  `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='${COLORS[i % COLORS.length]}'/%3E%3Ctext x='200' y='215' font-family='sans-serif' font-size='64' fill='white' text-anchor='middle'%3E${i + 1}%3C/text%3E%3C/svg%3E`;
+  `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='${COLORS[i % COLORS.length]}'/%3E%3Ctext x='200' y='222' font-family='sans-serif' font-size='64' font-weight='600' fill='white' text-anchor='middle'%3E${i + 1}%3C/text%3E%3C/svg%3E`;
+
+const LIGHTBOX_ATTRS = `dialog-class="lightbox" overlay-style="background-color: rgba(10, 11, 15, 0.8);"`;
 
 const GRID_CSS = `.gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  max-width: 480px;
+  gap: 12px;
+  max-width: 520px;
+}
+
+.gallery-grid sx-gallery-item {
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 .gallery-grid img {
+  display: block;
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 8px;
+  transition: transform 0.4s ease;
+}
+
+.gallery-grid sx-gallery-item:hover img {
+  transform: scale(1.06);
+}
+
+${LIGHTBOX_CSS.trim()}`;
+
+const CAROUSEL_CSS = `.gallery-carousel {
+  max-width: 560px;
+}
+
+.gallery-carousel sx-gallery-item {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.gallery-carousel img {
   display: block;
-}`;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-carousel sx-gallery-item:hover img {
+  transform: scale(1.06);
+}
+
+${LIGHTBOX_CSS.trim()}`;
 
 export const gallery: ComponentDoc = {
   slug: "gallery",
@@ -43,7 +83,7 @@ export const gallery: ComponentDoc = {
         Click (hoặc Enter/Space khi focus) vào <span class="c-accent">sx-gallery-item</span> nào sẽ mở lightbox đúng tại ảnh đó. Layout thumbnail (grid, carousel...) tự quyết định bởi CSS bạn viết — <span class="c-accent">sx-gallery</span> không ép layout nào.
       </p>
       <p class="note">
-        Muốn ảnh full-res khác với thumbnail: thêm <code>&lt;template data-gallery-full&gt;</code> bên trong từng <span class="c-accent">sx-gallery-item</span>, nội dung template sẽ được dùng làm slide trong lightbox thay vì clone thumbnail.
+        Muốn ảnh full-res khác với thumbnail: thêm <code>{"&lt;template data-gallery-full&gt;"}</code> bên trong từng <span class="c-accent">sx-gallery-item</span>, nội dung template sẽ được dùng làm slide trong lightbox thay vì clone thumbnail.
       </p>
 
       <h2>sx-gallery</h2>
@@ -89,43 +129,28 @@ galleryEl.open(2); // mở thẳng lightbox tại ảnh thứ 3`, "js")}
   demos: [
     {
       label: "Grid",
-      html: `<div class="gallery-grid">
-  <sx-gallery>
-    <sx-gallery-item><img src="${thumb(0)}" alt="Ảnh 1" /></sx-gallery-item>
-    <sx-gallery-item><img src="${thumb(1)}" alt="Ảnh 2" /></sx-gallery-item>
-    <sx-gallery-item><img src="${thumb(2)}" alt="Ảnh 3" /></sx-gallery-item>
-    <sx-gallery-item><img src="${thumb(3)}" alt="Ảnh 4" /></sx-gallery-item>
-    <sx-gallery-item><img src="${thumb(4)}" alt="Ảnh 5" /></sx-gallery-item>
-    <sx-gallery-item><img src="${thumb(0)}" alt="Ảnh 6" /></sx-gallery-item>
-  </sx-gallery>
-</div>`,
+      html: `<sx-gallery class="gallery-grid" ${LIGHTBOX_ATTRS}>
+${[0, 1, 2, 3, 4, 5].map((i) => `  <sx-gallery-item><img src="${thumb(i)}" alt="Ảnh ${i + 1}" /></sx-gallery-item>`).join("\n")}
+</sx-gallery>`,
       css: GRID_CSS,
     },
     {
       label: "Trong sx-slider (carousel)",
-      html: `<div style="max-width:480px">
-  <sx-gallery slider-effect="fade">
-    <sx-slider gap="10">
-      <sx-slider-track>
-        <sx-slider-slide>
-          <sx-gallery-item><img src="${thumb(0)}" alt="Ảnh 1" /></sx-gallery-item>
-        </sx-slider-slide>
-        <sx-slider-slide>
-          <sx-gallery-item><img src="${thumb(1)}" alt="Ảnh 2" /></sx-gallery-item>
-        </sx-slider-slide>
-        <sx-slider-slide>
-          <sx-gallery-item><img src="${thumb(2)}" alt="Ảnh 3" /></sx-gallery-item>
-        </sx-slider-slide>
-      </sx-slider-track>
-    </sx-slider>
-  </sx-gallery>
-</div>
+      html: `<sx-gallery class="gallery-carousel" slider-effect="fade" ${LIGHTBOX_ATTRS}>
+  <sx-slider per-view="2.2" gap="12">
+    <sx-slider-track>
+${[0, 1, 2, 3, 4, 5]
+  .map(
+    (i) => `      <sx-slider-slide>
+        <sx-gallery-item><img src="${thumb(i)}" alt="Ảnh ${i + 1}" /></sx-gallery-item>
+      </sx-slider-slide>`,
+  )
+  .join("\n")}
+    </sx-slider-track>
+  </sx-slider>
+</sx-gallery>
 <p class="note">Carousel ngoài trang dùng effect kéo-trượt thường, lightbox mở ra lại dùng hiệu ứng riêng (slider-effect="fade") — 2 slider độc lập, chỉ chia sẻ list ảnh.</p>`,
-      css: `${GRID_CSS}
-
-.gallery-grid img {
-  aspect-ratio: 4 / 3;
-}`,
+      css: CAROUSEL_CSS,
     },
   ],
 };

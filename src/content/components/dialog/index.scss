@@ -4,53 +4,42 @@ sx-dialog {
 
 #sx-dialog {
   margin: 20px;
-  .close-cursor {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--text);
-    color: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--text-sm);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  }
+}
 
+// sx-dialog tự chuyển mình ra làm con trực tiếp của <body> khi mount, nên mọi style cho nội dung
+// bên trong dialog phải nằm ngoài #sx-dialog (scope theo name thay vì theo ancestor của trang).
+sx-dialog sx-dialog-pull {
+  display: block;
+  width: 100px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+sx-dialog[name="pull-demo3"] {
   sx-dialog-pull {
-    display: block;
-    width: 100px;
-    height: 6px;
-    border-radius: 999px;
-    background: var(--border);
-    padding: 0 auto var(--space-2);
+    width: 6px;
+    height: 100px;
   }
+}
 
-  sx-dialog[name="pull-demo3"] {
+sx-dialog[name="dialog-responsive"] {
+  --sx-dialog-radius: 0;
+  .dialog-cart {
+    background-color: var(--surface);
+    padding: 20px;
+    height: 100vh;
+    width: min(420px, 100vw);
     sx-dialog-pull {
-      width: 6px;
-      height: 100px;
+      display: none;
     }
-  }
-
-  sx-dialog[name="dialog-responsive"] {
-    --sx-dialog-radius: 0;
-    .dialog-cart {
-      background-color: var(--surface);
-      padding: 20px;
-      height: 100vh;
-      width: min(420px, 100vw);
+    @media (max-width: 567px) {
+      width: 100%;
+      height: 60vh;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
       sx-dialog-pull {
-        display: none;
-      }
-      @media (max-width: 567px) {
-        width: 100%;
-        height: 60vh;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        sx-dialog-pull {
-          display: block;
-        }
+        display: block;
       }
     }
   }

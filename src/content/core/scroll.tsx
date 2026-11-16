@@ -107,7 +107,7 @@ OnScroll.create({
 
         <h2>Cú pháp start / end</h2>
         <p>
-          Mỗi giá trị là chuỗi hai từ: <code>"&lt;cạnh trigger&gt; &lt;cạnh viewport&gt;"</code> — animation chạy tới đúng lúc hai cạnh đó chạm nhau khi cuộn. Chỉ viết một từ (vd <code>"center"</code>) thì
+          Mỗi giá trị là chuỗi hai từ: <code>{'"&lt;cạnh trigger&gt; &lt;cạnh viewport&gt;"'}</code> — animation chạy tới đúng lúc hai cạnh đó chạm nhau khi cuộn. Chỉ viết một từ (vd <code>"center"</code>) thì
           từ còn lại tự là <code>"top"</code>.
         </p>
         <table class="content-pane__attrs">

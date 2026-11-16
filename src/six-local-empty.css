@@ -1,0 +1,2 @@
+/* Chỉ dùng ở chế độ `npm run dev:local` (xem vite.config.ts): khi đó `@six-js/core/components.css`
+   được alias tới file rỗng này, vì source của six-js tự import CSS của từng component. */

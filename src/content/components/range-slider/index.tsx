@@ -12,7 +12,7 @@ export const rangeSlider: ComponentDoc = {
   slug: "range-slider",
   eyebrow: "sx-range-slider",
   title: "Range Slider",
-  lead: "Thanh trượt 2 đầu (min/max) — tự dựng toàn bộ DOM bên trong, chỉ cần khai báo attribute, gần giống cách dùng <input type=\"range\">.",
+  lead: "Thanh trượt 2 đầu (min/max) — tự dựng toàn bộ DOM bên trong, chỉ cần khai báo attribute, gần giống cách dùng &lt;input type=\"range\"&gt;.",
   render: () => (
     <>
       <h2>Code</h2>

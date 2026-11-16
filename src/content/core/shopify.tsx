@@ -26,7 +26,7 @@ await cartStore.updateItem("line-key-abc", 2);         // POST /cart/change.js`,
           ["updateItem(line, quantity, sectionsToRender?)", "POST /cart/change.js — line là key (string, nên dùng) hoặc index 1-based (number, kiểu cũ)", "—"],
         ])}
         <p class="note">
-          Mọi method trả về <code>Promise&lt;ShopifyCart&gt;</code>. Gọi <code>add()</code>/<code>updateItem()</code> khi 1 cái còn đang chạy sẽ tự huỷ cái trước — chỉ kết quả của lần gọi mới nhất được áp dụng.
+          Mọi method trả về <code>{"Promise&lt;ShopifyCart&gt;"}</code>. Gọi <code>add()</code>/<code>updateItem()</code> khi 1 cái còn đang chạy sẽ tự huỷ cái trước — chỉ kết quả của lần gọi mới nhất được áp dụng.
         </p>
 
         <h2>Property</h2>

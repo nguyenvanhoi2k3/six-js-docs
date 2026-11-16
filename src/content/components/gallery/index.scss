@@ -1,1 +1,3 @@
-/* Demo styling nằm trong demos[].css (index.tsx) — không cần gì dùng chung ở đây. */
+/* Demo thumbnail styling nằm trong demos[].css (index.tsx). Style lightbox nằm ở lightbox.css —
+   import global (không qua scopeCss của demo.tsx) vì sx-dialog của lightbox tự chuyển ra <body>,
+   ra khỏi #section-id mà CSS của demo bị scope vào. */

@@ -1,1 +1,8 @@
-/* Demo styling nằm trong từng renderDemo() (index.tsx) — không cần gì dùng chung ở đây. */
+/* Demo styling nằm trong demos[].css (index.tsx). Ở đây chỉ chừa thêm khoảng trống cuối trang demo,
+   để video của demo cuối cùng vẫn cuộn ra khỏi viewport hoàn toàn được (nếu không trang hết chỗ
+   cuộn trước khi video ra khỏi màn hình, sẽ không thấy được việc tự pause). */
+#sx-video::after {
+  content: "";
+  display: block;
+  height: 100vh;
+}

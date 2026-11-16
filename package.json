@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:local": "vite --mode six-local",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@six-js/core": "^0.0.45",
+    "@six-js/core": "^0.0.46",
     "prismjs": "^1.30.0"
   },
   "devDependencies": {
