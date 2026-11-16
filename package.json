@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@six-js/core": "^0.0.46",
+    "@six-js/core": "^0.0.47",
     "prismjs": "^1.30.0"
   },
   "devDependencies": {
