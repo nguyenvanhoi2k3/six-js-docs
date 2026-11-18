@@ -199,6 +199,28 @@ export interface WysiwygEditor {
   selectionRange(): Range | null;
 }
 
+/** Thanh nhỏ ở góc dưới trái hiện địa chỉ link đang rê chuột (dùng chung cho mọi editor trên trang). */
+function linkStatusBar(): { show(url: string): void; hide(): void } {
+  let bar = document.querySelector<HTMLElement>(".np-link-status");
+  if (!bar) {
+    bar = document.createElement("div");
+    bar.className = "np-link-status";
+    bar.setAttribute("aria-hidden", "true");
+    bar.innerHTML = `<span class="np-link-status__url"></span><span class="np-link-status__hint">${/Mac|iPhone|iPad/.test(navigator.platform) ? "⌘" : "Ctrl"} + click to open</span>`;
+    document.body.appendChild(bar);
+  }
+  const el = bar;
+  return {
+    show(url) {
+      el.querySelector(".np-link-status__url")!.textContent = url;
+      el.classList.add("is-visible");
+    },
+    hide() {
+      el.classList.remove("is-visible");
+    },
+  };
+}
+
 export function createWysiwyg(root: HTMLElement, onChange: (markdown: string) => void): WysiwygEditor {
   document.execCommand("styleWithCSS", false, "false");
 
@@ -557,6 +579,18 @@ export function createWysiwyg(root: HTMLElement, onChange: (markdown: string) =>
       block.dataset.checked = block.dataset.checked === "true" ? "false" : "true";
       commit();
     }
+  });
+
+  // Rê chuột vào link → hiện địa chỉ ở góc dưới màn hình (giống thanh trạng thái của trình duyệt —
+  // trình duyệt không tự hiện cho link nằm trong vùng contenteditable).
+  const linkStatus = linkStatusBar();
+  root.addEventListener("mouseover", (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+    if (link && root.contains(link)) linkStatus.show(link.href);
+  });
+  root.addEventListener("mouseout", (e) => {
+    const link = (e.target as HTMLElement).closest("a[href]");
+    if (link && !link.contains(e.relatedTarget as Node)) linkStatus.hide();
   });
 
   // Ctrl/Cmd + click để mở link (click thường là đặt con trỏ để sửa).
