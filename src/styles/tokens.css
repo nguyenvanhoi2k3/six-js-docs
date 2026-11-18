@@ -10,7 +10,7 @@
   --muted: #9a94b3;
   --border: #c6c1da;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 
   --space-1: 0.5rem;
   --space-2: 1rem;
@@ -33,7 +33,7 @@
   --header-h: 56px;
   --sidebar-w: 260px;
 
-  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 
   --code-tag: #ff7ab6;
   --code-attr: #ffd479;

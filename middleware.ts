@@ -65,6 +65,9 @@ function loginPage(redirectPath: string, wrongPassword: boolean): Response {
 <meta name="robots" content="noindex" />
 <title>SixJS Docs</title>
 <link rel="icon" type="image/svg+xml" href="/sixjs_logo_fav_56x56.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 <script>
   try {
     var t = localStorage.getItem("six-js-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
@@ -76,7 +79,7 @@ function loginPage(redirectPath: string, wrongPassword: boolean): Response {
   :root[data-theme="light"] { color-scheme: light; --bg: #ffffff; --surface: #f5f4f9; --primary: #6428e0; --accent: #e2572f; --text: #16141f; --muted: #615c78; --border: #e2e0ea; }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; background: var(--bg); color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
   form { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: min(100%, 360px); padding: 2rem 1.75rem;
     border: 1px solid var(--border); border-radius: 12px; background: var(--surface); text-align: center; }
   form.is-shake { animation: shake 0.35s ease; }
