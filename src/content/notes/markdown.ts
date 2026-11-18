@@ -59,6 +59,7 @@ export function renderInline(text: string): string {
 export function plainText(source: string): string {
   return source
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
     .replace(/^\s*(#{1,3}|[-*+](\s+\[[ xX]\])?|\d+[.)]|>)\s+/gm, "")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(/[*_~`]/g, "");

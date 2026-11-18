@@ -37,6 +37,9 @@
         "pinned": {
           ".validate": "newData.isBoolean()"
         },
+        "wide": {
+          ".validate": "newData.isBoolean()"
+        },
         "$other": {
           ".validate": false
         }

@@ -3,6 +3,8 @@ import { dbRequest, SERVER_TIMESTAMP, STATUS_TEXT, subscribe } from "../../lib/r
 import { autoGrow, continueList, indentLines, insertLink, setLineStyle, wrapSelection } from "./editor";
 import { escapeHtml, plainText } from "./markdown";
 import { createWysiwyg, type BlockType, type InlineCommand, type WysiwygEditor } from "./wysiwyg";
+import { uploadImage } from "../../lib/cloudinary";
+import { openImageViewer } from "./viewer";
 import { h, Fragment } from "../../jsx";
 
 /** Node trên Firebase: { "<id tự sinh>": Note }. Giới hạn khớp với database.rules.json. */
@@ -26,6 +28,8 @@ interface Note {
   createdAt?: number;
   updatedAt?: number;
   pinned?: boolean;
+  /** Trang dùng hết chiều ngang màn hình (Full width, như Notion) — áp dụng cho mọi người xem. */
+  wide?: boolean;
 }
 
 interface SortOption {
@@ -65,6 +69,7 @@ const ICON = {
   link: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 11.5a3.5 3.5 0 0 0 5 0l2.5-2.5a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M11.5 8.5a3.5 3.5 0 0 0-5 0L4 11a3.5 3.5 0 0 0 5 5l1-1"/></svg>',
   copy: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M13 7V4.5A1.5 1.5 0 0 0 11.5 3h-7A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H7"/></svg>',
   trash: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5.5h13M8 5.5V3.5h4v2M5.5 5.5l.8 11h7.4l.8-11"/></svg>',
+  wide: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 10h15M5.5 7 2.5 10l3 3M14.5 7l3 3-3 3"/></svg>',
   plus: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>',
 };
 
@@ -103,6 +108,8 @@ const TOOLBAR: [label: string, title: string, command: string][] = [
   ["❝ Quote", "Quote", "quote"],
   ["{ } Code", "Code block", "codeblock"],
   ["—", "Divider", "divider"],
+  ["", "", ""],
+  ["▣ Image", "Insert image — or paste / drag an image into the page", "image"],
 ];
 
 const dateFormat = new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium", timeStyle: "short" });
@@ -241,6 +248,9 @@ function renderPage(note: Note): string {
         <button type="button" class="np-tool np-tool--text" data-act="markdown" title="Edit as Markdown" aria-pressed="false">
           MD
         </button>
+        <button type="button" class="np-tool" data-act="wide" title="Full width" aria-pressed="false">
+          {ICON.wide}
+        </button>
         <button type="button" class="np-tool" data-act="pin" title="Pin to top">
           {ICON.pin}
         </button>
@@ -308,6 +318,14 @@ export function initNotes(root: HTMLElement): void {
   let loaded = false;
   let selectedId: string | null = null;
   let rawMode = storageGet(RAW_KEY) === "1";
+  function applyWide(): void {
+    const wide = !!(selectedId && notes[selectedId]?.wide);
+    layout.classList.toggle("is-wide", wide);
+    const toggle = mainEl.querySelector<HTMLButtonElement>('[data-act="wide"]');
+    toggle?.classList.toggle("is-on", wide);
+    toggle?.setAttribute("aria-pressed", String(wide));
+    if (toggle) toggle.title = wide ? "Normal width" : "Full width";
+  }
   let editor: WysiwygEditor | null = null;
   /** Nội dung đang hiển thị/soạn của trang đang mở (có thể mới hơn bản trên server). */
   let localContent = "";
@@ -592,10 +610,12 @@ export function initNotes(root: HTMLElement): void {
       iconBtn.title = note.icon ? "Change icon" : "Add icon";
     }
     document.title = `${titleOf(note)} · Notes`;
+    applyWide();
   }
 
   function renderMain(): void {
     editor = null;
+    applyWide();
     layout.classList.toggle("is-detail", !!selectedId);
 
     if (!selectedId || !notes[selectedId]) {
@@ -619,10 +639,15 @@ export function initNotes(root: HTMLElement): void {
     localContent = contentOf(note);
     mainEl.innerHTML = renderPage(note);
     autoGrow(page<HTMLTextAreaElement>("[data-title]")!);
-    editor = createWysiwyg(page("[data-wysiwyg]")!, (markdown) => {
-      localContent = markdown;
-      queueSave({ content: markdown });
-    });
+    editor = createWysiwyg(
+      page("[data-wysiwyg]")!,
+      (markdown) => {
+        localContent = markdown;
+        queueSave({ content: markdown });
+      },
+      { onOpenImage: openImageViewer },
+    );
+    applyWide();
     applyMode();
     syncPageMeta();
   }
@@ -678,6 +703,7 @@ export function initNotes(root: HTMLElement): void {
   function applyFormat(command: string): void {
     if (!rawMode) {
       if (!editor) return;
+      if (command === "image") return editor.pickImages();
       if (command in BLOCK_COMMANDS) editor.block(BLOCK_COMMANDS[command]);
       else editor.inline(command as InlineCommand);
       scheduleBubble();
@@ -714,7 +740,28 @@ export function initNotes(root: HTMLElement): void {
         return wrapSelection(textarea, "```\n", "\n```", "code");
       case "divider":
         return wrapSelection(textarea, "\n---\n", "", "");
+      case "image":
+        return pickImageForMarkdown(textarea);
     }
+  }
+
+  /** Chế độ markdown thô: chọn ảnh → upload → chèn `![](url)` tại con trỏ. */
+  function pickImageForMarkdown(textarea: HTMLTextAreaElement): void {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.addEventListener("change", () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      setSaveStatus("Uploading image…");
+      uploadImage(file)
+        .then(({ url }) => {
+          wrapSelection(textarea, `\n![](${url})\n`, "", "");
+          setSaveStatus("");
+        })
+        .catch((error: Error) => setSaveStatus(`Couldn't upload: ${error.message}`, true));
+    });
+    input.click();
   }
 
   // ---------- Tạo / nhân bản / xóa ----------
@@ -841,7 +888,10 @@ export function initNotes(root: HTMLElement): void {
     const act = target.closest<HTMLElement>("[data-act]")?.dataset.act;
     if (act && selectedId) {
       const id = selectedId;
-      if (act === "markdown") {
+      if (act === "wide") {
+        queueSave({ wide: !notes[id].wide }, true);
+        applyWide();
+      } else if (act === "markdown") {
         rawMode = !rawMode;
         storageSet(RAW_KEY, rawMode ? "1" : "0");
         applyMode();
