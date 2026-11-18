@@ -1,0 +1,97 @@
+html[data-locked] {
+  overflow: hidden;
+}
+
+/* visibility (không phải display: none) để các component bên dưới vẫn đo được layout lúc khởi tạo */
+html[data-locked] body > :not(.auth-gate) {
+  visibility: hidden;
+}
+
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.auth-gate__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 360px);
+  padding: 2rem 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-align: center;
+}
+
+.auth-gate__card.is-shake {
+  animation: auth-gate-shake 0.35s ease;
+}
+
+.auth-gate__logo {
+  width: 48px;
+  height: 48px;
+}
+
+.auth-gate__title {
+  margin: 0.25rem 0 0;
+  font-size: var(--text-lg);
+}
+
+.auth-gate__hint {
+  margin: 0 0 0.5rem;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.auth-gate__input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.auth-gate__input:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.auth-gate__error {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.auth-gate__submit {
+  width: 100%;
+  justify-content: center;
+}
+
+@keyframes auth-gate-shake {
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-gate__card.is-shake {
+    animation: none;
+  }
+}

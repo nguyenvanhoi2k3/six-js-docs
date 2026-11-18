@@ -1,3 +1,4 @@
+import "../auth/gate";
 import "../styles/base.css";
 import { renderHeader } from "../layout/header/header";
 import { mountThemeToggle } from "../layout/header/theme";

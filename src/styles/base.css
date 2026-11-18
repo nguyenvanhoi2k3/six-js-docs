@@ -12,6 +12,11 @@ body {
   padding: 0;
 }
 
+/* Thuộc tính `hidden` luôn thắng — class nào đặt `display` (vd. display: block) cũng không làm phần tử hiện lại. */
+[hidden] {
+  display: none !important;
+}
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -23,6 +28,66 @@ body {
 
 a {
   color: var(--primary);
+}
+
+/* ---------- Trạng thái đồng bộ realtime (checklist, notes) ---------- */
+
+.sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.sync-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.sync-status[data-sync-status="online"]::before {
+  background: var(--primary);
+}
+
+.sync-status[data-sync-status="offline"]::before,
+.sync-status[data-sync-status="denied"]::before {
+  background: var(--accent);
+}
+
+/* ---------- Scrollbar: mảnh, bo tròn, theo màu theme ---------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Viền trong suốt + background-clip để thumb trông mảnh hơn vùng bắt chuột */
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 40%, transparent) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--muted) 70%, transparent) padding-box;
+}
+
+/* Firefox không có ::-webkit-scrollbar — dùng thuộc tính chuẩn. Bọc trong @supports vì Chrome
+   bỏ qua toàn bộ style ::-webkit-scrollbar ở trên nếu gặp scrollbar-width/scrollbar-color. */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--muted) 45%, transparent) transparent;
+  }
 }
 
 .container {
@@ -87,7 +152,7 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
   height: var(--header-h);
   padding: 0 var(--container-pad);
   /* No backdrop-filter here on purpose — blurring what's behind a sticky header forces the
@@ -101,7 +166,7 @@ a {
 .site-header__brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-shrink: 0;
   font-weight: 700;
   font-size: var(--text-lg);
@@ -110,7 +175,7 @@ a {
 }
 
 .site-header__brand .logo_text {
-  width: 80px;
+  width: 64px;
   height: auto;
   display: block;
 }
@@ -124,7 +189,7 @@ a {
   display: none;
 }
 .site-header__brand .logo_icon {
-  width: 30px;
+  width: 24px;
   height: auto;
   display: block;
 }
@@ -133,13 +198,22 @@ a {
   color: var(--primary);
 }
 
+.site-header__menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+  height: 100%;
+  margin-right: auto;
+  margin-left: var(--space-3);
+}
+
 .site-header__nav {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1.5rem;
+  min-width: 0;
   height: 100%;
-  margin-right: auto;
-  margin-left: var(--space-5);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -148,7 +222,8 @@ a {
   display: none;
 }
 
-.site-header__nav a {
+.site-header__nav a,
+.site-header__dropdown summary {
   position: relative;
   display: flex;
   align-items: center;
@@ -160,15 +235,19 @@ a {
   font-weight: 600;
 }
 
-.site-header__nav a:hover {
+.site-header__nav a:hover,
+.site-header__dropdown summary:hover,
+.site-header__dropdown[open] summary {
   color: var(--text);
 }
 
-.site-header__nav a.is-active {
+.site-header__nav a.is-active,
+.site-header__dropdown summary.is-active {
   color: var(--text);
 }
 
-.site-header__nav a.is-active::after {
+.site-header__nav a.is-active::after,
+.site-header__dropdown summary.is-active::after {
   content: "";
   position: absolute;
   left: 0;
@@ -177,6 +256,107 @@ a {
   height: 2px;
   background: var(--primary);
   border-radius: 2px 2px 0 0;
+}
+
+/* ---------- Menu "Tools" trên header ---------- */
+
+.site-header__dropdown {
+  position: relative;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.site-header__dropdown summary {
+  gap: 0.3rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.site-header__dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Mũi tên nhỏ cạnh chữ Tools */
+.site-header__dropdown summary::before {
+  content: "";
+  order: 1;
+  width: 5px;
+  height: 5px;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.site-header__dropdown[open] summary::before {
+  margin-top: 3px;
+  transform: rotate(-135deg);
+}
+
+.site-header__dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 240px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+}
+
+.site-header__dropdown-panel a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.site-header__dropdown-panel a:hover,
+.site-header__dropdown-panel a.is-active {
+  background: var(--surface-2);
+}
+
+.site-header__dropdown-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.site-header__dropdown-panel a.is-active .site-header__dropdown-label {
+  color: var(--primary);
+}
+
+.site-header__dropdown-desc {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .site-header__menu {
+    margin-left: var(--space-1);
+    gap: 1rem;
+  }
+
+  .site-header__nav {
+    gap: 1rem;
+  }
+
+  /* Màn hình hẹp: menu trải ngang dưới header thay vì neo theo chữ Tools (tránh tràn mép) */
+  .site-header__dropdown-panel {
+    position: fixed;
+    top: calc(var(--header-h) + 6px);
+    left: var(--container-pad);
+    right: var(--container-pad);
+    min-width: 0;
+  }
 }
 
 .site-header__actions {

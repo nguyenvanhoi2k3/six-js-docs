@@ -90,11 +90,13 @@ const GRAMMAR_NAME: Record<CodeLang, string> = {
   bash: "bash",
 };
 
-export function codeBlock(code: string, lang: CodeLang = "html"): string {
+/** `lang` là một CodeLang, hoặc tên grammar Prism bất kỳ đã được import (vd. "typescript", "liquid"). */
+export function codeBlock(code: string, lang: CodeLang | (string & {}) = "html"): string {
   const source = code.trim();
-  const grammarName = GRAMMAR_NAME[lang];
+  const grammarName = GRAMMAR_NAME[lang as CodeLang] ?? lang;
   const grammar = Prism.languages[grammarName];
-  const highlighted = grammar ? Prism.highlight(source, grammar, grammarName) : source;
+  // Không có grammar thì vẫn phải escape — code có thể do người dùng nhập (Notes).
+  const highlighted = grammar ? Prism.highlight(source, grammar, grammarName) : source.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
   return (
     <div class="code-block-wrap">

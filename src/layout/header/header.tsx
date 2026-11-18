@@ -1,7 +1,27 @@
 import { VERSION } from "@six-js/core";
 import { h } from "../../jsx";
 
-export type ActiveSection = "installation" | "components" | "core" | "ease" | "plugins" | "showcase";
+export type ActiveSection = "installation" | "components" | "core" | "ease" | "plugins" | "showcase" | "checklist" | "notes";
+
+/** Tool tiện ích gom vào menu "Tools" để thanh header không bị dài. */
+const TOOLS: { section: ActiveSection; href: string; label: string; desc: string }[] = [
+  { section: "checklist", href: "checklist.html", label: "Shopify requirements", desc: "Checklist duyệt Theme Store" },
+  { section: "notes", href: "notes.html", label: "Notes", desc: "Ghi chú dùng chung" },
+];
+
+// Đóng menu Tools khi bấm ra ngoài hoặc nhấn Esc (<details> tự mở/đóng khi bấm vào summary).
+document.addEventListener("click", (e) => {
+  document.querySelectorAll<HTMLDetailsElement>(".site-header__dropdown[open]").forEach((menu) => {
+    if (!menu.contains(e.target as Node)) menu.open = false;
+  });
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  document.querySelectorAll<HTMLDetailsElement>(".site-header__dropdown[open]").forEach((menu) => {
+    menu.open = false;
+    menu.querySelector("summary")?.focus();
+  });
+});
 
 export function renderHeader(active: ActiveSection): string {
   const link = (section: ActiveSection, href: string, label: string) => (
@@ -18,14 +38,29 @@ export function renderHeader(active: ActiveSection): string {
         <img class="logo_text logo_text--dark" src="sixjs_logo_darkmode.png" alt="" width="885" height="252" />
       </a>
 
-      <nav class="site-header__nav">
-        {link("installation", "installation.html", "Installation")}
-        {link("components", "components.html", "Components")}
-        {link("core", "core.html", "Core")}
-        {link("ease", "ease.html", "Easing")}
-        {link("plugins", "plugins.html", "Plugins")}
-        {link("showcase", "showcase.html", "Showcase")}
-      </nav>
+      <div class="site-header__menu">
+        <nav class="site-header__nav">
+          {link("installation", "installation.html", "Installation")}
+          {link("components", "components.html", "Components")}
+          {link("core", "core.html", "Core")}
+          {link("ease", "ease.html", "Easing")}
+          {link("plugins", "plugins.html", "Plugins")}
+          {link("showcase", "showcase.html", "Showcase")}
+        </nav>
+
+        {/* Nằm ngoài .site-header__nav vì nav có overflow-x (cuộn ngang trên mobile) sẽ cắt mất dropdown. */}
+        <details class="site-header__dropdown">
+          <summary class={TOOLS.some((t) => t.section === active) ? "is-active" : undefined}>Tools</summary>
+          <div class="site-header__dropdown-panel">
+            {TOOLS.map((tool) => (
+              <a href={tool.href} class={tool.section === active ? "is-active" : undefined}>
+                <span class="site-header__dropdown-label">{tool.label}</span>
+                <span class="site-header__dropdown-desc">{tool.desc}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+      </div>
 
       <div class="site-header__actions">
         <span class="site-header__version" title="Phiên bản">

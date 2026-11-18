@@ -48,6 +48,11 @@ export default defineConfig(({ command, mode }) => {
   // .html entries (already asset-referenced with a leading "/") which Vite itself rewrites
   // against `base` at build time.
   base: command === "build" ? (process.env.VERCEL ? "/" : "/six-js-docs/") : "/",
+  // Bản deploy Vercel đã được middleware.ts chặn bằng mật khẩu phía server, nên bỏ màn hình
+  // mật khẩu phía trình duyệt (src/auth/gate.ts) để không phải nhập 2 lần. GitHub Pages vẫn giữ.
+  define: {
+    __CLIENT_GATE__: JSON.stringify(!(command === "build" && process.env.VERCEL)),
+  },
   esbuild: {
     jsxFactory: "h",
     jsxFragmentFactory: "Fragment",
@@ -63,6 +68,8 @@ export default defineConfig(({ command, mode }) => {
         plugins: resolve(import.meta.dirname, "plugins.html"),
         showcase: resolve(import.meta.dirname, "showcase.html"),
         demo: resolve(import.meta.dirname, "demo.html"),
+        checklist: resolve(import.meta.dirname, "checklist.html"),
+        notes: resolve(import.meta.dirname, "notes.html"),
       },
     },
   },

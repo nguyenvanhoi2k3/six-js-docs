@@ -1,3 +1,4 @@
+import "../auth/gate";
 import "@six-js/core/components.css";
 import "../styles/base.css";
 import { registerDialog } from "@six-js/core/Components";

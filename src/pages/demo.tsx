@@ -1,3 +1,4 @@
+import "../auth/gate";
 import "@six-js/core/components.css";
 import "../styles/base.css";
 import "../styles/demo-fixed-light.css";

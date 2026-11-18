@@ -1,0 +1,829 @@
+/* Notes kiểu Notion: sidebar danh sách trang + trang soạn thảo ở giữa. */
+
+.np {
+  --np-line: color-mix(in srgb, var(--border) 38%, transparent);
+  --np-sidebar-w: 272px;
+  --np-topbar-h: 44px;
+  display: grid;
+  grid-template-columns: var(--np-sidebar-w) minmax(0, 1fr);
+  min-height: calc(100vh - var(--header-h));
+}
+
+.np-field {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--np-line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+
+  &:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -1px;
+  }
+}
+
+/* ---------- Sidebar ---------- */
+
+.np-sidebar {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--np-line);
+  background: var(--surface);
+}
+
+.np-sidebar__top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 12px 6px;
+}
+
+.np-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.np-sort-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px;
+}
+
+/* Nút dạng chữ nhỏ (Select, Pin, Delete, Done) */
+.np-link-btn {
+  padding: 2px 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  &--danger:hover:not(:disabled) {
+    color: var(--accent);
+  }
+}
+
+.np-sort {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-xs);
+  color: var(--muted);
+
+  select {
+    padding: 2px 4px;
+    border: none;
+    border-radius: 6px;
+    /* Nền không được để transparent: Chrome/Windows lấy nền của <select> cho popup danh sách,
+       transparent → popup nền trắng còn chữ vẫn màu sáng của theme tối. */
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-2);
+    }
+  }
+
+  option,
+  optgroup {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  optgroup {
+    color: var(--muted);
+    font-style: normal;
+  }
+}
+
+.np-selectbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 4px 8px 0;
+  padding: 4px 4px 4px 8px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.np-selectbar__all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+
+  input {
+    margin: 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+  }
+}
+
+.np-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2px 8px 12px;
+}
+
+.np-list__empty {
+  margin: 0;
+  padding: 16px 8px;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.np-group__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 6px 0 2px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+}
+
+.np-group__count {
+  opacity: 0.7;
+}
+
+/* Mũi tên: chỉ xuống khi mở, chỉ sang phải khi thu gọn */
+.np-group__chevron {
+  width: 6px;
+  height: 6px;
+  margin: 0 2px 2px 0;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+
+  .is-collapsed & {
+    margin: 0 2px 0 -1px;
+    transform: rotate(-45deg);
+  }
+}
+
+.np-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--surface-2);
+  }
+
+  &.is-active,
+  &.is-picked {
+    background: color-mix(in srgb, var(--primary) 16%, transparent);
+  }
+}
+
+/* Ô tick khi đang chọn nhiều trang */
+.np-item__check {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  border: 1.5px solid var(--muted);
+  border-radius: 4px;
+
+  .is-picked & {
+    border-color: var(--primary);
+    background: var(--primary)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E")
+      center / 12px no-repeat;
+  }
+}
+
+/* Shift+click để chọn khoảng không bôi đen chữ trong danh sách */
+.np-item {
+  user-select: none;
+}
+
+.np-item__icon {
+  flex: none;
+  width: 20px;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.np-item__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.np-item__title,
+.np-item__sub {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.np-item__title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+
+  &.is-untitled {
+    color: var(--muted);
+  }
+}
+
+.np-item__sub {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.np-sidebar__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--np-line);
+}
+
+.np-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+/* ---------- Trang ---------- */
+
+.np-main {
+  min-width: 0;
+}
+
+.np-topbar {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--np-topbar-h);
+  padding: 0 12px 0 16px;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+}
+
+.np-crumb {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.np-topbar__meta {
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+  margin: 0 6px 0 auto;
+  overflow: hidden;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.np-save.is-error {
+  color: var(--accent);
+}
+
+.np-tool {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+
+  svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  &:hover {
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  &.is-on {
+    color: var(--primary);
+  }
+
+  &--danger:hover {
+    color: var(--accent);
+  }
+}
+
+.np-back {
+  display: none;
+}
+
+.np-doc {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 56px 120px;
+}
+
+.np-icon-row {
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.np-page-icon {
+  padding: 4px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 60px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface);
+  }
+
+  /* Chưa có icon: chỉ hiện nút "Add icon" khi rê chuột vào trang (giống Notion) */
+  &.is-empty {
+    padding: 4px 8px;
+    font-size: var(--text-sm);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+}
+
+.np-doc:hover .np-page-icon.is-empty,
+.np-page-icon.is-empty:focus-visible {
+  opacity: 1;
+}
+
+.np-emoji {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: repeat(10, 34px);
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid var(--np-line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+
+  &[hidden] {
+    display: none;
+  }
+
+  button {
+    height: 34px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-2);
+    }
+  }
+}
+
+.np-emoji .np-emoji__remove {
+  grid-column: 1 / -1;
+  height: auto;
+  padding: 6px;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-sm);
+}
+
+.np-title {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  resize: none;
+  overflow: hidden;
+  outline: none;
+
+  &::placeholder {
+    color: var(--muted);
+    opacity: 0.5;
+  }
+}
+
+.np-props {
+  margin: 10px 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--np-line);
+  font-size: var(--text-sm);
+  color: var(--muted);
+
+  strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+}
+
+.np-toolbar {
+  position: sticky;
+  top: calc(var(--header-h) + var(--np-topbar-h));
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  margin: 0 -6px 14px;
+  padding: 4px;
+  border: 1px solid var(--np-line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.15);
+
+  &[hidden] {
+    display: none;
+  }
+
+  button {
+    height: 28px;
+    padding: 0 8px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-2);
+    }
+  }
+}
+
+.np-toolbar__sep {
+  align-self: stretch;
+  width: 1px;
+  margin: 4px;
+  background: var(--np-line);
+}
+
+.np-editor {
+  display: block;
+  width: 100%;
+  min-height: 240px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  caret-color: var(--primary);
+  font: inherit;
+  line-height: 1.7;
+  resize: none;
+  overflow: hidden;
+  outline: none;
+}
+
+.np-empty {
+  max-width: 420px;
+  margin: 18vh auto 0;
+  padding: 0 16px;
+  text-align: center;
+  color: var(--muted);
+
+  h2 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: var(--text-lg);
+  }
+
+  p {
+    margin: 0 0 18px;
+  }
+}
+
+.np-empty .np-empty__icon {
+  margin-bottom: 8px;
+  font-size: 48px;
+}
+
+/* ---------- Editor WYSIWYG (soạn trực tiếp, không thấy ký hiệu markdown) ---------- */
+
+.np-tool--text {
+  width: auto;
+  padding: 0 7px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.np-wysiwyg {
+  --np-indent-step: 24px;
+  min-height: 240px;
+  padding-bottom: 120px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  outline: none;
+  caret-color: var(--primary);
+
+  > * {
+    margin: 0;
+  }
+
+  a {
+    color: var(--primary);
+    text-underline-offset: 2px;
+    cursor: text;
+  }
+
+  /* Trang trống: gợi ý cách dùng ở dòng đầu */
+  &.is-empty > :first-child {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      inset: 2px 0 auto;
+      color: var(--muted);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  }
+}
+
+.np-wysiwyg.is-empty > :first-child::before {
+  content: "Type something… shortcuts: # heading, - list, 1. numbered, [] to-do, > quote, ``` code";
+}
+
+.np-wysiwyg [data-type="p"] {
+  padding: 2px 0 2px calc(var(--indent, 0) * var(--np-indent-step));
+}
+
+.np-wysiwyg [data-type="h1"],
+.np-wysiwyg [data-type="h2"],
+.np-wysiwyg [data-type="h3"] {
+  margin: 1.2em 0 0.2em;
+  line-height: 1.3;
+}
+
+.np-wysiwyg > [data-type^="h"]:first-child {
+  margin-top: 0;
+}
+
+.np-wysiwyg [data-type="h1"] {
+  font-size: 1.75rem;
+}
+
+.np-wysiwyg [data-type="h2"] {
+  font-size: 1.4rem;
+}
+
+.np-wysiwyg [data-type="h3"] {
+  font-size: 1.15rem;
+}
+
+/* List / to-do: ký hiệu vẽ bằng ::before nằm trong phần padding bên trái */
+.np-wysiwyg [data-type="bullet"],
+.np-wysiwyg [data-type="numbered"],
+.np-wysiwyg [data-type="todo"] {
+  position: relative;
+  padding: 2px 0 2px calc(var(--indent, 0) * var(--np-indent-step) + 26px);
+
+  &::before {
+    position: absolute;
+    left: calc(var(--indent, 0) * var(--np-indent-step));
+    width: 20px;
+    color: var(--muted);
+    text-align: center;
+  }
+}
+
+.np-wysiwyg [data-type="bullet"]::before {
+  content: "•";
+}
+
+.np-wysiwyg [data-type="numbered"]::before {
+  content: attr(data-number) ".";
+}
+
+.np-wysiwyg [data-type="todo"] {
+  &::before {
+    content: "";
+    top: 0.42em;
+    left: calc(var(--indent, 0) * var(--np-indent-step) + 2px);
+    width: 16px;
+    height: 16px;
+    box-sizing: border-box;
+    border: 1.5px solid var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  &[data-checked="true"] {
+    color: var(--muted);
+    text-decoration: line-through;
+
+    &::before {
+      border-color: var(--primary);
+      background: var(--primary)
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E")
+        center / 12px no-repeat;
+    }
+  }
+}
+
+.np-wysiwyg [data-type="quote"] {
+  margin: 4px 0;
+  padding: 2px 0 2px 14px;
+  border-left: 3px solid var(--text);
+}
+
+.np-wysiwyg [data-type="hr"] {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid var(--np-line);
+}
+
+.np-wysiwyg [data-type="code"] {
+  position: relative;
+  margin: 8px 0;
+  padding: 16px 18px;
+  border-color: var(--np-line);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  code {
+    white-space: inherit;
+  }
+
+  /* Tên ngôn ngữ (```ts) ở góc trên phải */
+  &[data-lang]:not([data-lang=""])::after {
+    content: attr(data-lang);
+    position: absolute;
+    top: 4px;
+    right: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+}
+
+/* ---------- Mobile: danh sách và trang là 2 màn hình riêng ---------- */
+
+@media (max-width: 860px) {
+  .np {
+    grid-template-columns: 1fr;
+  }
+
+  .np-sidebar {
+    position: static;
+    height: auto;
+    min-height: calc(100vh - var(--header-h));
+    border-right: none;
+  }
+
+  .np.is-detail .np-sidebar,
+  .np:not(.is-detail) .np-main {
+    display: none;
+  }
+
+  .np-back {
+    display: grid;
+  }
+
+  .np-edited {
+    display: none;
+  }
+
+  .np-doc {
+    padding: 24px var(--container-pad) 96px;
+  }
+
+  .np-emoji {
+    grid-template-columns: repeat(8, 34px);
+  }
+}
+
+/* ---------- Thanh định dạng nổi khi bôi đen chữ ---------- */
+
+.np-bubble {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border: 1px solid var(--np-line, var(--border));
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.3);
+
+  button {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 7px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--surface-2);
+    }
+  }
+}
+
+.np-bubble__sep {
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 3px;
+  background: var(--np-line, var(--border));
+}
